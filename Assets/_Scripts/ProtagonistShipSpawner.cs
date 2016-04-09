@@ -4,6 +4,9 @@ using System.Collections;
 public class ProtagonistShipSpawner : MonoBehaviour {
 	public GameObject[] protagonistShipPrefabs;
 
+	float minSpawnDelay = 0.5f;
+	float maxSpawnDelay = 4f;
+
 	float posOffsetMax = 15f;			//How far off-center the ship can spawn
 	float angleOffsetMax = 3f;          //How far off-center of the screen the ship can aim towards
 	float minSpeed = 20f;				//Lower limit on new ship speed
@@ -30,7 +33,7 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		while (true) {
 			SpawnNewShip();
 
-			float sleepTime = Random.Range(0.25f, 2f);
+			float sleepTime = Random.Range(minSpawnDelay, maxSpawnDelay);
 			yield return new WaitForSeconds(sleepTime);
 		}
 	}
@@ -41,12 +44,12 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 
 		//Determine the random size (and parallax) of the ship
 		float scaleFactor = GetScaleFactor();
-		bool backgroundShip = Mathf.Abs(1 - scaleFactor) > interactableShipThreshold;
+		bool battlegroundShip = Mathf.Abs(1 - scaleFactor) < interactableShipThreshold;
 
 		//Give a random offset to the ship's position
 		//If this ship will be a background/foreground ship, allow it to spawn in a wider range
 		float randPosOffset = 0;
-		if (!backgroundShip) {
+		if (battlegroundShip) {
 			randPosOffset = Random.Range(-posOffsetMax, posOffsetMax);
 		}
 		else {
@@ -54,10 +57,11 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		}
 		Vector3 spawnPos = transform.position + transform.right * randPosOffset;
 
+		//Spawn the new ship
 		GameObject newShip = Instantiate(protagonistShipPrefabs[randIndex], spawnPos, new Quaternion()) as GameObject;
 		PhysicsObj newShipPhysics = newShip.GetComponent<PhysicsObj>();
 
-		//Apply a random size (and parallax) to the ship
+		//Apply the random size to the ship
 		Vector3 curScale = newShip.transform.localScale;
 		curScale.x *= scaleFactor;
         curScale.y *= scaleFactor;
@@ -67,14 +71,14 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		SpriteRenderer newShipSprite = newShip.GetComponentInChildren<SpriteRenderer>();
 		newShipSprite.sortingOrder = (int)((1 - scaleFactor) * -100);
 		//Dim the colors of background ships
-		if (backgroundShip) {
+		if (!battlegroundShip) {
 			newShipSprite.color *= backgroundShipColorDim;
 		}
 
 		//Aim the ship towards the center of the map (+/- angleOffset) if it's an interactable ship
 		//or more lazily towards the center of the map if it's a background or foreground ship
 		float randAngleOffset = 0;
-		if (!backgroundShip) {
+		if (battlegroundShip) {
 			randAngleOffset = Random.Range(-angleOffsetMax, angleOffsetMax);
 		}
 		else {
@@ -86,7 +90,7 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		float randSpeed = Random.Range(minSpeed, maxSpeed);
 		newShipPhysics.velocity = newShip.transform.up * randSpeed * scaleFactor;
 
-		if (!backgroundShip) {
+		if (battlegroundShip) {
 			print("Look out, a ship has entered the battlegrounds!");
 		}
 	}

@@ -6,7 +6,9 @@ public class LeadingShot : MonoBehaviour {
 
 	public Transform target;
 	public int bulletsPerBurst = 100;
-	public GameObject bulletPrefab;
+	public float spread = 4.5f;
+	public float spreadIncrementPerBullet = 3f;
+	public Bullet bulletPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -30,9 +32,9 @@ public class LeadingShot : MonoBehaviour {
 
 		//Debug.DrawRay(gameObject.transform.position, 5 * curDirection.PolarToCartesian(), Color.red, 10);
 
-		float degreeOfSpread =  9f * Mathf.Deg2Rad;
+		float degreeOfSpread =  spread * Mathf.Deg2Rad;
 
-		float degreeIncrement = 3f * Mathf.Deg2Rad;
+		float degreeIncrement = spreadIncrementPerBullet * Mathf.Deg2Rad;
 
 		int degreeScalar = 1;
 
@@ -41,7 +43,9 @@ public class LeadingShot : MonoBehaviour {
 				degreeScalar *= -1;
 			}
 
-			GameObject curBullet = Instantiate(bulletPrefab, gameObject.transform.position, new Quaternion()) as GameObject;
+			Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
+			curBullet.transform.position = gameObject.transform.position;
+			//GameObject curBullet = Instantiate(bulletPrefab, gameObject.transform.position, new Quaternion()) as GameObject;
 			curBullet.GetComponent<Rigidbody>().velocity = 10 * curDirection.PolarToCartesian().normalized;
 			curDirection.angle += degreeIncrement * degreeScalar;
 

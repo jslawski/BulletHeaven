@@ -9,6 +9,9 @@ public class ShipMovement : MonoBehaviour {
 	float shipTurnLerpSpeed = 0.1f;             //Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 10f;                   //Maximum amount a ship can toward in a certain direction
 
+	float viewportXOffset = 0.03f;				//How far off the left and right sides of the screen the ship must stay
+	float viewportYOffset = 0.015f;				//How far off the top and bottom sides of the screen the ship must stay
+
 	Vector3 desiredPosition;					//The position that the transform lerps towards each FixedUpdate()
 	Quaternion startRotation;					//The beginning rotation of the ship
 	Quaternion desiredRotation;					//The rotation that the transform lerps towards each FixedUpdate()
@@ -43,8 +46,28 @@ public class ShipMovement : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
+		ClampDesiredPosition();
+         transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
+
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, shipLerpSpeed);
+	}
+	void ClampDesiredPosition() {
+		Vector3 desiredViewportPos = Camera.main.WorldToViewportPoint(desiredPosition);
+
+		//Clamp x-direction
+		if (desiredViewportPos.x < viewportXOffset) {
+			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportXOffset, desiredViewportPos.y, desiredViewportPos.z)).x;
+		}
+		else if (desiredViewportPos.x > 1-viewportXOffset) {
+			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(1-viewportXOffset, desiredViewportPos.y, desiredViewportPos.z)).x;
+		}
+		//Clamp y-direction
+		if (desiredViewportPos.y < viewportYOffset) {
+			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportYOffset, desiredViewportPos.z)).y;
+		}
+		else if (desiredViewportPos.y > 1-viewportYOffset) {
+			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, 1-viewportYOffset, desiredViewportPos.z)).y;
+		}
 	}
 
 	void Move(Vector3 moveVector) {
@@ -61,8 +84,5 @@ public class ShipMovement : MonoBehaviour {
 			sign = -1;
 		}
 		desiredRotation = Quaternion.Euler(startRotation.eulerAngles + new Vector3(0, 0, sign*maxTurnAngle));
-	}
-	void Turn(Vector3 moveVector) {
-
 	}
 }
