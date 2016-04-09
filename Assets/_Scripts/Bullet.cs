@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class Bullet : PooledObj {
+	public GameObject explosionPrefab;
+	public float damage;
+
 	SpriteRenderer sprite;
 	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
@@ -18,6 +21,7 @@ public class Bullet : PooledObj {
 
 	void Awake() {
 		sprite = GetComponent<SpriteRenderer>();
+		damage = 1;
 	}
 
 	void OnTriggerEnter(Collider other) {
@@ -28,7 +32,19 @@ public class Bullet : PooledObj {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			if (player.player != owningPlayer) {
 				//Do damage to the player hit
+				player.TakeDamage(damage);
+
+				GameObject explosion = Instantiate(explosionPrefab, transform.position, new Quaternion()) as GameObject;
+				Destroy(explosion, 5f);
+				ReturnToPool();
 			}
+		}
+		else if (other.tag == "ProtagShip") {
+			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
+			otherShip.TakeDamage(damage);
+
+			GameObject explosion = Instantiate(explosionPrefab, transform.position, new Quaternion()) as GameObject;
+			Destroy(explosion, 5f);
 			ReturnToPool();
 		}
 	}

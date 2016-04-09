@@ -63,7 +63,7 @@ public class LeadingShot : MonoBehaviour {
 			curBullet.owningPlayer = owningPlayer;
 			curBullet.transform.position = gameObject.transform.position;
 			//GameObject curBullet = Instantiate(bulletPrefab, gameObject.transform.position, new Quaternion()) as GameObject;
-			curBullet.GetComponent<Rigidbody>().velocity = 10 * curDirection.PolarToCartesian().normalized;
+			curBullet.GetComponent<PhysicsObj>().velocity = 10 * curDirection.PolarToCartesian().normalized;
 			curDirection.angle += degreeIncrement * degreeScalar;
 
 			yield return new WaitForFixedUpdate();
