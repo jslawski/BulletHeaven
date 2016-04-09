@@ -22,6 +22,23 @@ public class ObjectPool : MonoBehaviour {
 		}
 		return obj;
 	}
+	public PooledObj GetObject(Vector3 moveToPosition) {
+		PooledObj obj;
+		//If we have an object available, return that
+		if (availableObjects.Count > 0) {
+			obj = availableObjects.Pop();
+			obj.transform.position = moveToPosition;
+			obj.gameObject.SetActive(true);
+		}
+		//Else create a new one to return
+		else {
+			obj = Instantiate(prefab);
+			obj.transform.SetParent(transform, false);
+			obj.transform.position = moveToPosition;
+			obj.Pool = this;
+		}
+		return obj;
+	}
 
 	public void ReturnObject(PooledObj obj) {
 		obj.gameObject.SetActive(false);

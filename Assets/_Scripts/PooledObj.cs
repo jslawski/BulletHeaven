@@ -22,4 +22,10 @@ public class PooledObj : MonoBehaviour {
 		}
 		return (T)poolInstanceForPrefab.GetObject();
 	}
+	public T GetPooledInstance<T>(Vector3 position) where T : PooledObj {
+		if (!poolInstanceForPrefab) {
+			poolInstanceForPrefab = ObjectPool.GetPool(this);
+		}
+		return (T)poolInstanceForPrefab.GetObject(position);
+	}
 }

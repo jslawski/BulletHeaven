@@ -134,4 +134,8 @@ public class PhysicsObj : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		OnTriggerEnter(other);
 	}
+
+	void OnDestroy() {
+		PhysicsEngine.physicsObjects.Remove(this);
+	}
 }
