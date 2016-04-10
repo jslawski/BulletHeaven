@@ -3,14 +3,18 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
 	float shipLerpSpeed = 0.275f;               //Percent ship lerps towards desired position each FixedUpdate()
-	float verticalMovespeed = 13f;              //Speed at which the player can move up and down
-	float horizontalMovespeed = 10.5f;          //Speed at which the player can move right to left
+	float vertMovespeedDefault = 13f;
+	float horizMovespeedDefault = 10.5f;
+	float verticalMovespeed;					//Speed at which the player can move up and down
+	float horizontalMovespeed;					//Speed at which the player can move right to left
 
 	float shipTurnLerpSpeed = 0.1f;             //Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 10f;                   //Maximum amount a ship can toward in a certain direction
 
-	float viewportXOffset = 0.03f;				//How far off the left and right sides of the screen the ship must stay
-	float viewportYOffset = 0.015f;				//How far off the top and bottom sides of the screen the ship must stay
+	public float viewportMinX;
+	public float viewportMaxX;
+	public float viewportMinY;
+	public float viewportMaxY;
 
 	Vector3 desiredPosition;					//The position that the transform lerps towards each FixedUpdate()
 	Quaternion startRotation;					//The beginning rotation of the ship
@@ -19,6 +23,9 @@ public class ShipMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
+		verticalMovespeed = vertMovespeedDefault;
+		horizontalMovespeed = horizMovespeedDefault;
+
 		desiredPosition = transform.position;
 		startRotation = transform.rotation;
 		desiredRotation = startRotation;
@@ -55,18 +62,18 @@ public class ShipMovement : MonoBehaviour {
 		Vector3 desiredViewportPos = Camera.main.WorldToViewportPoint(desiredPosition);
 
 		//Clamp x-direction
-		if (desiredViewportPos.x < viewportXOffset) {
-			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportXOffset, desiredViewportPos.y, desiredViewportPos.z)).x;
+		if (desiredViewportPos.x < viewportMinX) {
+			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportMinX, desiredViewportPos.y, desiredViewportPos.z)).x;
 		}
-		else if (desiredViewportPos.x > 1-viewportXOffset) {
-			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(1-viewportXOffset, desiredViewportPos.y, desiredViewportPos.z)).x;
+		else if (desiredViewportPos.x > viewportMaxX) {
+			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, desiredViewportPos.y, desiredViewportPos.z)).x;
 		}
 		//Clamp y-direction
-		if (desiredViewportPos.y < viewportYOffset) {
-			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportYOffset, desiredViewportPos.z)).y;
+		if (desiredViewportPos.y < viewportMinY) {
+			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMinY, desiredViewportPos.z)).y;
 		}
-		else if (desiredViewportPos.y > 1-viewportYOffset) {
-			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, 1-viewportYOffset, desiredViewportPos.z)).y;
+		else if (desiredViewportPos.y > viewportMaxY) {
+			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
 		}
 	}
 
@@ -77,6 +84,7 @@ public class ShipMovement : MonoBehaviour {
 		//Turn the ship slightly
 		float dotValue = Vector3.Dot(moveVector, dotVector);
 		int sign = 0;
+		//0.01 because of floating point inaccuracies
 		if (dotValue > 0.01f) {
 			sign = 1;
 		}
@@ -84,5 +92,14 @@ public class ShipMovement : MonoBehaviour {
 			sign = -1;
 		}
 		desiredRotation = Quaternion.Euler(startRotation.eulerAngles + new Vector3(0, 0, sign*maxTurnAngle));
+	}
+
+	public void SlowPlayer(float percentOfNormalMovespeed) {
+		verticalMovespeed = vertMovespeedDefault * percentOfNormalMovespeed;
+		horizontalMovespeed = horizMovespeedDefault * percentOfNormalMovespeed;
+	}
+	public void RestoreSpeed() {
+		verticalMovespeed = vertMovespeedDefault;
+		horizontalMovespeed = horizMovespeedDefault;
 	}
 }
