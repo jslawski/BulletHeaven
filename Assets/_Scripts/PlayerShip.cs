@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Player player;
 	public Color playerColor;
-	public Transform healthBar;
+	public HealthBar healthBar;
 
 	float maxHealth = 100f;
 	float _health;
@@ -18,9 +18,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 				_health = 0;
 			}
 
-			Vector3 healthScale = healthBar.localScale;
-			healthScale.x = Mathf.Max(0, (_health / maxHealth));
-			healthBar.localScale = healthScale;
+			healthBar.SetHealth(_health / maxHealth);
 		}
 	}
 

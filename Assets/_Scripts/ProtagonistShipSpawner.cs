@@ -16,7 +16,7 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 	float minBackgroundShipSize = 0.15f;		//Lower limit on size of background ships
 	float maxBackgroundShipSize = 0.75f;         //Upper limit on size of background ships
 
-	float battlegroundsShipChance = 10.065f;		//Percent chance for a ship to spawn in the battlegrounds
+	float battlegroundsShipChance = 0.065f;		//Percent chance for a ship to spawn in the battlegrounds
 	float minBattlegroundShipSize = 0.95f;		//Lower limit on size of battleground ships
 	float maxBattlegroundShipSize = 1.05f;      //Upper limit on size of battleground ships
 
