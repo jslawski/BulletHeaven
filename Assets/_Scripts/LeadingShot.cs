@@ -23,10 +23,6 @@ public class LeadingShot : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.A) && !inCoroutine) {
 			FireBurst();
 		}
-
-		//PolarCoordinate debugDirection = new PolarCoordinate(1, target.position - gameObject.transform.position);
-
-		//Debug.DrawRay(gameObject.transform.position, 5 * debugDirection.PolarToCartesian(), Color.blue);
 	}
 
 	public void FireBurst() {
@@ -45,8 +41,6 @@ public class LeadingShot : MonoBehaviour {
 
 		PolarCoordinate startDirection = new PolarCoordinate(1, target.position - gameObject.transform.position);
 		PolarCoordinate curDirection = new PolarCoordinate(startDirection.radius, startDirection.angle);
-
-		//Debug.DrawRay(gameObject.transform.position, 5 * curDirection.PolarToCartesian(), Color.red, 10);
 
 		float degreeOfSpread =  spread * Mathf.Deg2Rad;
 

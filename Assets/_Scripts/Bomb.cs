@@ -12,6 +12,7 @@ public class Bomb : MonoBehaviour {
 	public Player owningPlayer = Player.none;       //Set this when creating a new Bomb
 	public GameObject shockwavePrefab;
 	public LeadingShot leadingShotPrefab;
+	public SpiralShot spiralShotPrefab;
 
 	PhysicsObj physics;
 	SpriteRenderer spriteRenderer;
@@ -47,6 +48,11 @@ public class Bomb : MonoBehaviour {
 				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
 				newShot.owningPlayer = owningPlayer;
 				newShot.FireBurst();
+				break;
+			case Attack.spiral:
+				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
+				spiralShot.owningPlayer = owningPlayer;
+				spiralShot.FireBurst();
 				break;
 			default:
 				Debug.LogError("Attack type " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
