@@ -41,10 +41,10 @@ public class CameraEffects : MonoBehaviour {
 
 	//Camera movement in FixedUpdate() for smoother following of the physics calculations
 	void FixedUpdate() {
-		transform.position = Vector3.Lerp(transform.position, transform.position + curOffset, followSpeed);
+		transform.position = Vector3.Lerp(transform.position, startOffset + curOffset, followSpeed);
 		thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, curSize, zoomSpeed);
 
-		curOffset = Vector3.Lerp(curOffset, Vector3.zero, 0.1f);
+		curOffset = Vector3.Lerp(curOffset, startOffset, 0.1f);
 	}
 
 	public void CameraShake(float duration, float intensity) {
@@ -58,7 +58,7 @@ public class CameraEffects : MonoBehaviour {
 		float timeElapsed = 0;
 		while (timeElapsed < duration) {
 			Vector2 tempVector2 = Random.insideUnitCircle;
-			curOffset = startOffset + intensity * (new Vector3(tempVector2.x, 0, tempVector2.y));
+			curOffset = startOffset + intensity * (new Vector3(tempVector2.x, tempVector2.y, 0));
 
 			timeElapsed += 1 / cameraShakeFrequency;
 			yield return new WaitForSeconds(1 / cameraShakeFrequency);
