@@ -32,7 +32,10 @@ public class CameraEffects : MonoBehaviour {
 	//DEBUG INPUT FOR CAMERA SHAKE
 	void Update() {
 		if (Input.GetKey("x")) {
-			CameraShake(0.2f, 2);
+			CameraShake(10f, 2);
+		}
+		if (Input.GetKey("c")) {
+			CameraShake(.2f, 20, true);
 		}
 		if (Input.GetKey("z")) {
 			CameraZoom(0.4f, 0.5f);
@@ -47,8 +50,12 @@ public class CameraEffects : MonoBehaviour {
 		curOffset = Vector3.Lerp(curOffset, startOffset, 0.1f);
 	}
 
-	public void CameraShake(float duration, float intensity) {
+	public void CameraShake(float duration, float intensity, bool overrideCurrentShake=false) {
 		if (!inCameraShakeCoroutine) {
+			StartCoroutine(CameraShakeCoroutine(duration, intensity));
+		}
+		else if (overrideCurrentShake) {
+			StopAllCoroutines();
 			StartCoroutine(CameraShakeCoroutine(duration, intensity));
 		}
 	}

@@ -5,6 +5,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Player player;
 	public Color playerColor;
 	public HealthBar healthBar;
+	public ShipMovement playerMovement;
 
 	float maxHealth = 100f;
 	float _health;
@@ -25,6 +26,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	// Use this for initialization
 	void Start () {
 		health = maxHealth;
+		playerMovement = GetComponent<ShipMovement>();
 	}
 	
 	// Update is called once per frame
