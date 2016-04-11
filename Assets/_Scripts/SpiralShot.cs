@@ -48,6 +48,6 @@ public class SpiralShot : MonoBehaviour {
 
 		}
 
-		
+		Destroy(gameObject);
 	}
 }

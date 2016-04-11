@@ -5,6 +5,8 @@ public class Bullet : PooledObj {
 	public GameObject explosionPrefab;
 	public float damage;
 
+	float transparencyCheckCooldown = 0.4f;
+
 	SpriteRenderer sprite;
 	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
@@ -19,7 +21,15 @@ public class Bullet : PooledObj {
 			}
 		}
 	}
-	bool transparent = false;
+	bool _transparent = false;
+	bool transparent {
+		get {
+			return _transparent;
+		}
+		set {
+			SetTransparency(value);
+		}
+	}
 	float transparencyAlpha = 71f/255f;
 	ShipMovement owningPlayerMovement;
 
@@ -28,12 +38,29 @@ public class Bullet : PooledObj {
 		damage = 1;
 	}
 
-	void FixedUpdate() {
-		if (!transparent && InOwnPlayersTerritory()) {
-			SetTransparency(true);
-		}
-		else if (transparent && !InOwnPlayersTerritory()) {
-			SetTransparency(false);
+	void OnEnable() {
+		transparent = false;
+		Invoke("StartTransparencyCheckCoroutine", 0.02f);
+	}
+	void StartTransparencyCheckCoroutine() {
+		StartCoroutine(TransparencyCheck());
+	}
+
+	IEnumerator TransparencyCheck() {
+		while (true) {
+			if (!sprite.isVisible) {
+				ReturnToPool();
+				yield break;
+			}
+
+			if (!transparent && InOwnPlayersTerritory()) {
+				SetTransparency(true);
+			}
+			else if (transparent && !InOwnPlayersTerritory()) {
+				SetTransparency(false);
+			}
+
+			yield return new WaitForSeconds(transparencyCheckCooldown);
 		}
 	}
 
@@ -63,7 +90,7 @@ public class Bullet : PooledObj {
 	}
 
 	void SetTransparency(bool isTransparent) {
-		transparent = isTransparent;
+		_transparent = isTransparent;
 
 		if (transparent) {
 			Color curColor = sprite.color;
@@ -78,16 +105,15 @@ public class Bullet : PooledObj {
 	}
 
 	bool InOwnPlayersTerritory() {
-		Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
 		//Player1 check
 		if (owningPlayer == Player.player1) {
-			if (viewportPos.x < owningPlayerMovement.viewportMaxX) {
+			if (transform.position.x < owningPlayerMovement.worldSpaceMaxX) {
 				return true;
 			}
 		}
 		//Player2 check
 		else if (owningPlayer == Player.player2) {
-			if (viewportPos.x > owningPlayerMovement.viewportMinX) {
+			if (transform.position.x > owningPlayerMovement.worldSpaceMinX) {
 				return true;
 			}
 		}

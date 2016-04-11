@@ -16,6 +16,11 @@ public class ShipMovement : MonoBehaviour {
 	public float viewportMinY;
 	public float viewportMaxY;
 
+	public float worldSpaceMinX;
+	public float worldSpaceMaxX;
+	public float worldSpaceMinY;
+	public float worldSpaceMaxY;
+
 	Vector3 desiredPosition;					//The position that the transform lerps towards each FixedUpdate()
 	Quaternion startRotation;					//The beginning rotation of the ship
 	Quaternion desiredRotation;					//The rotation that the transform lerps towards each FixedUpdate()
@@ -25,6 +30,13 @@ public class ShipMovement : MonoBehaviour {
 	void Start() {
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
+
+		Vector3 worldSpaceMin = Camera.main.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
+		worldSpaceMinX = worldSpaceMin.x;
+		worldSpaceMinY = worldSpaceMin.y;
+		Vector3 worldSpacemax = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
+		worldSpaceMaxX = worldSpacemax.x;
+		worldSpaceMaxY = worldSpacemax.y;
 
 		desiredPosition = transform.position;
 		startRotation = transform.rotation;
