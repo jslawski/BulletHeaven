@@ -11,6 +11,11 @@ public class Beam : MonoBehaviour {
 		}
 		set {
 			_owningPlayer = value;
+			if (value != Player.none) {
+				foreach (var beam in beams) {
+					beam.startColor = GameManager.S.players[(int)value].playerColor;
+				}
+			}
 		}
 	}
 
@@ -23,7 +28,7 @@ public class Beam : MonoBehaviour {
 		beams = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyBeam());
 
-		CameraEffects.S.CameraShake(1.5f, 0.75f);
+		CameraEffects.S.CameraShake(1.5f, 0.75f, true);
 	}
 
 	IEnumerator DestroyBeam() {
