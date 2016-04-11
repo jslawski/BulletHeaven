@@ -28,7 +28,7 @@ public class Bullet : PooledObj {
 		damage = 1;
 	}
 
-	void Update() {
+	void FixedUpdate() {
 		if (!transparent && InOwnPlayersTerritory()) {
 			SetTransparency(true);
 		}
