@@ -4,7 +4,7 @@ using System.Collections;
 public enum Attack {
 	leadingShot,
 	spiral,
-	attack3,
+	beam,
 	attack4
 }
 
@@ -13,6 +13,7 @@ public class Bomb : MonoBehaviour {
 	public GameObject shockwavePrefab;
 	public LeadingShot leadingShotPrefab;
 	public SpiralShot spiralShotPrefab;
+	public Beam beamShotPrefab;
 
 	PhysicsObj physics;
 	SpriteRenderer spriteRenderer;
@@ -53,6 +54,10 @@ public class Bomb : MonoBehaviour {
 				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
 				spiralShot.owningPlayer = owningPlayer;
 				spiralShot.FireBurst();
+				break;
+			case Attack.beam:
+				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
+				beamShot.owningPlayer = owningPlayer;
 				break;
 			default:
 				Debug.LogError("Attack type " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");

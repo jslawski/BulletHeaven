@@ -97,9 +97,16 @@ public class ShipMovement : MonoBehaviour {
 	public void SlowPlayer(float percentOfNormalMovespeed) {
 		verticalMovespeed = vertMovespeedDefault * percentOfNormalMovespeed;
 		horizontalMovespeed = horizMovespeedDefault * percentOfNormalMovespeed;
+		StartCoroutine(RestoreSpeedCoroutine());
 	}
+
 	public void RestoreSpeed() {
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
+	}
+
+	IEnumerator RestoreSpeedCoroutine() {
+		yield return new WaitForSeconds(0.2f);
+		RestoreSpeed();
 	}
 }

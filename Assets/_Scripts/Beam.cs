@@ -21,11 +21,15 @@ public class Beam : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		beams = GetComponentsInChildren<ParticleSystem>();
+		StartCoroutine(DestroyBeam());
+
+		CameraEffects.S.CameraShake(1.5f, 0.75f);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	IEnumerator DestroyBeam() {
+		yield return new WaitForSeconds(3.2f);
+
+		Destroy(gameObject);
 	}
 
 	void OnTriggerStay(Collider other) {

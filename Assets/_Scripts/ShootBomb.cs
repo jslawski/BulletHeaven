@@ -34,6 +34,9 @@ public class ShootBomb : MonoBehaviour {
 		else if (Input.GetKeyDown(KeyCode.Alpha2)) {
 			DetonateBomb(Attack.spiral);
 		}
+		else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+			DetonateBomb(Attack.beam);
+		}
 
 		if (bombShootCooldownRemaining > 0) {
 			bombShootCooldownRemaining -= Time.deltaTime;
