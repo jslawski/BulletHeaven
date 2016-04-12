@@ -16,6 +16,8 @@ public class ShootBomb : MonoBehaviour {
 	float minSpeed = 10f;
 	float maxSpeed = 20;
 
+	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam;
+
 	// Use this for initialization
 	void Start () {
 		thisPlayer = GetComponent<PlayerShip>();
@@ -23,18 +25,18 @@ public class ShootBomb : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("space") && bombShootCooldownRemaining <= 0) {
+		if (Input.GetKeyDown(shootBomb) && bombShootCooldownRemaining <= 0) {
 			Shoot();
 		}
 
 		//Detonating bombs
-		if (Input.GetKeyDown(KeyCode.Alpha1)) {
+		if (Input.GetKeyDown(shootLeadingShot)) {
 			DetonateBomb(Attack.leadingShot);
 		}
-		else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+		else if (Input.GetKeyDown(shootSpiral)) {
 			DetonateBomb(Attack.spiral);
 		}
-		else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+		else if (Input.GetKeyDown(shootBeam)) {
 			DetonateBomb(Attack.beam);
 		}
 

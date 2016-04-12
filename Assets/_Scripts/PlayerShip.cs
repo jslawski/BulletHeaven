@@ -46,5 +46,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	void Die() {
 		print("I am dead");
+		Destroy(gameObject);
 	}
 }

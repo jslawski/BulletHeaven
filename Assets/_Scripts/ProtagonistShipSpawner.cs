@@ -5,22 +5,22 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 	public GameObject[] protagonistShipPrefabs;
 
 	float minSpawnDelay = 0.5f;
-	float maxSpawnDelay = 4f;
+	float maxSpawnDelay = 3f;
 
 	float posOffsetMax = 15f;			//How far off-center the ship can spawn
 	float angleOffsetMax = 3f;          //How far off-center of the screen the ship can aim towards
 	float minSpeed = 20f;				//Lower limit on new ship speed
 	float maxSpeed = 25f;               //Upper limit on new ship speed
 
-	float backgroundShipChance = 0.9f;			//Percent chance for a ship to spawn in the background
-	float minBackgroundShipSize = 0.15f;		//Lower limit on size of background ships
-	float maxBackgroundShipSize = 0.75f;         //Upper limit on size of background ships
+	float backgroundShipChance = 0.835f;		//Percent chance for a ship to spawn in the background
+	float minBackgroundShipSize = 0.35f;		//Lower limit on size of background ships
+	float maxBackgroundShipSize = 0.65f;         //Upper limit on size of background ships
 
 	float battlegroundsShipChance = 0.065f;		//Percent chance for a ship to spawn in the battlegrounds
 	float minBattlegroundShipSize = 0.95f;		//Lower limit on size of battleground ships
 	float maxBattlegroundShipSize = 1.05f;      //Upper limit on size of battleground ships
 
-	float foregroundShipChance = 0.05f;         //Percent chance for a ship to spawn in the foreground
+	float foregroundShipChance = 0.1f;         //Percent chance for a ship to spawn in the foreground
 	float minForegroundShipSize = 2.5f;			//Lower limit on size of foreground ships
 	float maxForegroundShipSize = 5f;			//Upper limit on size of foreground ships
 
@@ -67,12 +67,15 @@ public class ProtagonistShipSpawner : MonoBehaviour {
         curScale.y *= scaleFactor;
 		newShip.transform.localScale = curScale;
 
-		//Apply a sorting order based on the depth of this ship
 		SpriteRenderer newShipSprite = newShip.GetComponentInChildren<SpriteRenderer>();
-		newShipSprite.sortingOrder = (int)((1 - scaleFactor) * -100);
+		//Apply a sorting order based on the depth of this ship
 		//Dim the colors of background ships
 		if (!battlegroundShip) {
 			newShipSprite.color *= backgroundShipColorDim;
+			newShipSprite.sortingOrder = (int)((1 - scaleFactor) * -100);
+		}
+		else {
+			newShipSprite.sortingOrder = -1;
 		}
 
 		//Aim the ship towards the center of the map (+/- angleOffset) if it's an interactable ship

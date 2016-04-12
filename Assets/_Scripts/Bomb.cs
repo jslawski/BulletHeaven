@@ -9,7 +9,18 @@ public enum Attack {
 }
 
 public class Bomb : MonoBehaviour {
-	public Player owningPlayer = Player.none;       //Set this when creating a new Bomb
+	Player _owningPlayer = Player.none;       //Set this when creating a new Bomb
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+			if (value != Player.none) {
+				spriteRenderer.sprite = playerBombSprites[(int)value];
+            }
+		}
+	}
 	public GameObject shockwavePrefab;
 	public LeadingShot leadingShotPrefab;
 	public SpiralShot spiralShotPrefab;
@@ -17,14 +28,16 @@ public class Bomb : MonoBehaviour {
 
 	PhysicsObj physics;
 	SpriteRenderer spriteRenderer;
+	Sprite[] playerBombSprites = new Sprite[2];
 
 
 	float decelerationRate = 0.005f;
 
-	// Use this for initialization
-	void Start () {
+	void Awake() {
 		physics = GetComponent<PhysicsObj>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
+		playerBombSprites[0] = Resources.Load<Sprite>("Images/Bomb1");
+		playerBombSprites[1] = Resources.Load<Sprite>("Images/Bomb2");
 	}
 	
 	// Update is called once per frame
@@ -38,6 +51,8 @@ public class Bomb : MonoBehaviour {
 			//print("Bomb " + gameObject.name + " went offscreen and died");
 			Destroy(gameObject);
 		}
+
+		transform.Rotate(new Vector3(0, 0, 180 * Time.deltaTime));
 	}
 
 	public void Detonate(Attack attackToPerform) {

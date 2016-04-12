@@ -19,7 +19,7 @@ public class Beam : MonoBehaviour {
 		}
 	}
 
-	float damage = 1f;
+	float damage = 0.65f;
 	float slowingFactor = 0.25f;				//Percent of normal movement speed the player experiences while in the beam
 	ParticleSystem[] beams;
 
