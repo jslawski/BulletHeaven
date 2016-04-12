@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerShip : MonoBehaviour, DamageableObject {
+	public FinishAttack finalAttackPrefab;
 	public Player player;
 	public Color playerColor;
 	public HealthBar healthBar;
@@ -22,6 +23,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			healthBar.SetHealth(_health / maxHealth);
 		}
 	}
+	bool dead = false;
 
 	// Use this for initialization
 	void Start () {
@@ -45,7 +47,22 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	void Die() {
+		if (dead) {
+			return;
+		}
+		dead = true;
+		playerMovement.movementDisabled = true;
 		print("I am dead");
-		Destroy(gameObject);
+
+		int otherPlayer = (player == Player.player1) ? (int)Player.player2 : (int)Player.player1;
+		GameManager.S.players[otherPlayer].BeginFinalAttack();
+	}
+
+	public void BeginFinalAttack() {
+		Vector3 spawnPos = transform.position + transform.up * 4.5f;
+		print(transform.position + " " + spawnPos);
+        FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
+		finalAttack.owningPlayer = player;
+		finalAttack.fireKey = (player == Player.player1) ? KeyCode.E : KeyCode.KeypadEnter;
 	}
 }

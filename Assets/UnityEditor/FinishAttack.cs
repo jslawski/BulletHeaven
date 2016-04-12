@@ -2,8 +2,25 @@
 using System.Collections;
 
 public class FinishAttack : MonoBehaviour {
-	public Transform target;
-	public Gradient beamPulse;
+	public KeyCode fireKey;
+	Player _owningPlayer = Player.none;
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+			if (value != Player.none) {
+				int otherPlayer = (value == Player.player1) ? (int)Player.player2 : (int)Player.player1;
+				target = GameManager.S.players[otherPlayer].transform;
+				beamPulse = (value == Player.player1) ? beamPulseP1 : beamPulseP2;
+			}
+		}
+	}
+	Transform target;
+	public Gradient beamPulseP1;
+	public Gradient beamPulseP2;
+	Gradient beamPulse;
 	ParticleSystem charge;
 	ParticleSystem background;
 	ParticleSystem explosion;
@@ -12,8 +29,8 @@ public class FinishAttack : MonoBehaviour {
 
 	float startSpeed = -10f;
 	float endSpeed = 0.1f;
-	float startRadius = 10f;
-	float endRadius = 2f;
+	//float startRadius = 10f;
+	//float endRadius = 2f;
 	float startSize = 10f;
 	float endSize = 4f;
 	float startEmissiveRate = 750f;
@@ -35,24 +52,33 @@ public class FinishAttack : MonoBehaviour {
 		charge = transform.FindChild("Charge").GetComponent<ParticleSystem>();
 		background = transform.FindChild("BackgroundEffect").GetComponent<ParticleSystem>();
 		explosion = transform.FindChild("MassiveExplosion").GetComponent<ParticleSystem>();
-
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("return")) {
+		if (owningPlayer == Player.none) {
+			return;
+		}
+
+		if (Input.GetKeyDown(fireKey)) {
 			StartCoroutine(FinalAttack());
 		}
 	}
 
 	IEnumerator FinalAttack() {
+		PlayerShip attackingPlayer = GameManager.S.players[(int)owningPlayer];
+		attackingPlayer.playerMovement.movementDisabled = true;
+
+		//Move the attack into the right position before beginning
+		transform.position = attackingPlayer.transform.position + attackingPlayer.transform.up * 4.5f;
+
 		StartCoroutine(CameraRumble());
 		charge.Play();
 		background.Play();
 		float timeElapsed = 0;
 
 		Color startColor = Color.black;
-		Color endColor = charge.startColor;
+		Color endColor = beamPulse.Evaluate(0);
 
 		ParticleSystemRenderer backgroundRenderer = background.GetComponent<ParticleSystemRenderer>();
 
@@ -71,9 +97,9 @@ public class FinishAttack : MonoBehaviour {
 			background.startColor = Color.Lerp(startColor, endColor, percent);
 
 			//This is a hack to get around a non-modifiable property in the particle system settings
-			UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(charge);
-			so.FindProperty("ShapeModule.radius").floatValue = Mathf.Lerp(startRadius, endRadius, percent);
-			so.ApplyModifiedProperties();
+			//UnityEditor.SerializedObject so = new UnityEditor.SerializedObject(charge);
+			//so.FindProperty("ShapeModule.radius").floatValue = Mathf.Lerp(startRadius, endRadius, percent);
+			//so.ApplyModifiedProperties();
 
 			yield return null;
 		}
@@ -135,7 +161,7 @@ public class FinishAttack : MonoBehaviour {
 			}
 			differenceVector = target.position - transform.position;
 
-			transform.Translate(differenceVector.normalized * Time.deltaTime * laserSpeed);
+			transform.Translate(differenceVector.normalized * Time.deltaTime * laserSpeed, Space.World);
 			yield return null;
 		}
 		yield return new WaitForSeconds(pulseTime);

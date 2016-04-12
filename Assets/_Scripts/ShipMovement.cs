@@ -26,6 +26,8 @@ public class ShipMovement : MonoBehaviour {
 	Quaternion desiredRotation;					//The rotation that the transform lerps towards each FixedUpdate()
 	Vector3 dotVector;                          //Used to determine which way the ship should turn when moving up and down
 
+	public bool movementDisabled = false;
+
 	public KeyCode left, right, up, down;
 
 	// Use this for initialization
@@ -48,6 +50,10 @@ public class ShipMovement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update() {
+		if (movementDisabled) {
+			return;
+		}
+
 		if (Input.GetKey(left)) {
 			Move(Vector3.left * horizontalMovespeed * Time.deltaTime);
 		}
