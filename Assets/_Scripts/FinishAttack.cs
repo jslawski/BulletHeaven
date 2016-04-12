@@ -13,10 +13,12 @@ public class FinishAttack : MonoBehaviour {
 			if (value != Player.none) {
 				int otherPlayer = (value == Player.player1) ? (int)Player.player2 : (int)Player.player1;
 				target = GameManager.S.players[otherPlayer].transform;
+				thisPlayer = GameManager.S.players[(int)value];
 				beamPulse = (value == Player.player1) ? beamPulseP1 : beamPulseP2;
 			}
 		}
 	}
+	PlayerShip thisPlayer;
 	Transform target;
 	public Gradient beamPulseP1;
 	public Gradient beamPulseP2;
@@ -60,8 +62,16 @@ public class FinishAttack : MonoBehaviour {
 			return;
 		}
 
-		if (Input.GetKeyDown(fireKey)) {
-			StartCoroutine(FinalAttack());
+		if (thisPlayer.device == null) {
+			if (Input.GetKeyDown(fireKey)) {
+				StartCoroutine(FinalAttack());
+			}
+		}
+		//Controller input
+		else {
+			if (thisPlayer.device.RightTrigger.WasPressed) {
+				StartCoroutine(FinalAttack());
+			}
 		}
 	}
 
@@ -71,6 +81,9 @@ public class FinishAttack : MonoBehaviour {
 
 		//Move the attack into the right position before beginning
 		transform.position = attackingPlayer.transform.position + attackingPlayer.transform.up * 4.5f;
+
+		//Tell the camera to start following this projectile
+		CameraEffects.S.followObj = transform;
 
 		StartCoroutine(CameraRumble());
 		charge.Play();
@@ -204,7 +217,8 @@ public class FinishAttack : MonoBehaviour {
 
 			yield return null;
 		}
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(2.5f);
 		explosion.Stop();
+		CameraEffects.S.followObj = null;
 	}
 }

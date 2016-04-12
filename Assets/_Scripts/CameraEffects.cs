@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CameraEffects : MonoBehaviour {
 	public static CameraEffects S;
+	public Transform followObj;
 	Camera thisCamera;
 	
 	Vector3 startOffset;                //Starting position of the camera relative to the object it is following
@@ -44,7 +45,12 @@ public class CameraEffects : MonoBehaviour {
 
 	//Camera movement in FixedUpdate() for smoother following of the physics calculations
 	void FixedUpdate() {
-		transform.position = Vector3.Lerp(transform.position, startOffset + curOffset, followSpeed);
+		if (!followObj) {
+			transform.position = Vector3.Lerp(transform.position, startOffset + curOffset, followSpeed);
+		}
+		else {
+			transform.position = Vector3.Lerp(transform.position, followObj.position + startOffset + curOffset, followSpeed);
+		}
 		thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, curSize, zoomSpeed);
 
 		curOffset = Vector3.Lerp(curOffset, startOffset, 0.1f);

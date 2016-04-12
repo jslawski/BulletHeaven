@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ShootBomb : MonoBehaviour {
 	public GameObject bombPrefab;
 	PlayerShip thisPlayer;
+	public bool shootingDisabled = false;
 
 	public List<Bomb> bombsInAir = new List<Bomb>();         //Bombs that have been fired but not detonated
 	int maxNumBombsInAir = 2;
@@ -25,19 +26,41 @@ public class ShootBomb : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(shootBomb) && bombShootCooldownRemaining <= 0) {
-			Shoot();
+		if (shootingDisabled) {
+			return;
 		}
+		if (thisPlayer.device == null) {
+			if (Input.GetKeyDown(shootBomb) && bombShootCooldownRemaining <= 0) {
+				Shoot();
+			}
 
-		//Detonating bombs
-		if (Input.GetKeyDown(shootLeadingShot)) {
-			DetonateBomb(Attack.leadingShot);
+			//Detonating bombs
+			if (Input.GetKeyDown(shootLeadingShot)) {
+				DetonateBomb(Attack.leadingShot);
+			}
+			else if (Input.GetKeyDown(shootSpiral)) {
+				DetonateBomb(Attack.spiral);
+			}
+			else if (Input.GetKeyDown(shootBeam)) {
+				DetonateBomb(Attack.beam);
+			}
 		}
-		else if (Input.GetKeyDown(shootSpiral)) {
-			DetonateBomb(Attack.spiral);
-		}
-		else if (Input.GetKeyDown(shootBeam)) {
-			DetonateBomb(Attack.beam);
+		//Controller input
+		else {
+			if (thisPlayer.device.RightTrigger.WasPressed && bombShootCooldownRemaining <= 0) {
+				Shoot();
+			}
+
+			//Detonating bombs
+			if (thisPlayer.device.Action1.WasPressed) {
+				DetonateBomb(Attack.leadingShot);
+			}
+			else if (thisPlayer.device.Action2.WasPressed) {
+				DetonateBomb(Attack.spiral);
+			}
+			else if (thisPlayer.device.Action3.WasPressed) {
+				DetonateBomb(Attack.beam);
+			}
 		}
 
 		if (bombShootCooldownRemaining > 0) {

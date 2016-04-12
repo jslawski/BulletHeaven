@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
 
 public class PlayerShip : MonoBehaviour, DamageableObject {
 	public FinishAttack finalAttackPrefab;
@@ -7,6 +8,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Color playerColor;
 	public HealthBar healthBar;
 	public ShipMovement playerMovement;
+	public ShootBomb playerShooting;
+	public InputDevice device;
 
 	float maxHealth = 100f;
 	float _health;
@@ -29,6 +32,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	void Start () {
 		health = maxHealth;
 		playerMovement = GetComponent<ShipMovement>();
+		playerShooting = GetComponent<ShootBomb>();
 	}
 	
 	// Update is called once per frame
@@ -64,5 +68,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
 		finalAttack.owningPlayer = player;
 		finalAttack.fireKey = (player == Player.player1) ? KeyCode.E : KeyCode.KeypadEnter;
+
+		//Disable shooting so you don't fire a bomb when you perform the final attack
+		playerShooting.shootingDisabled = true;
 	}
 }

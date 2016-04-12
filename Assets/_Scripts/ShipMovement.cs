@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
+	PlayerShip thisPlayer;
 	float shipLerpSpeed = 0.275f;               //Percent ship lerps towards desired position each FixedUpdate()
-	float vertMovespeedDefault = 13f;
-	float horizMovespeedDefault = 10.5f;
+	float vertMovespeedDefault = 16f;
+	float horizMovespeedDefault = 12.5f;
 	float verticalMovespeed;					//Speed at which the player can move up and down
 	float horizontalMovespeed;					//Speed at which the player can move right to left
 
 	float shipTurnLerpSpeed = 0.1f;             //Percent ship lerps towards the desired rotation each FixedUpdate()
-	float maxTurnAngle = 10f;                   //Maximum amount a ship can toward in a certain direction
+	float maxTurnAngle = 15f;                   //Maximum amount a ship can toward in a certain direction
 
 	public float viewportMinX;
 	public float viewportMaxX;
@@ -32,6 +33,8 @@ public class ShipMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
+		thisPlayer = GetComponent<PlayerShip>();
+
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
 
@@ -54,27 +57,40 @@ public class ShipMovement : MonoBehaviour {
 			return;
 		}
 
-		if (Input.GetKey(left)) {
-			Move(Vector3.left * horizontalMovespeed * Time.deltaTime);
+		if (thisPlayer.device == null) {
+			if (Input.GetKey(left)) {
+				Move(Vector3.left * horizontalMovespeed * Time.deltaTime);
+			}
+			if (Input.GetKey(right)) {
+				Move(Vector3.right * horizontalMovespeed * Time.deltaTime);
+			}
+			if (Input.GetKey(up)) {
+				Move(Vector3.up * verticalMovespeed * Time.deltaTime);
+			}
+			if (Input.GetKey(down)) {
+				Move(Vector3.down * verticalMovespeed * Time.deltaTime);
+			}
+			//If no directions are being pressed, have the ship face forward
+			else if (!Input.GetKey(left) && !Input.GetKey(right) && !Input.GetKey(up) && !Input.GetKey(down)) {
+				desiredRotation = startRotation;
+			}
 		}
-		if (Input.GetKey(right)) {
-			Move(Vector3.right * horizontalMovespeed * Time.deltaTime);
-		}
-		if (Input.GetKey(up)) {
-			Move(Vector3.up * verticalMovespeed * Time.deltaTime);
-		}
-		if (Input.GetKey(down)) {
-			Move(Vector3.down * verticalMovespeed * Time.deltaTime);
-		}
-		//If no directions are being pressed, have the ship face forward
-		else if (!Input.GetKey(left) && !Input.GetKey(right) && !Input.GetKey(up) && !Input.GetKey(down)) {
-			desiredRotation = startRotation;
+		//Controller input
+		else {
+			if (thisPlayer.device.LeftStick) {
+				Move(thisPlayer.device.LeftStick.Vector);
+			}
+			else {
+				desiredRotation = startRotation;
+			}
 		}
 	}
 
 	void FixedUpdate() {
-		ClampDesiredPosition();
-         transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
+		if (!movementDisabled) {
+			ClampDesiredPosition();
+		}
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
 
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, shipLerpSpeed);
 	}
@@ -96,10 +112,14 @@ public class ShipMovement : MonoBehaviour {
 			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
 		}
 	}
-
+	void Move(Vector2 stickPosition) {
+		Vector3 moveVector = new Vector3(stickPosition.x, stickPosition.y, 0);
+		moveVector.x *= horizontalMovespeed * Time.deltaTime;
+		moveVector.y *= verticalMovespeed * Time.deltaTime;
+		Move(moveVector);
+	}
 	void Move(Vector3 moveVector) {
 		desiredPosition += moveVector;
-		Vector3 temp = transform.forward;
 
 		//Turn the ship slightly
 		float dotValue = Vector3.Dot(moveVector, dotVector);
@@ -111,7 +131,8 @@ public class ShipMovement : MonoBehaviour {
 		else if (dotValue < -0.01f) {
 			sign = -1;
 		}
-		desiredRotation = Quaternion.Euler(startRotation.eulerAngles + new Vector3(0, 0, sign*maxTurnAngle));
+		float turnAngle = maxTurnAngle * Mathf.Abs(Vector3.Dot(moveVector, Vector3.up));
+		desiredRotation = Quaternion.Euler(startRotation.eulerAngles + new Vector3(0, 0, sign*turnAngle));
 	}
 
 	public void SlowPlayer(float percentOfNormalMovespeed) {

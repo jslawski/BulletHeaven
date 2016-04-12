@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class ProtagShip : MonoBehaviour, DamageableObject {
+	float minLifespan = 4f;
+	float timeAlive = 0;
 	GameObject shipExplosionPrefab;
 	SpriteRenderer sprite;
 	float slowdownOnHit = 0.75f;		//Amount the ship slows down from getting hit by a bullet
@@ -26,9 +28,10 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 			Explode();
 		}
 
-		if (!sprite.isVisible) {
+		if (!sprite.isVisible && timeAlive > minLifespan) {
 			Destroy(gameObject);
 		}
+		timeAlive += Time.deltaTime;
 	}
 
 	void Explode() {
