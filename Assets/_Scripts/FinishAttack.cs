@@ -92,6 +92,7 @@ public class FinishAttack : MonoBehaviour {
 			CameraEffects.S.CameraShake(0.25f, 1f, true);
 			yield return new WaitForSeconds(0.25f);
 		}
+		CameraEffects.S.CameraShake(pulseTime, 1f, true);
 		yield return new WaitForSeconds(pulseTime);
 		CameraEffects.S.CameraShake(explosionDuration, 10f, true);
 		yield return new WaitForSeconds(explosionDuration);
