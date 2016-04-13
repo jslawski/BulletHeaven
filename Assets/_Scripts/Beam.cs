@@ -24,7 +24,10 @@ public class Beam : MonoBehaviour {
 	ParticleSystem[] beams;
 
 	// Use this for initialization
-	void Awake () {
+	void Awake() {
+		VibrateManager.S.BeamVibrate();
+		//VibrateManager.S.RumbleVibrate(GameManager.S.players[1].device, 0.1f, 3f);
+
 		beams = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyBeam());
 

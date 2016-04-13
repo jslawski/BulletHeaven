@@ -23,7 +23,7 @@ public class SpiralShot : MonoBehaviour {
 		float startingAngle = 0;
 		int directionScalar = 1;
 		float angleOffset = 10;
-		float bulletVelocity = 5;
+		float bulletVelocity = 4;
 
 
 		for (int i = 0; i < numBursts; i++) {

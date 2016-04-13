@@ -89,6 +89,7 @@ public class ShootBomb : MonoBehaviour {
 		//Add this bomb to the end of the queue
 		bombsInAir.Add(newBomb);
 		bombShootCooldownRemaining = bombShootCooldown;
+
 	}
 
 	public void DetonateBomb(Attack attackToPerform) {

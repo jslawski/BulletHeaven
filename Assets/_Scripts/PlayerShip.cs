@@ -44,6 +44,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		health -= damageIn;
 
 		CameraEffects.S.CameraShake(0.1f, .5f);
+		VibrateManager.S.HitVibrate(player);
 
 		if (health <= 0) {
 			Die();

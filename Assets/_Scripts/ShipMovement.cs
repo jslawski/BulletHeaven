@@ -49,10 +49,12 @@ public class ShipMovement : MonoBehaviour {
 		startRotation = transform.rotation;
 		desiredRotation = startRotation;
 		dotVector = -transform.right;
+		
 	}
 
 	// Update is called once per frame
 	void Update() {
+
 		if (movementDisabled) {
 			desiredRotation = startRotation;
 			return;
