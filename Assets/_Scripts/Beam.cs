@@ -20,14 +20,15 @@ public class Beam : MonoBehaviour {
 		}
 	}
 
+	float beamDuration = 3.2f;
 	float damage = 0.65f;
 	float slowingFactor = 0.25f;				//Percent of normal movement speed the player experiences while in the beam
 	ParticleSystem[] beams;
 
 	// Use this for initialization
 	void Awake() {
-		VibrateManager.S.RumbleVibrate(Player.player1, vibrationIntensity, 3f, false);
-		//VibrateManager.S.RumbleVibrate(Player.player2, vibrationIntensity, 3f, false);
+		VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
+		VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
 
 		beams = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyBeam());
@@ -36,7 +37,7 @@ public class Beam : MonoBehaviour {
 	}
 
 	IEnumerator DestroyBeam() {
-		yield return new WaitForSeconds(3.2f);
+		yield return new WaitForSeconds(beamDuration);
 
 		Destroy(gameObject);
 	}

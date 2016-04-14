@@ -29,6 +29,8 @@ public class FinishAttack : MonoBehaviour {
 	AudioSource chargeSound;
 	AudioSource explodeSound;
 
+	public bool hasBeenFired;
+
 	float chargeTime = 2f;
 
 	float startSpeed = -10f;
@@ -65,7 +67,7 @@ public class FinishAttack : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (owningPlayer == Player.none) {
+		if (owningPlayer == Player.none || hasBeenFired) {
 			return;
 		}
 
@@ -83,6 +85,7 @@ public class FinishAttack : MonoBehaviour {
 	}
 
 	IEnumerator FinalAttack() {
+		hasBeenFired = true;
 		PlayerShip attackingPlayer = GameManager.S.players[(int)owningPlayer];
 		attackingPlayer.playerMovement.movementDisabled = true;
 
@@ -92,7 +95,7 @@ public class FinishAttack : MonoBehaviour {
 		//Tell the camera to start following this projectile
 		CameraEffects.S.followObj = transform;
 
-		StartCoroutine(CameraRumble());
+		StartCoroutine(Rumble());
 		charge.Play();
 		background.Play();
 		float timeElapsed = 0;
@@ -101,7 +104,7 @@ public class FinishAttack : MonoBehaviour {
 		Color endColor = beamPulse.Evaluate(0);
 
 		ParticleSystemRenderer backgroundRenderer = background.GetComponent<ParticleSystemRenderer>();
-
+		
 		chargeSound.Play();
 
 		//Charge the laser
@@ -135,17 +138,40 @@ public class FinishAttack : MonoBehaviour {
 		StartCoroutine(PulsateLaser());
 	}
 
-	IEnumerator CameraRumble() {
+	IEnumerator Rumble() {
+		float currentChargePercent = 0f;
+
+		//Charging and traveling to target
 		while (!hasReachedDestination) {
+			VibrateManager.S.RumbleVibrate(Player.player1, 0.25f, currentChargePercent*0.25f, true);
+			VibrateManager.S.RumbleVibrate(Player.player2, 0.25f, currentChargePercent*0.25f, true);
+
 			CameraEffects.S.CameraShake(0.25f, 1f, true);
+
+			currentChargePercent = Mathf.Min(1, currentChargePercent + 0.25f / chargeTime);
 			yield return new WaitForSeconds(0.25f);
 		}
+		
+		//Waiting on target
+		VibrateManager.S.RumbleVibrate(Player.player1, pulseTime, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(Player.player2, pulseTime, 0.5f, true);
 		CameraEffects.S.CameraShake(pulseTime, 1f, true);
 		yield return new WaitForSeconds(pulseTime);
+
+		//Exploding on target
+		VibrateManager.S.RumbleVibrate(Player.player1, explosionDuration, 1, true);
+		VibrateManager.S.RumbleVibrate(Player.player2, explosionDuration, 1, true);
 		CameraEffects.S.CameraShake(explosionDuration, 10f, true);
 		yield return new WaitForSeconds(explosionDuration);
+
+		//Aftershocks
+		VibrateManager.S.RumbleVibrate(Player.player1, explosionDuration/2f, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(Player.player2, explosionDuration/2f, 0.5f, true);
 		CameraEffects.S.CameraShake(explosionDuration/2f, 1f, true);
+
 		yield return new WaitForSeconds(explosionDuration/2f);
+		VibrateManager.S.RumbleVibrate(Player.player1, 0.75f*explosionDuration, 0.1f, true);
+		VibrateManager.S.RumbleVibrate(Player.player2, 0.75f*explosionDuration, 0.1f, true);
 		CameraEffects.S.CameraShake(explosionDuration / 2f, 0.5f, true);
 	}
 

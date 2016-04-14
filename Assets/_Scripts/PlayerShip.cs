@@ -11,7 +11,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public ShootBomb playerShooting;
 	public InputDevice device;
 	float hitVibrateIntensity = 1f;
-	
 
 	float maxHealth = 100f;
 	float _health;
@@ -30,23 +29,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 	bool dead = false;
 
-	float _vibrateIntensity = 0;
-	public float realVibrateIntensity = 0; //Current, unclamped intensity
-	public float vibrateIntensity {
-		get { return _vibrateIntensity; }
-		set {
-			_vibrateIntensity = value;
-
-			//Clamp to 1
-			if (_vibrateIntensity > 1) {
-				_vibrateIntensity = 1;
-			}
-			if (device != null) {
-				device.Vibrate(_vibrateIntensity);
-			}
-		}
-	}
-
 	// Use this for initialization
 	void Start () {
 		health = maxHealth;
@@ -63,7 +45,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		health -= damageIn;
 
 		CameraEffects.S.CameraShake(0.1f, .5f);
-		VibrateManager.S.RumbleVibrate(player, hitVibrateIntensity, 0.2f, true);
+		VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
 
 		if (health <= 0) {
 			Die();

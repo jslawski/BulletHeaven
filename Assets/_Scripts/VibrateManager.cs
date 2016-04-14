@@ -3,11 +3,16 @@ using System.Collections;
 using InControl;
 
 public class VibrateManager : MonoBehaviour {
-
 	public static VibrateManager S;
+
+	float[] vibrations;
 
 	public void Awake() {
 		S = this;
+	}
+
+	void Start() {
+		vibrations = new float[GameManager.S.players.Length];
 	}
 
 	void OnDestroy() {
@@ -20,35 +25,56 @@ public class VibrateManager : MonoBehaviour {
 		}
 	}
 	
-	public bool RumbleVibrate(Player player, float intensity, float duration, bool stack=false) {
+	public void RumbleVibrate(Player player, float duration, float intensity, bool stack=true) {
 		PlayerShip curPlayer = GameManager.S.players[(int)player];
-
-		//Only increment the intensity if the vibration given is stackable, or the controller is currently not vibrating
-		if (stack == true || curPlayer.vibrateIntensity == 0) {
-			//Increment vibration intensity
-			curPlayer.realVibrateIntensity += intensity;
-			curPlayer.vibrateIntensity += intensity;
-
-			StartCoroutine(RumbleVibrateCoroutine(curPlayer, intensity, duration));
-			return true;
+		//Ignore vibrations until the player has a controller plugged in
+		if (curPlayer.device == null) {
+			return;
 		}
-		else {
-			curPlayer.realVibrateIntensity += intensity;
-			StartCoroutine(RumbleVibrateCoroutine(curPlayer, intensity, duration));
-			return false;
-		}
+		StartCoroutine(RumbleVibrateCoroutine(curPlayer, duration, intensity, stack));
 	}
 
 	//Disable the vibrating after a specific duration
-	IEnumerator RumbleVibrateCoroutine(PlayerShip player, float intensity, float duration) {
-		yield return new WaitForSeconds(duration);
-		//Continuously set the vibration
-		//for (float i = 0; i < duration; i += Time.fixedDeltaTime) {
-		//	player.vibrateIntensity = player.realVibrateIntensity;
-		//	yield return new WaitForFixedUpdate();
-		//}
+	IEnumerator RumbleVibrateCoroutine(PlayerShip player, float duration, float intensity, bool stack) {
+		float timeElapsed = 0;
+		int index = (int)player.player;
+		bool hasTakenEffect = false;
 
-		player.realVibrateIntensity -= intensity;
-		player.vibrateIntensity = Mathf.Abs(player.realVibrateIntensity);
+		//If the vibration stacks, add it to the total vibration value
+		if (stack) {
+			//Increase the player's vibration by intensity value
+			vibrations[index] += intensity;
+			player.device.Vibrate(vibrations[index]);
+			hasTakenEffect = true;
+		}
+		else {
+			//While we are waiting for the non-stacking vibration to take place
+			while (!hasTakenEffect && timeElapsed < duration) {
+				//If it doesn't stack, only increase the player's vibration if there is no other vibration happening at the time
+				//0.01 used to account for floating point inaccuracy
+				if (vibrations[index] < 0.01f) {
+					//Increase the player's vibration by intensity
+					vibrations[index] += intensity;
+					player.device.Vibrate(vibrations[index]);
+					hasTakenEffect = true;
+					break;
+				}
+
+				timeElapsed += Time.deltaTime;
+				yield return null;
+			}
+		}
+		//If we waited out for longer than the duration of the vibration, just give up and return
+		if (!hasTakenEffect) {
+			yield break;
+		}
+
+		print("Time left on vibration: " + (duration - timeElapsed) + "\nCurrent intensity: " + vibrations[index]);
+		//If the vibration took effect, wait the remaining amount of time
+		yield return new WaitForSeconds(duration - timeElapsed);
+
+		//Decrease the player's vibration by intensity value
+		vibrations[index] -= intensity;
+		player.device.Vibrate(vibrations[index]);
 	}
 }
