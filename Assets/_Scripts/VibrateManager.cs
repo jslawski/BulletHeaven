@@ -10,7 +10,7 @@ public class VibrateManager : MonoBehaviour {
 
 	float hitVibrate1 = 0;                //Magnitude of vibration when taking damage player1
 	float hitVibrate2 = 0;                //Magnitude of vibration when taking damage player2
-	float hitVibrate_c = 1f;							//Max magnitude of vibration when a player is hit.
+	float hitVibrate_c = 1f;                            //Max magnitude of vibration when a player is hit.
 
 	public void Awake() {
 		S = this;

@@ -26,6 +26,8 @@ public class FinishAttack : MonoBehaviour {
 	ParticleSystem charge;
 	ParticleSystem background;
 	ParticleSystem explosion;
+	AudioSource chargeSound;
+	AudioSource explodeSound;
 
 	float chargeTime = 2f;
 
@@ -51,6 +53,11 @@ public class FinishAttack : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		AudioSource[] sounds = thisPlayer.gameObject.GetComponentsInChildren<AudioSource>();
+		chargeSound = sounds[1];
+		explodeSound = sounds[0];
+
+
 		charge = transform.FindChild("Charge").GetComponent<ParticleSystem>();
 		background = transform.FindChild("BackgroundEffect").GetComponent<ParticleSystem>();
 		explosion = transform.FindChild("MassiveExplosion").GetComponent<ParticleSystem>();
@@ -94,6 +101,8 @@ public class FinishAttack : MonoBehaviour {
 		Color endColor = beamPulse.Evaluate(0);
 
 		ParticleSystemRenderer backgroundRenderer = background.GetComponent<ParticleSystemRenderer>();
+
+		chargeSound.Play();
 
 		//Charge the laser
 		while (timeElapsed < chargeTime) {
@@ -188,6 +197,8 @@ public class FinishAttack : MonoBehaviour {
 	}
 
 	IEnumerator Explode() {
+		explodeSound.Play();
+
 		explosion.Play();
 
 		float startEmissiveRate = explosion.emissionRate;
