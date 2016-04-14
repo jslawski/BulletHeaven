@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Beam : MonoBehaviour {
 	public GameObject explosionPrefab;
+	float vibrationIntensity = 0.15f;
 
 	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
@@ -25,8 +26,8 @@ public class Beam : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
-		VibrateManager.S.BeamVibrate();
-		//VibrateManager.S.RumbleVibrate(GameManager.S.players[1].device, 0.1f, 3f);
+		VibrateManager.S.RumbleVibrate(Player.player1, vibrationIntensity, 3f, false);
+		//VibrateManager.S.RumbleVibrate(Player.player2, vibrationIntensity, 3f, false);
 
 		beams = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyBeam());
