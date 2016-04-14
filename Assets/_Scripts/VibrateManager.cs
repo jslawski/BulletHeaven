@@ -16,6 +16,16 @@ public class VibrateManager : MonoBehaviour {
 		S = this;
 	}
 
+	void OnDestroy() {
+		if (GameManager.S.players[0].device != null) {
+			GameManager.S.players[0].device.Vibrate(0);
+		}
+
+		if (GameManager.S.players[1].device != null) {
+			GameManager.S.players[1].device.Vibrate(0);
+		}
+	}
+
 	void FixedUpdate() {
 		if (GameManager.S.players[0].device != null) {
 			float currentIntensity = beamVibrate + hitVibrate1;
