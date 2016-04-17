@@ -29,6 +29,7 @@ public class Beam : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake() {
+		SoundManager.instance.Play("BeamDetonate");
 		beams = GetComponentsInChildren<ParticleSystem>();
 		hitboxes = GetComponentsInChildren<BoxCollider>();
 
@@ -36,6 +37,7 @@ public class Beam : MonoBehaviour {
     }
 
 	void StartBeam() {
+		SoundManager.instance.Play("Beam");
 		VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
 		VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
 		CameraEffects.S.CameraShake(1.5f, 0.75f, true);

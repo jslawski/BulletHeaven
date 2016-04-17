@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class ShootBomb : MonoBehaviour {
 	public GameObject bombPrefab;
@@ -19,6 +20,7 @@ public class ShootBomb : MonoBehaviour {
 
 	public float reloadDuration = 4f;
 	public int curAmmo = 2;
+	public Ammo[] ammoImages;
 
 	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam;
 
@@ -80,9 +82,9 @@ public class ShootBomb : MonoBehaviour {
 
 	void Shoot() {
 		//Don't fire if we already have the max number of bombs in the air
-		if (bombsInAir.Count >= maxNumBombsInAir) {
-			return;
-		}
+		//if (bombsInAir.Count >= maxNumBombsInAir) {
+		//	return;
+		//}
 
 		//Don't fire if we are out of ammo
 		if (curAmmo == 0) {
@@ -107,6 +109,13 @@ public class ShootBomb : MonoBehaviour {
 
 		curAmmo--;
 		StartCoroutine(ReloadBomb());
+		//Disable the correct ammo image
+		if (ammoImages[0].reloading == false) {
+			StartCoroutine(ammoImages[0].DisplayReloadCoroutine(reloadDuration));
+		}
+		else if (ammoImages[1].reloading == false) {
+			StartCoroutine(ammoImages[1].DisplayReloadCoroutine(reloadDuration));
+		}
 
 	}
 
