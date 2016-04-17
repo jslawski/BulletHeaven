@@ -17,6 +17,9 @@ public class ShootBomb : MonoBehaviour {
 	float minSpeed = 10f;
 	float maxSpeed = 20;
 
+	public float reloadDuration = 4f;
+	public int curAmmo = 2;
+
 	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam;
 
 	// Use this for initialization
@@ -74,6 +77,11 @@ public class ShootBomb : MonoBehaviour {
 			return;
 		}
 
+		//Don't fire if we are out of ammo
+		if (curAmmo == 0) {
+			return;
+		}
+
 		GameObject newBombGO = Instantiate(bombPrefab, transform.position, new Quaternion()) as GameObject;
 		Bomb newBomb = newBombGO.GetComponent<Bomb>();
 		PhysicsObj bombPhysics = newBomb.GetComponent<PhysicsObj>();
@@ -90,6 +98,14 @@ public class ShootBomb : MonoBehaviour {
 		bombsInAir.Add(newBomb);
 		bombShootCooldownRemaining = bombShootCooldown;
 
+		curAmmo--;
+		StartCoroutine(ReloadBomb());
+
+	}
+
+	IEnumerator ReloadBomb() {
+		yield return new WaitForSeconds(reloadDuration);
+		curAmmo++;
 	}
 
 	public void DetonateBomb(Attack attackToPerform) {
