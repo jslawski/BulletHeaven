@@ -44,7 +44,7 @@ public class VibrateManager : MonoBehaviour {
 		if (stack) {
 			//Increase the player's vibration by intensity value
 			vibrations[index] += intensity;
-			player.device.Vibrate(vibrations[index]);
+			player.device.Vibrate(Mathf.Min(1, vibrations[index]));
 			hasTakenEffect = true;
 		}
 		else {
@@ -55,7 +55,7 @@ public class VibrateManager : MonoBehaviour {
 				if (vibrations[index] < 0.01f) {
 					//Increase the player's vibration by intensity
 					vibrations[index] += intensity;
-					player.device.Vibrate(vibrations[index]);
+					player.device.Vibrate(Mathf.Min(1, vibrations[index]));
 					hasTakenEffect = true;
 					break;
 				}
@@ -77,6 +77,6 @@ public class VibrateManager : MonoBehaviour {
 
 		//Decrease the player's vibration by intensity value
 		vibrations[index] -= intensity;
-		player.device.Vibrate(vibrations[index]);
+		player.device.Vibrate(Mathf.Min(1, vibrations[index]));
 	}
 }
