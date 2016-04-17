@@ -55,7 +55,7 @@ public class ShipMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 
-		if (movementDisabled) {
+		if (movementDisabled || !GameManager.S.gameHasBegun) {
 			desiredRotation = startRotation;
 			return;
 		}
