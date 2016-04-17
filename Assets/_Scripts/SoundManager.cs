@@ -39,16 +39,11 @@ public class SoundManager : MonoBehaviour {
 		if (m_instance == null) {
 			m_instance = this;            
 		} else if (m_instance != this)        
-			Destroy (gameObject);    
-		
-		DontDestroyOnLoad (gameObject);
-	}
-	
-	// Use this for initialization
-	void Start () {
+			Destroy (gameObject);
+
 		sounds = new Dictionary<string, ClipChannelPair>();
 		int maxChannelNum = -1;
-		for (int i = 0; i < sounds_.Length; i++){
+		for (int i = 0; i < sounds_.Length; i++) {
 			ClipChannelPair newValue = new ClipChannelPair();
 			newValue.audio = sounds_[i].value;
 			newValue.channel = sounds_[i].channel;
@@ -68,6 +63,13 @@ public class SoundManager : MonoBehaviour {
 
 		//Set music to looping
 		soundChannels[0].loop = true;
+
+		DontDestroyOnLoad (gameObject);
+	}
+	
+	// Use this for initialization
+	void Start () {
+		
 	}
 	
 	public void Play(string soundName){
