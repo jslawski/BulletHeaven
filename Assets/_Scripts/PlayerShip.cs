@@ -7,10 +7,14 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Player player;
 	public Color playerColor;
 	public HealthBar healthBar;
-	public ShipMovement playerMovement;
-	public ShootBomb playerShooting;
 	public InputDevice device;
+	public PressStartPrompt controllerPrompt;
 	float hitVibrateIntensity = 1f;
+
+	[HideInInspector]
+	public ShipMovement playerMovement;
+	[HideInInspector]
+	public ShootBomb playerShooting;
 
 	float maxHealth = 100f;
 	float _health;

@@ -10,6 +10,7 @@ public enum Player {
 public class GameManager : MonoBehaviour {
 	public static GameManager S;
 	public static bool emergencyBumperControls = false;
+	public bool gameHasBegun = false;
 
 	public PlayerShip[] players;
 
@@ -31,5 +32,9 @@ public class GameManager : MonoBehaviour {
 			emergencyBumperControls = !emergencyBumperControls;
 			print("Emergency bumper mode " + (emergencyBumperControls ? "activated" : "deactivated") + ".");
 		}
+	}
+
+	public void StartGame() {
+		gameHasBegun = true;
 	}
 }
