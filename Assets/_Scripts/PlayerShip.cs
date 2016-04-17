@@ -57,6 +57,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			return;
 		}
 		dead = true;
+		playerShooting.shootingDisabled = true;
 		playerMovement.movementDisabled = true;
 		print("I am dead");
 
@@ -66,7 +67,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	public void BeginFinalAttack() {
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
-		print(transform.position + " " + spawnPos);
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
 		finalAttack.owningPlayer = player;
 		finalAttack.fireKey = (player == Player.player1) ? KeyCode.E : KeyCode.KeypadEnter;

@@ -9,6 +9,7 @@ public enum Player {
 
 public class GameManager : MonoBehaviour {
 	public static GameManager S;
+	public static bool emergencyBumperControls = false;
 
 	public PlayerShip[] players;
 
@@ -21,11 +22,14 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		SoundManager.instance.Play("MainTheme");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetKeyDown(KeyCode.BackQuote)) {
+			emergencyBumperControls = !emergencyBumperControls;
+			print("Emergency bumper mode " + (emergencyBumperControls ? "activated" : "deactivated") + ".");
+		}
 	}
 }

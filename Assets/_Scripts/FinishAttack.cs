@@ -26,8 +26,6 @@ public class FinishAttack : MonoBehaviour {
 	ParticleSystem charge;
 	ParticleSystem background;
 	ParticleSystem explosion;
-	AudioSource chargeSound;
-	AudioSource explodeSound;
 
 	public bool hasBeenFired;
 
@@ -56,9 +54,6 @@ public class FinishAttack : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		AudioSource[] sounds = thisPlayer.gameObject.GetComponentsInChildren<AudioSource>();
-		chargeSound = sounds[1];
-		explodeSound = sounds[0];
-
 
 		charge = transform.FindChild("Charge").GetComponent<ParticleSystem>();
 		background = transform.FindChild("BackgroundEffect").GetComponent<ParticleSystem>();
@@ -78,7 +73,14 @@ public class FinishAttack : MonoBehaviour {
 		}
 		//Controller input
 		else {
-			if (thisPlayer.device.RightTrigger.WasPressed) {
+			//Emergency bumper controls
+			if (GameManager.emergencyBumperControls) {
+				if (thisPlayer.device.RightBumper.WasPressed) {
+					StartCoroutine(FinalAttack());
+				}
+			}
+			//Normal controls
+			else if (thisPlayer.device.RightTrigger.WasPressed) {
 				StartCoroutine(FinalAttack());
 			}
 		}
@@ -105,7 +107,7 @@ public class FinishAttack : MonoBehaviour {
 
 		ParticleSystemRenderer backgroundRenderer = background.GetComponent<ParticleSystemRenderer>();
 		
-		chargeSound.Play();
+		SoundManager.instance.Play("FinalShotCharge");
 
 		//Charge the laser
 		while (timeElapsed < chargeTime) {
@@ -223,7 +225,7 @@ public class FinishAttack : MonoBehaviour {
 	}
 
 	IEnumerator Explode() {
-		explodeSound.Play();
+		SoundManager.instance.Play("FinalExplosion");
 
 		explosion.Play();
 
