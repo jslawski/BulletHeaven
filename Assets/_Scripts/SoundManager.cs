@@ -63,6 +63,7 @@ public class SoundManager : MonoBehaviour {
 
 		//Set music to looping
 		soundChannels[0].loop = true;
+		soundChannels[0].volume = 0.5f;
 
 		DontDestroyOnLoad (gameObject);
 	}
