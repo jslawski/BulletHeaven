@@ -4,7 +4,7 @@ using InControl;
 
 public class VibrateManager : MonoBehaviour {
 	public static VibrateManager S;
-
+	public bool DEBUG_MODE = false;
 	float[] vibrations;
 
 	public void Awake() {
@@ -69,7 +69,9 @@ public class VibrateManager : MonoBehaviour {
 			yield break;
 		}
 
-		print("Time left on vibration: " + (duration - timeElapsed) + "\nCurrent intensity: " + vibrations[index]);
+		if (DEBUG_MODE) {
+			print("Time left on vibration: " + (duration - timeElapsed) + "\nCurrent intensity: " + vibrations[index]);
+		}
 		//If the vibration took effect, wait the remaining amount of time
 		yield return new WaitForSeconds(duration - timeElapsed);
 

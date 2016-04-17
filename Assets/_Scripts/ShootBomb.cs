@@ -50,7 +50,14 @@ public class ShootBomb : MonoBehaviour {
 		}
 		//Controller input
 		else {
-			if (thisPlayer.device.RightTrigger.WasPressed && bombShootCooldownRemaining <= 0) {
+			//Emergency bumper controls
+			if (GameManager.emergencyBumperControls) {
+				if (thisPlayer.device.RightBumper.WasPressed && bombShootCooldownRemaining <= 0) {
+					Shoot();
+				}
+			}
+			//Normal controls
+			else if (thisPlayer.device.RightTrigger.WasPressed && bombShootCooldownRemaining <= 0) {
 				Shoot();
 			}
 

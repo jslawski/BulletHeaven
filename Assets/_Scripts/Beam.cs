@@ -20,26 +20,45 @@ public class Beam : MonoBehaviour {
 		}
 	}
 
+	float chargeDuration = 0.75f;
 	float beamDuration = 3.2f;
 	float damage = 0.65f;
 	float slowingFactor = 0.25f;				//Percent of normal movement speed the player experiences while in the beam
 	ParticleSystem[] beams;
+	BoxCollider[] hitboxes;
 
 	// Use this for initialization
 	void Awake() {
+		beams = GetComponentsInChildren<ParticleSystem>();
+		hitboxes = GetComponentsInChildren<BoxCollider>();
+
+		Invoke("StartBeam", chargeDuration);
+    }
+
+	void StartBeam() {
 		VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
 		VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
-
-		beams = GetComponentsInChildren<ParticleSystem>();
-		StartCoroutine(DestroyBeam());
-
 		CameraEffects.S.CameraShake(1.5f, 0.75f, true);
+
+		//Stop the charge particle system and start the beam particle systems
+		beams[0].Stop();
+		for (int i = 1; i < beams.Length; i++) {
+			beams[i].Play();
+		}
+
+		//Turn the hitboxes on for the beams
+		foreach (var hitbox in hitboxes) {
+			hitbox.enabled = true;
+		}
+
+		StartCoroutine(DestroyBeam());
 	}
 
 	IEnumerator DestroyBeam() {
 		yield return new WaitForSeconds(beamDuration);
 
 		Destroy(gameObject);
+
 	}
 
 	void OnTriggerStay(Collider other) {

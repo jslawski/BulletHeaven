@@ -6,8 +6,9 @@ public class SpiralShot : MonoBehaviour {
 
 	public Player owningPlayer = Player.none;
 	public Bullet bulletPrefab;
-	int numBursts = 40;
+	int numBursts = 80;
 	int numDirectionFlips = 7;
+	float bulletDelay = 0.05f;
 
 	// Use this for initialization
 	void Start () {
@@ -22,15 +23,15 @@ public class SpiralShot : MonoBehaviour {
 		float firingSeparation = 60 * Mathf.Deg2Rad;
 		float startingAngle = 0;
 		int directionScalar = 1;
-		float angleOffset = 10;
-		float bulletVelocity = 4;
-
+		float angleOffset = 6;
+		float bulletVelocity = 6;
 
 		for (int i = 0; i < numBursts; i++) {
 			//Fire burst of bullets
 			for (float curAngle = startingAngle; curAngle < startingAngle + (2 * Mathf.PI); curAngle += firingSeparation) {
 				PolarCoordinate direction = new PolarCoordinate(1, curAngle);
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
+				curBullet.damage = 1.5f;
 				curBullet.owningPlayer = owningPlayer;
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * direction.PolarToCartesian().normalized;
@@ -44,7 +45,7 @@ public class SpiralShot : MonoBehaviour {
 			//Update starting angle with the offset
 			startingAngle += angleOffset * Mathf.Deg2Rad * directionScalar;
 
-			yield return new WaitForSeconds(0.15f);
+			yield return new WaitForSeconds(bulletDelay);
 
 		}
 
