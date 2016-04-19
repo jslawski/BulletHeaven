@@ -4,7 +4,7 @@ using PolarCoordinates;
 
 public class Reflector : MonoBehaviour {
 
-	Material reflectorMat;
+	ParticleSystem[] reflectorParticles;
 	float reflectorDuration = 4f;
 	float reflectionVelocity = 10f;
 
@@ -16,12 +16,18 @@ public class Reflector : MonoBehaviour {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				reflectorMat.color = GameManager.S.players[(int)value].playerColor;			}
+				if (value == Player.player1) {
+					reflectorParticles[0].Play();
+				}
+				else {
+					reflectorParticles[1].Play();
+				}
+			}
 		}
 	}
 
 	void Awake() {
-		reflectorMat = GetComponentInChildren<SpriteRenderer>().material;
+		reflectorParticles = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyReflector());
 	}
 
