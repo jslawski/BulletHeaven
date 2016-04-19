@@ -15,8 +15,8 @@ public class ShootBomb : MonoBehaviour {
 	float bombShootCooldownRemaining = 0f;
 	float bombSpread = 0.2f;
 
-	float minSpeed = 10f;
-	float maxSpeed = 20;
+	float minSpeed = 15f;
+	float maxSpeed = 18;
 
 	public float reloadDuration = 4f;
 	public int curAmmo = 2;

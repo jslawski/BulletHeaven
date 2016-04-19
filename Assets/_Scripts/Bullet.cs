@@ -74,7 +74,7 @@ public class Bullet : PooledObj {
 				//Do damage to the player hit
 				player.TakeDamage(damage);
 
-				GameObject explosion = Instantiate(explosionPrefab, transform.position, new Quaternion()) as GameObject;
+				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
 				ReturnToPool();
 			}
@@ -83,7 +83,7 @@ public class Bullet : PooledObj {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
 			otherShip.TakeDamage(damage);
 
-			GameObject explosion = Instantiate(explosionPrefab, transform.position, new Quaternion()) as GameObject;
+			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
 			ReturnToPool();
 		}
@@ -96,11 +96,13 @@ public class Bullet : PooledObj {
 			Color curColor = sprite.color;
 			curColor.a = transparencyAlpha;
 			sprite.color = curColor;
+			sprite.sortingOrder = -1;
 		}
 		else {
 			Color curColor = sprite.color;
 			curColor.a = 1;
 			sprite.color = curColor;
+			sprite.sortingOrder = 0;
 		}
 	}
 

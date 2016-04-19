@@ -6,8 +6,8 @@ public class SpiralShot : MonoBehaviour {
 
 	public Player owningPlayer = Player.none;
 	public Bullet bulletPrefab;
-	int numBursts = 80;
-	int numDirectionFlips = 7;
+	int numBursts = 40;
+	int numDirectionFlips = 4;
 	float bulletDelay = 0.05f;
 
 	// Use this for initialization
@@ -23,8 +23,8 @@ public class SpiralShot : MonoBehaviour {
 		float firingSeparation = 60 * Mathf.Deg2Rad;
 		float startingAngle = 0;
 		int directionScalar = 1;
-		float angleOffset = 6;
-		float bulletVelocity = 6;
+		float angleOffset = 4;
+		float bulletVelocity = 4;
 
 		for (int i = 0; i < numBursts; i++) {
 			//Fire burst of bullets
