@@ -24,6 +24,18 @@ public class SoundManager : MonoBehaviour {
 	
 	float lowPitchRange = 0.9f;
 	float highPitchRange = 1.1f;
+
+	bool _muted = false;
+	public bool muted {
+		get {
+			return _muted;
+		}
+		set {
+			if (value != _muted) {
+				ToggleMute();
+			}
+		}
+	}
 	
 	public static SoundManager instance {
 		get {
@@ -117,6 +129,14 @@ public class SoundManager : MonoBehaviour {
 		else {
 			Debug.LogError("Sound: " + soundName + " not found. Check the Sounds_ array in the inspector.");
 			return -1;
+		}
+	}
+
+	void ToggleMute() {
+		_muted = !_muted;
+		
+		foreach (var channel in soundChannels) {
+			channel.mute = muted;
 		}
 	}
 }

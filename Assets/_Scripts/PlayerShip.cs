@@ -32,6 +32,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		}
 	}
 	bool dead = false;
+	public bool invincible = false;
 
 	// Use this for initialization
 	void Start () {
@@ -46,6 +47,10 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	public void TakeDamage(float damageIn) {
+		if (invincible) {
+			return;
+		}
+
 		health -= damageIn;
 
 		CameraEffects.S.CameraShake(0.1f, .5f);
@@ -69,10 +74,10 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		print("I am dead");
 
 		int otherPlayer = (player == Player.player1) ? (int)Player.player2 : (int)Player.player1;
-		GameManager.S.players[otherPlayer].BeginFinalAttack();
+		GameManager.S.players[otherPlayer].InitializeFinalAttack();
 	}
 
-	public void BeginFinalAttack() {
+	public void InitializeFinalAttack() {
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
 		finalAttack.owningPlayer = player;
@@ -80,5 +85,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 		//Disable shooting so you don't fire a bomb when you perform the final attack
 		playerShooting.shootingDisabled = true;
+		invincible = true;
 	}
 }

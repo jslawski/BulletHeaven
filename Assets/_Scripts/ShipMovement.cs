@@ -97,7 +97,8 @@ public class ShipMovement : MonoBehaviour {
 		if (!movementDisabled) {
 			ClampDesiredPosition();
 		}
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
+		
+		transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
 
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, shipLerpSpeed);
 	}
@@ -156,5 +157,13 @@ public class ShipMovement : MonoBehaviour {
 	IEnumerator RestoreSpeedCoroutine() {
 		yield return new WaitForSeconds(0.2f);
 		RestoreSpeed();
+	}
+
+	public Vector3 GetVelocity() {
+		ClampDesiredPosition();
+
+		Vector3 moveVector = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed) - transform.position; // m
+		moveVector /= Time.deltaTime; // m/s
+		return moveVector;
 	}
 }

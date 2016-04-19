@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour {
 			emergencyBumperControls = !emergencyBumperControls;
 			print("Emergency bumper mode " + (emergencyBumperControls ? "activated" : "deactivated") + ".");
 		}
+
+		if (Input.GetKeyDown(KeyCode.M)) {
+			SoundManager.instance.muted = !SoundManager.instance.muted;
+			print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
+		}
 	}
 
 	public void StartGame() {
