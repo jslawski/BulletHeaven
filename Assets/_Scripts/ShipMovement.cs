@@ -17,9 +17,13 @@ public class ShipMovement : MonoBehaviour {
 	public float viewportMinY;
 	public float viewportMaxY;
 
+	[HideInInspector]
 	public float worldSpaceMinX;
+	[HideInInspector]
 	public float worldSpaceMaxX;
+	[HideInInspector]
 	public float worldSpaceMinY;
+	[HideInInspector]
 	public float worldSpaceMaxY;
 
 	Vector3 desiredPosition;					//The position that the transform lerps towards each FixedUpdate()
@@ -32,7 +36,7 @@ public class ShipMovement : MonoBehaviour {
 	public KeyCode left, right, up, down;
 
 	// Use this for initialization
-	void Start() {
+	void Awake() {
 		thisPlayer = GetComponent<PlayerShip>();
 
 		verticalMovespeed = vertMovespeedDefault;

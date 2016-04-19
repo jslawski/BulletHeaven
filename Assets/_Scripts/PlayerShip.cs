@@ -54,6 +54,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		if (health <= 0) {
 			Die();
 		}
+		else if (health >= maxHealth) {
+			health = maxHealth;
+		}
 	}
 
 	void Die() {
