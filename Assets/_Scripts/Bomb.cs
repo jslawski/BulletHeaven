@@ -18,6 +18,13 @@ public class Bomb : MonoBehaviour {
 			_owningPlayer = value;
 			if (value != Player.none) {
 				spriteRenderer.sprite = playerBombSprites[(int)value];
+				//Set the color of each of the wing's particle systems
+				for (int i = 0; i < 3; i++) {
+					particleSystems[i].startColor = GameManager.S.players[(int)value].playerColor;
+				}
+				//Only turn on the prewarmed particle glow for this player
+				particleSystems[3].gameObject.SetActive((value == Player.player1));
+				particleSystems[4].gameObject.SetActive((value == Player.player2));
             }
 		}
 	}
@@ -29,6 +36,7 @@ public class Bomb : MonoBehaviour {
 
 	PhysicsObj physics;
 	SpriteRenderer spriteRenderer;
+	ParticleSystem[] particleSystems;
 	Sprite[] playerBombSprites = new Sprite[2];
 
 
@@ -39,6 +47,7 @@ public class Bomb : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		playerBombSprites[0] = Resources.Load<Sprite>("Images/Bomb1");
 		playerBombSprites[1] = Resources.Load<Sprite>("Images/Bomb2");
+		particleSystems = GetComponentsInChildren<ParticleSystem>();
 	}
 	
 	// Update is called once per frame
