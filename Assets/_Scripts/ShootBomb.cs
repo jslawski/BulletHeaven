@@ -22,7 +22,7 @@ public class ShootBomb : MonoBehaviour {
 	public int curAmmo = 2;
 	public Ammo[] ammoImages;
 
-	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam;
+	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam, shootReflector;
 
 	// Use this for initialization
 	void Start () {
@@ -49,6 +49,9 @@ public class ShootBomb : MonoBehaviour {
 			else if (Input.GetKeyDown(shootBeam)) {
 				DetonateBomb(Attack.beam);
 			}
+			else if (Input.GetKeyDown(shootReflector)) {
+				DetonateBomb(Attack.reflector);
+			}
 		}
 		//Controller input
 		else {
@@ -72,6 +75,9 @@ public class ShootBomb : MonoBehaviour {
 			}
 			else if (thisPlayer.device.Action3.WasPressed) {
 				DetonateBomb(Attack.beam);
+			}
+			else if (thisPlayer.device.Action4.WasPressed) {
+				DetonateBomb(Attack.reflector);
 			}
 		}
 

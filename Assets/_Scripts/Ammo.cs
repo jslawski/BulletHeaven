@@ -27,7 +27,7 @@ public class Ammo : MonoBehaviour {
 		reloading = false;
 		liveAmmoImage.fillAmount = 1; //Just in case...
 
-		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
-		Destroy(shockwave, 5f);
+		//GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
+		//Destroy(shockwave, 5f);
 	}
 }

@@ -5,7 +5,7 @@ public enum Attack {
 	leadingShot,
 	spiral,
 	beam,
-	attack4
+	reflector
 }
 
 public class Bomb : MonoBehaviour {
@@ -25,6 +25,7 @@ public class Bomb : MonoBehaviour {
 	public LeadingShot leadingShotPrefab;
 	public SpiralShot spiralShotPrefab;
 	public Beam beamShotPrefab;
+	public Reflector reflectorPrefab;
 
 	PhysicsObj physics;
 	SpriteRenderer spriteRenderer;
@@ -73,6 +74,10 @@ public class Bomb : MonoBehaviour {
 			case Attack.beam:
 				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
 				beamShot.owningPlayer = owningPlayer;
+				break;
+			case Attack.reflector:
+				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
+				reflectorShot.owningPlayer = owningPlayer;
 				break;
 			default:
 				Debug.LogError("Attack type " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
