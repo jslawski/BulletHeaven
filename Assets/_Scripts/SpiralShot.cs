@@ -7,7 +7,7 @@ public class SpiralShot : MonoBehaviour {
 	public Player owningPlayer = Player.none;
 	public Bullet bulletPrefab;
 	int numBursts = 40;
-	int numDirectionFlips = 4;
+	int numDirectionFlips = 3;
 	float bulletDelay = 0.05f;
 
 	// Use this for initialization

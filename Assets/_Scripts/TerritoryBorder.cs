@@ -23,7 +23,7 @@ public class TerritoryBorder : MonoBehaviour {
 			threshold = GameManager.S.players[0].playerMovement.worldSpaceMaxX - thisPlayer.worldSpaceMinX;
 		}
 
-		while (true){
+		while (thisPlayer != null){
 			if (owningPlayer == Player.player1) {
 				float shiftedPos = thisPlayer.transform.position.x - (thisPlayer.worldSpaceMaxX - threshold);
 				if (shiftedPos > 0) {

@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 	public static GameManager S;
 	public static bool emergencyBumperControls = false;
 	public bool gameHasBegun = false;
+	public bool slowMo = false;
 
 	public PlayerShip[] players;
 
@@ -24,6 +25,11 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		SoundManager.instance.Play("MainTheme");
+
+		if (slowMo) {
+			Time.timeScale *= 0.75f;
+			Time.fixedDeltaTime *= 0.75f;
+		}
 	}
 	
 	// Update is called once per frame

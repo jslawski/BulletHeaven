@@ -3,7 +3,6 @@ using System.Collections;
 using PolarCoordinates;
 
 public class Reflector : MonoBehaviour {
-
 	ParticleSystem[] reflectorParticles;
 	float reflectorDuration = 4f;
 	float reflectionVelocity = 10f;
