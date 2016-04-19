@@ -5,6 +5,7 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 	float minLifespan = 4f;
 	float timeAlive = 0;
 	GameObject shipExplosionPrefab;
+	GameObject healthSpawnPrefab;
 	SpriteRenderer sprite;
 	float slowdownOnHit = 0.75f;		//Amount the ship slows down from getting hit by a bullet
 
@@ -15,6 +16,7 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 	void Awake() {
 		shipHealth = Random.Range(minHealth, maxHealth);
 		shipExplosionPrefab = Resources.Load<GameObject>("Prefabs/ProtagShipExplosion");
+		healthSpawnPrefab = Resources.Load<GameObject>("Prefabs/HealthPickup");
 		sprite = GetComponent<SpriteRenderer>();
 	}
 
@@ -38,6 +40,7 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 		CameraEffects.S.CameraShake(1f, 1.5f, true);
 
 		GameObject explosion = Instantiate(shipExplosionPrefab, transform.position, new Quaternion()) as GameObject;
+		Instantiate(healthSpawnPrefab, transform.position, new Quaternion());
 		Destroy(explosion, 5f);
 		Destroy(gameObject);
 	}

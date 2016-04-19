@@ -18,9 +18,12 @@ public class Bullet : PooledObj {
 			if (value != Player.none) {
 				sprite.color = GameManager.S.players[(int)value].playerColor;
 				owningPlayerMovement = GameManager.S.players[(int)value].playerMovement;
+				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
+				otherPlayer = GameManager.S.players[(int)other].playerMovement;
 			}
 		}
 	}
+	ShipMovement otherPlayer;
 	bool _transparent = false;
 	bool transparent {
 		get {
@@ -109,13 +112,13 @@ public class Bullet : PooledObj {
 	bool InOwnPlayersTerritory() {
 		//Player1 check
 		if (owningPlayer == Player.player1) {
-			if (transform.position.x < owningPlayerMovement.worldSpaceMaxX) {
+			if (transform.position.x < otherPlayer.worldSpaceMinX) {
 				return true;
 			}
 		}
 		//Player2 check
 		else if (owningPlayer == Player.player2) {
-			if (transform.position.x > owningPlayerMovement.worldSpaceMinX) {
+			if (transform.position.x > otherPlayer.worldSpaceMaxX) {
 				return true;
 			}
 		}
