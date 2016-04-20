@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class StretchText : MonoBehaviour {
-
+	public float amplitude = 0.1f;
+	public float frequency = 0.5f;
 	// Use this for initialization
 	void Start() {
 		StartCoroutine(StretchTextCoroutine());
@@ -10,8 +11,6 @@ public class StretchText : MonoBehaviour {
 
 	IEnumerator StretchTextCoroutine() {
 		float timeElapsed = 0;
-		float frequency = 0.5f;
-		float amplitude = 0.1f;
 		Vector3 startSize = transform.localScale;
 
 		while (true) {

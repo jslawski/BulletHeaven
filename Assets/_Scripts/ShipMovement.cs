@@ -100,7 +100,7 @@ public class ShipMovement : MonoBehaviour {
 		
 		transform.position = Vector3.Lerp(transform.position, desiredPosition, shipLerpSpeed);
 
-		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, shipLerpSpeed);
+		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, shipTurnLerpSpeed);
 	}
 	void ClampDesiredPosition() {
 		Vector3 desiredViewportPos = Camera.main.WorldToViewportPoint(desiredPosition);

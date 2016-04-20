@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
+using InControl;
 
 public enum Player {
 	player1,
@@ -7,8 +9,15 @@ public enum Player {
 	none
 }
 
+public enum GameStates {
+	controllerSelect,
+	playing,
+	winnerScreen
+}
+
 public class GameManager : MonoBehaviour {
 	public static GameManager S;
+	public GameStates gameState = GameStates.controllerSelect;
 	public static bool emergencyBumperControls = false;
 	public bool gameHasBegun = false;
 	public bool slowMo = false;
@@ -44,9 +53,19 @@ public class GameManager : MonoBehaviour {
 			SoundManager.instance.muted = !SoundManager.instance.muted;
 			print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
 		}
+
+		if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+			SceneManager.LoadScene("_Scene_Title");
+		}
 	}
 
 	public void StartGame() {
+		gameState = GameStates.playing;
 		gameHasBegun = true;
+	}
+
+	public void EndGame(Player winner) {
+		gameState = GameStates.winnerScreen;
+		WinnerPanel.S.DisplayWinner(winner);
 	}
 }
