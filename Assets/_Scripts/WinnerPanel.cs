@@ -57,5 +57,7 @@ public class WinnerPanel : MonoBehaviour {
 
 			yield return 0;
 		}
+
+		GameManager.S.gameState = GameStates.winnerScreen;
 	}
 }

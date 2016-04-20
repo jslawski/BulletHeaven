@@ -10,6 +10,7 @@ public enum Player {
 }
 
 public enum GameStates {
+	titleScreen,
 	controllerSelect,
 	playing,
 	winnerScreen
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour {
 
 	public PlayerShip[] players;
 	public string titleSceneName = "_Scene_Title";
+
+	float minTimeInSceneForInput = 0.25f;
+	float timeInScene = 0;
 
 	void Awake() {
 		S = this;
@@ -44,18 +48,26 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.BackQuote)) {
-			emergencyBumperControls = !emergencyBumperControls;
-			print("Emergency bumper mode " + (emergencyBumperControls ? "activated" : "deactivated") + ".");
+		if (timeInScene < minTimeInSceneForInput) {
+			timeInScene += Time.deltaTime;
 		}
+		else {
+			if (Input.GetKeyDown(KeyCode.BackQuote)) {
+				emergencyBumperControls = !emergencyBumperControls;
+				print("Emergency bumper mode " + (emergencyBumperControls ? "activated" : "deactivated") + ".");
+			}
 
-		if (Input.GetKeyDown(KeyCode.M)) {
-			SoundManager.instance.muted = !SoundManager.instance.muted;
-			print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
-		}
+			if (Input.GetKeyDown(KeyCode.M)) {
+				SoundManager.instance.muted = !SoundManager.instance.muted;
+				print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
+			}
 
-		if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-			SceneManager.LoadScene("_Scene_Title");
+			if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+				SceneManager.LoadScene("_Scene_Title");
+			}
+			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+				SceneManager.LoadScene("_Scene_Main");
+			}
 		}
 	}
 
@@ -65,7 +77,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void EndGame(Player winner) {
-		gameState = GameStates.winnerScreen;
 		WinnerPanel.S.DisplayWinner(winner);
 	}
 }
