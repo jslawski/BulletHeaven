@@ -12,6 +12,15 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	float hitVibrateIntensity = 1f;
 	public GameObject finishAttackPrompt;
 
+	SpriteRenderer shipSprite;
+	bool inDamageFlashCoroutine = false;
+	float damageFlashDuration = 0.2f;
+	float timeSinceTakenDamage = 0f;
+
+	float maxDamageAmplification = 4f;
+	float damageAmplificationTime = 300f;       //Time it takes to reach maximum damage amplification
+	float curDamageAmplification = 1f;
+
 	[HideInInspector]
 	public ShipMovement playerMovement;
 	[HideInInspector]
@@ -42,11 +51,16 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		health = maxHealth;
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
+		shipSprite = GetComponentInChildren<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		timeSinceTakenDamage += Time.deltaTime;
+
+		if (GameManager.S.gameHasBegun && curDamageAmplification < maxDamageAmplification) {
+			curDamageAmplification += Time.deltaTime * maxDamageAmplification / damageAmplificationTime;
+		}
 	}
 
 	public void TakeDamage(float damageIn) {
@@ -54,24 +68,61 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			return;
 		}
 
+		if (damageIn > 0) {
+			damageIn *= curDamageAmplification;
+			CameraEffects.S.CameraShake(0.1f, .5f);
+			VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
+		}
+
 		health -= damageIn;
 
-		CameraEffects.S.CameraShake(0.1f, .5f);
-		VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
-
 		if (health <= 0) {
-			SoundManager.instance.Play("NearDeath");
 			Die();
 		}
 		else if (health >= maxHealth) {
 			health = maxHealth;
 		}
+		timeSinceTakenDamage = 0;
+		if (!inDamageFlashCoroutine) {
+			StartCoroutine(FlashOnDamage(damageIn));
+		}
+	}
+
+	IEnumerator FlashOnDamage(float damage) {
+		inDamageFlashCoroutine = true;
+
+		Color targetColor = (damage > 0) ? Color.red : Color.green;
+		shipSprite.color = targetColor;
+
+		//Taking damage
+		if (damage > 0) {
+			while (timeSinceTakenDamage < damageFlashDuration) {
+				float percent = timeSinceTakenDamage / damageFlashDuration;
+				shipSprite.color = Color.Lerp(targetColor, Color.white, percent);
+	
+				yield return null;
+			}
+		}
+		//Healing damage
+		else {
+			float timeElapsed = 0;
+			while (timeElapsed < 4*damageFlashDuration) {
+				timeElapsed += Time.deltaTime;
+				shipSprite.color = Color.Lerp(targetColor, Color.white, timeElapsed/(4*damageFlashDuration));
+
+				yield return null;
+			}
+		}
+		shipSprite.color = Color.white;
+
+		inDamageFlashCoroutine = false;
 	}
 
 	void Die() {
 		if (dead) {
 			return;
 		}
+		SoundManager.instance.Play("NearDeath");
 		dead = true;
 		playerShooting.shootingDisabled = true;
 		playerMovement.movementDisabled = true;

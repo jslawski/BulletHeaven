@@ -47,7 +47,6 @@ public class FinishAttack : MonoBehaviour {
 
 	bool hasReachedDestination = false;
 	float laserSpeed = 10f;
-	float fireDelay = 1.5f;
 
 	float explosionDuration = 2f;
 
@@ -75,12 +74,12 @@ public class FinishAttack : MonoBehaviour {
 		else {
 			//Emergency bumper controls
 			if (GameManager.emergencyBumperControls) {
-				if (thisPlayer.device.RightBumper.WasPressed) {
+				if (thisPlayer.device.RightBumper.IsPressed && thisPlayer.device.LeftBumper.IsPressed) {
 					StartCoroutine(FinalAttack());
 				}
 			}
 			//Normal controls
-			else if (thisPlayer.device.RightTrigger.WasPressed) {
+			else if (thisPlayer.device.RightTrigger.IsPressed && thisPlayer.device.LeftTrigger.IsPressed) {
 				StartCoroutine(FinalAttack());
 			}
 		}
@@ -260,5 +259,6 @@ public class FinishAttack : MonoBehaviour {
 		yield return new WaitForSeconds(2.5f);
 		explosion.Stop();
 		CameraEffects.S.followObj = null;
+		GameManager.S.EndGame(owningPlayer);
 	}
 }

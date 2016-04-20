@@ -13,10 +13,12 @@ public class ShootBomb : MonoBehaviour {
 
 	float bombShootCooldown = 0.5f;
 	float bombShootCooldownRemaining = 0f;
-	float bombSpread = 0.2f;
+	float bombSpread = 0.1f;
 
 	float minSpeed = 15f;
 	float maxSpeed = 18;
+	float momentumInfluenceX = 0.1f;
+	float momentumInfluenceY = 0.2f;
 
 	public float reloadDuration = 4f;
 	public int curAmmo = 2;
@@ -109,7 +111,10 @@ public class ShootBomb : MonoBehaviour {
 		//Set the initial speed of the fired bomb
 		float speed = Random.Range(minSpeed, maxSpeed);
 		Vector3 aimDirection = ApplySpread(transform.up, bombSpread);
-		bombPhysics.velocity = speed*aimDirection;
+		Vector3 momentumVector = thisPlayer.playerMovement.GetVelocity();
+		momentumVector.x *= momentumInfluenceX;
+		momentumVector.y *= momentumInfluenceY;
+		bombPhysics.velocity = speed*aimDirection + momentumVector;
 
 		//Add this bomb to the end of the queue
 		bombsInAir.Add(newBomb);
