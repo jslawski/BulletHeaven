@@ -28,7 +28,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 				_health = 0;
 			}
 
-			healthBar.SetHealth(_health / maxHealth);
+			if (healthBar != null) {
+				healthBar.SetHealth(_health / maxHealth);
+			}
 		}
 	}
 	bool dead = false;
