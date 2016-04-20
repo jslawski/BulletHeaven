@@ -37,6 +37,8 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 	}
 
 	void Explode() {
+		SoundManager.instance.Play("DestroyProtagShip");
+
 		CameraEffects.S.CameraShake(1f, 1.5f, true);
 
 		GameObject explosion = Instantiate(shipExplosionPrefab, transform.position, new Quaternion()) as GameObject;
