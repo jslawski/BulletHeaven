@@ -74,12 +74,12 @@ public class FinishAttack : MonoBehaviour {
 		else {
 			//Emergency bumper controls
 			if (GameManager.emergencyBumperControls) {
-				if (thisPlayer.device.RightBumper.WasPressed) {
+				if (thisPlayer.device.RightBumper.IsPressed && thisPlayer.device.LeftBumper.IsPressed) {
 					StartCoroutine(FinalAttack());
 				}
 			}
 			//Normal controls
-			else if (thisPlayer.device.RightTrigger.WasPressed) {
+			else if (thisPlayer.device.RightTrigger.IsPressed && thisPlayer.device.LeftTrigger.IsPressed) {
 				StartCoroutine(FinalAttack());
 			}
 		}

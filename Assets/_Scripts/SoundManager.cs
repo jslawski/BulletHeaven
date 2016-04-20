@@ -32,7 +32,7 @@ public class SoundManager : MonoBehaviour {
 		}
 		set {
 			if (value != _muted) {
-				ToggleMute();
+				ToggleMuteMusic();
 			}
 		}
 	}
@@ -142,11 +142,9 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 
-	void ToggleMute() {
+	void ToggleMuteMusic() {
 		_muted = !_muted;
-		
-		foreach (var channel in soundChannels) {
-			channel.mute = muted;
-		}
+
+		soundChannels[0].mute = _muted;
 	}
 }
