@@ -97,6 +97,8 @@ public class ShootBomb : MonoBehaviour {
 			return;
 		}
 
+		SoundManager.instance.Play("FireBomb");
+
 		GameObject newBombGO = Instantiate(bombPrefab, transform.position, new Quaternion()) as GameObject;
 		Bomb newBomb = newBombGO.GetComponent<Bomb>();
 		PhysicsObj bombPhysics = newBomb.GetComponent<PhysicsObj>();

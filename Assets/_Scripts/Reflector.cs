@@ -26,6 +26,7 @@ public class Reflector : MonoBehaviour {
 	}
 
 	void Awake() {
+		SoundManager.instance.Play("Reflector");
 		reflectorParticles = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyReflector());
 	}

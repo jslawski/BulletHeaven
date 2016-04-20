@@ -59,6 +59,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
 
 		if (health <= 0) {
+			SoundManager.instance.Play("NearDeath");
 			Die();
 		}
 		else if (health >= maxHealth) {
