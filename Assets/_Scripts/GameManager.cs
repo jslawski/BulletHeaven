@@ -28,8 +28,8 @@ public class GameManager : MonoBehaviour {
 		SoundManager.instance.Play("MainTheme");
 
 		if (slowMo) {
-			Time.timeScale *= 0.75f;
-			Time.fixedDeltaTime *= 0.75f;
+			Time.timeScale *= 0.15f;
+			Time.fixedDeltaTime *= 0.15f;
 		}
 	}
 	
