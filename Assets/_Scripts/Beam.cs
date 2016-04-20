@@ -38,9 +38,12 @@ public class Beam : MonoBehaviour {
 
 	void StartBeam() {
 		SoundManager.instance.Play("Beam");
-		VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
-		VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
-		CameraEffects.S.CameraShake(1.5f, 0.75f, true);
+
+		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+			VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
+			VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
+			CameraEffects.S.CameraShake(1.5f, 0.75f, true);
+		}
 
 		//Stop the charge particle system and start the beam particle systems
 		beams[0].Stop();

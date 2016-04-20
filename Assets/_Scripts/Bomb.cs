@@ -56,8 +56,8 @@ public class Bomb : MonoBehaviour {
 	}
 
 	void Update() {
-		//Destroy the bomb if it goes off-screen
-		if (!spriteRenderer.isVisible) {
+		//Destroy the bomb if it goes off-screen (not during title screen though)
+		if (!spriteRenderer.isVisible && (Application.loadedLevelName != GameManager.S.titleSceneName)) {
 			//print("Bomb " + gameObject.name + " went offscreen and died");
 			Destroy(gameObject);
 		}
@@ -100,8 +100,8 @@ public class Bomb : MonoBehaviour {
 
 	void OnDestroy() {
 		//print("Destroyed bomb");
-		//Remove this bomb from the bombsInAir queue
-		if (GameManager.S && owningPlayer != Player.none) {
+		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
+		if (GameManager.S && owningPlayer != Player.none && Application.loadedLevelName != GameManager.S.titleSceneName) {
 			GameManager.S.players[(int)owningPlayer].GetComponent<ShootBomb>().bombsInAir.Remove(this);
 		}
 	}

@@ -86,6 +86,11 @@ public class SoundManager : MonoBehaviour {
 	}
 	
 	public void Play(string soundName){
+		//Only play the main theme on the title screen
+		if (Application.loadedLevelName == GameManager.S.titleSceneName && soundName != "MainTheme") {
+			return;
+		}
+
 		int channel = GetChannelIndex(soundName);
 		float randPitch = Random.Range(lowPitchRange, highPitchRange);
 
@@ -103,6 +108,11 @@ public class SoundManager : MonoBehaviour {
 	}
 	
 	public void Play(string soundName, float pitch){
+		//Only play the main theme on the title screen
+		if (Application.loadedLevelName == GameManager.S.titleSceneName && soundName != "MainTheme") {
+			return;
+		}
+
 		int channel = GetChannelIndex(soundName);
 
 		//Music channel should not have random pitch

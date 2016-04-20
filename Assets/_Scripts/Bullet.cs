@@ -110,6 +110,11 @@ public class Bullet : PooledObj {
 	}
 
 	bool InOwnPlayersTerritory() {
+		//Don't do this check on the title screen
+		if (Application.loadedLevelName == GameManager.S.titleSceneName) {
+			return false;
+		}
+
 		//Player1 check
 		if (owningPlayer == Player.player1) {
 			if (transform.position.x < otherPlayer.worldSpaceMinX) {

@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
 	public bool slowMo = false;
 
 	public PlayerShip[] players;
+	public string titleSceneName = "_Scene_Title";
 
 	void Awake() {
 		S = this;

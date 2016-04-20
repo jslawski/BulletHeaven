@@ -40,7 +40,12 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 		CameraEffects.S.CameraShake(1f, 1.5f, true);
 
 		GameObject explosion = Instantiate(shipExplosionPrefab, transform.position, new Quaternion()) as GameObject;
-		Instantiate(healthSpawnPrefab, transform.position, new Quaternion());
+
+		//Don't spawn health on the title screen
+		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+			Instantiate(healthSpawnPrefab, transform.position, new Quaternion());
+		}
+
 		Destroy(explosion, 5f);
 		Destroy(gameObject);
 	}

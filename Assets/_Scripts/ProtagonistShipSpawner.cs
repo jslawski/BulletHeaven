@@ -12,15 +12,15 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 	float minSpeed = 20f;				//Lower limit on new ship speed
 	float maxSpeed = 25f;               //Upper limit on new ship speed
 
-	float backgroundShipChance = 0.835f;		//Percent chance for a ship to spawn in the background
+	public float backgroundShipChance = 0.835f;		//Percent chance for a ship to spawn in the background
 	float minBackgroundShipSize = 0.35f;		//Lower limit on size of background ships
 	float maxBackgroundShipSize = 0.65f;         //Upper limit on size of background ships
 
-	float battlegroundsShipChance = 0.065f;		//Percent chance for a ship to spawn in the battlegrounds
+	public float battlegroundsShipChance = 0.065f;		//Percent chance for a ship to spawn in the battlegrounds
 	float minBattlegroundShipSize = 0.95f;		//Lower limit on size of battleground ships
 	float maxBattlegroundShipSize = 1.05f;      //Upper limit on size of battleground ships
 
-	float foregroundShipChance = 0.1f;         //Percent chance for a ship to spawn in the foreground
+	public float foregroundShipChance = 0.1f;         //Percent chance for a ship to spawn in the foreground
 	float minForegroundShipSize = 2.5f;			//Lower limit on size of foreground ships
 	float maxForegroundShipSize = 5f;			//Upper limit on size of foreground ships
 
