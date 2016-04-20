@@ -3,14 +3,16 @@ using System.Collections;
 
 public class BounceText : MonoBehaviour {
 
+	public float amplitude = 5f;
+	public float timeBeforeDirectionChange = 1.5f;
+
 	// Use this for initialization
 	void Start() {
 		StartCoroutine(BounceTextCoroutine());
 	}
 
 	IEnumerator BounceTextCoroutine() {
-		float amplitude = 5f;
-		float timeBeforeDirectionChange = 1.5f;
+		
 		float timeElapsed = 0;
 
 		Vector3 startPos = transform.position;

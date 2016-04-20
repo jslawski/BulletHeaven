@@ -10,6 +10,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public InputDevice device;
 	public PressStartPrompt controllerPrompt;
 	float hitVibrateIntensity = 1f;
+	public GameObject finishAttackPrompt;
 
 	[HideInInspector]
 	public ShipMovement playerMovement;
@@ -81,6 +82,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	public void InitializeFinalAttack() {
+		finishAttackPrompt.SetActive(true);
+
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
 		finalAttack.owningPlayer = player;

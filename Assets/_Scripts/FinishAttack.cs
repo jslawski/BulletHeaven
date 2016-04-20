@@ -90,6 +90,7 @@ public class FinishAttack : MonoBehaviour {
 		hasBeenFired = true;
 		PlayerShip attackingPlayer = GameManager.S.players[(int)owningPlayer];
 		attackingPlayer.playerMovement.movementDisabled = true;
+		attackingPlayer.finishAttackPrompt.SetActive(false);
 
 		//Move the attack into the right position before beginning
 		transform.position = attackingPlayer.transform.position + attackingPlayer.transform.up * 4.5f;
