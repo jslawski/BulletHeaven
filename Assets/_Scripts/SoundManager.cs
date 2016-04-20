@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public struct NameClipChannel {
 	public string key;
 	public AudioClip value;
-	[Range(0,8)]
+	[Range(0,15)]
 	public int channel;
 }
 
@@ -18,7 +18,7 @@ public struct ClipChannelPair {
 public class SoundManager : MonoBehaviour {
 	private static SoundManager m_instance;
 	private AudioSource[] soundChannels;
-	[Header("Music should go on channel 0, sound effects on channels 1-8.")]
+	[Header("Music should go on channel 0, sound effects on channels 1-15.")]
 	public NameClipChannel[] sounds_;
 	private Dictionary<string, ClipChannelPair> sounds;
 	

@@ -31,6 +31,7 @@ public class HealthPickup : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
+			SoundManager.instance.Play("HealthPickup");
 			PlayerShip thisPlayer = other.GetComponentInParent<PlayerShip>();
 			thisPlayer.TakeDamage(-healAmount);
 			Destroy(transform.parent.gameObject);

@@ -69,6 +69,8 @@ public class Bomb : MonoBehaviour {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
+		SoundManager.instance.Play("BombExplode");
+
 		switch (attackToPerform) {
 			case Attack.leadingShot:
 				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
