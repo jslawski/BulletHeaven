@@ -12,6 +12,16 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	float hitVibrateIntensity = 1f;
 	public GameObject finishAttackPrompt;
 
+	public Color damageColor;
+
+	//Death particles
+	public GameObject explosionPrefab;
+	ParticleSystem smokeParticles;
+	float pulsateRedPeriod = 2f;
+	float maxExplosionRadius = 1f;
+	float minTimeBetweenExplosions = 0.1f;
+	float maxTimeBetweenExplosions = 0.5f;
+
 	SpriteRenderer shipSprite;
 	bool inDamageFlashCoroutine = false;
 	float damageFlashDuration = 0.2f;
@@ -48,6 +58,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
+		smokeParticles = GetComponentInChildren<ParticleSystem>();
 	}
 	
 	// Update is called once per frame
@@ -83,7 +94,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	IEnumerator FlashOnDamage(float damage) {
 		inDamageFlashCoroutine = true;
 
-		Color targetColor = (damage > 0) ? Color.red : Color.green;
+		Color targetColor = (damage > 0) ? damageColor : Color.green;
 		shipSprite.color = targetColor;
 
 		//Taking damage
@@ -114,14 +125,17 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		if (dead) {
 			return;
 		}
-		SoundManager.instance.Play("NearDeath");
+		SoundManager.instance.Play("NearDeath", 1);
 		dead = true;
 		playerShooting.shootingDisabled = true;
 		playerMovement.movementDisabled = true;
-		print("I am dead");
+		//print("I am dead");
 
 		int otherPlayer = (player == Player.player1) ? (int)Player.player2 : (int)Player.player1;
 		GameManager.S.players[otherPlayer].InitializeFinalAttack();
+
+		StartCoroutine(DeathParticles());
+		StartCoroutine(PulsateRed());
 	}
 
 	public void InitializeFinalAttack() {
@@ -135,5 +149,27 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		//Disable shooting so you don't fire a bomb when you perform the final attack
 		playerShooting.shootingDisabled = true;
 		invincible = true;
+	}
+
+	IEnumerator DeathParticles() {
+		smokeParticles.Play();
+		while (GameManager.S.gameState != GameStates.finalAttack) {
+			Vector3 offset = maxExplosionRadius * Random.insideUnitCircle;
+
+			GameObject explosion = Instantiate(explosionPrefab, transform.position + offset, new Quaternion()) as GameObject;
+			Destroy(explosion, 5f);
+
+			yield return new WaitForSeconds(Random.Range(minTimeBetweenExplosions, maxTimeBetweenExplosions));
+		}
+	}
+	IEnumerator PulsateRed() {
+		float t = 0;
+		while (GameManager.S.gameState != GameStates.finalAttack) {
+			t += Time.deltaTime;
+
+			shipSprite.color = Color.Lerp(Color.white, damageColor, 0.5f * (Mathf.Sin(2 * Mathf.PI * t / pulsateRedPeriod) + 1));
+
+			yield return 0;
+		}
 	}
 }

@@ -87,6 +87,8 @@ public class FinishAttack : MonoBehaviour {
 
 	IEnumerator FinalAttack() {
 		hasBeenFired = true;
+
+		GameManager.S.gameState = GameStates.finalAttack;
 		PlayerShip attackingPlayer = GameManager.S.players[(int)owningPlayer];
 		attackingPlayer.playerMovement.movementDisabled = true;
 		attackingPlayer.finishAttackPrompt.SetActive(false);

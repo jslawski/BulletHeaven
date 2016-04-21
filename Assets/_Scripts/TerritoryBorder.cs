@@ -23,7 +23,7 @@ public class TerritoryBorder : MonoBehaviour {
 			threshold = GameManager.S.players[0].playerMovement.worldSpaceMaxX - thisPlayer.worldSpaceMinX;
 		}
 
-		while (thisPlayer != null){
+		while (thisPlayer != null && GameManager.S.gameState != GameStates.finalAttack){
 			if (owningPlayer == Player.player1) {
 				float shiftedPos = thisPlayer.transform.position.x - (thisPlayer.worldSpaceMaxX - threshold);
 				if (shiftedPos > 0) {
@@ -52,6 +52,8 @@ public class TerritoryBorder : MonoBehaviour {
 			}
 			yield return null;
 		}
+
+		territoryImage.enabled = false;
 	}
 	
 	// Update is called once per frame

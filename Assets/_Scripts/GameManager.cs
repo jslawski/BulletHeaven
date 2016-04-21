@@ -13,6 +13,7 @@ public enum GameStates {
 	titleScreen,
 	controllerSelect,
 	playing,
+	finalAttack,
 	winnerScreen
 }
 
