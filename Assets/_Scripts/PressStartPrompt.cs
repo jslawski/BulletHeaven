@@ -10,6 +10,7 @@ public class PressStartPrompt : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		playersReady = null;
 		if (playersReady == null) {
 			playersReady = new bool[GameManager.S.players.Length];
 		}
