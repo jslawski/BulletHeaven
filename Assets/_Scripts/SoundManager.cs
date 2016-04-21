@@ -24,8 +24,22 @@ public class SoundManager : MonoBehaviour {
 	
 	float lowPitchRange = 0.9f;
 	float highPitchRange = 1.1f;
-
-	public bool easterEgg = false;
+	
+	bool _easterEgg = false;
+	public bool easterEgg {
+		get {
+			return _easterEgg;
+		}
+		set {
+			if (value) {
+				Play("PrettyNeatMusic");
+			}
+			_easterEgg = value;
+			if (!value) {
+				Play("MainTheme");
+			}
+		}
+	}
 
 	bool _muted = false;
 	public bool muted {

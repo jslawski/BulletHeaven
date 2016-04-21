@@ -20,7 +20,12 @@ public class EasterEgg : MonoBehaviour {
 			if (compVal == -1) {
 				currentlyTyped = "";
 				SoundManager.instance.easterEgg = !SoundManager.instance.easterEgg;
-				print("Easter egg activated. It's pretty neat.");
+				if (SoundManager.instance.easterEgg) {
+					print("Easter egg activated. It's pretty neat.");
+				}
+				else {
+					print("Easter egg deactivated. It's less neat now.");
+				}
 			}
 			else if (compVal != -2) {
 				currentlyTyped = "";
