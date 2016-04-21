@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//Quit the game on pressing escape
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.Quit();
+		}
+
 		if (gameHasBegun && curDamageAmplification < maxDamageAmplification) {
 			curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
 			if (curDamageAmplification > maxDamageAmplification) {
