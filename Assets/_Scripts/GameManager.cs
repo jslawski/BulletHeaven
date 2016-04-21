@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour {
 
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;
+	
+	float maxDamageAmplification = 4f;
+	float damageAmplificationTime = 300f;       //Time it takes to reach maximum damage amplification
+	public float curDamageAmplification = 1f;
 
 	void Awake() {
 		S = this;
@@ -48,6 +52,10 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (gameHasBegun && curDamageAmplification < maxDamageAmplification) {
+			curDamageAmplification += Time.deltaTime * maxDamageAmplification / damageAmplificationTime;
+		}
+
 		if (timeInScene < minTimeInSceneForInput) {
 			timeInScene += Time.deltaTime;
 		}

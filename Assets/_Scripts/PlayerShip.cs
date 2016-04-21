@@ -17,10 +17,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	float damageFlashDuration = 0.2f;
 	float timeSinceTakenDamage = 0f;
 
-	float maxDamageAmplification = 4f;
-	float damageAmplificationTime = 300f;       //Time it takes to reach maximum damage amplification
-	float curDamageAmplification = 1f;
-
 	[HideInInspector]
 	public ShipMovement playerMovement;
 	[HideInInspector]
@@ -57,19 +53,15 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	// Update is called once per frame
 	void Update () {
 		timeSinceTakenDamage += Time.deltaTime;
-
-		if (GameManager.S.gameHasBegun && curDamageAmplification < maxDamageAmplification) {
-			curDamageAmplification += Time.deltaTime * maxDamageAmplification / damageAmplificationTime;
-		}
 	}
 
 	public void TakeDamage(float damageIn) {
-		if (invincible) {
+		if (invincible || dead) {
 			return;
 		}
 
 		if (damageIn > 0) {
-			damageIn *= curDamageAmplification;
+			damageIn *= GameManager.S.curDamageAmplification;
 			CameraEffects.S.CameraShake(0.1f, .5f);
 			VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
 		}

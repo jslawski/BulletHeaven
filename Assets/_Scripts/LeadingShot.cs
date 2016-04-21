@@ -47,6 +47,10 @@ public class LeadingShot : MonoBehaviour {
 		float degreeIncrement = spreadIncrementPerBullet * Mathf.Deg2Rad;
 
 		int degreeScalar = 1;
+		float distanceToPlayer = (target.position - transform.position).magnitude;
+		//Leads more when the explosion happens closer to the player, less when exploded far away
+		float leadingAmount = Mathf.Lerp(0.1f, 0f, Mathf.InverseLerp(4, 20, distanceToPlayer));
+		Vector3 targetPlayerVelocity = leadingAmount*GameManager.S.players[(int)targetPlayer].playerMovement.GetVelocity();
 
 		for (int i = 0; i < bulletsPerBurst; i++) {
 			if (Mathf.Abs(startDirection.angle - curDirection.angle) > degreeOfSpread) {
@@ -57,7 +61,7 @@ public class LeadingShot : MonoBehaviour {
 			curBullet.owningPlayer = owningPlayer;
 			curBullet.transform.position = gameObject.transform.position;
 			//GameObject curBullet = Instantiate(bulletPrefab, gameObject.transform.position, new Quaternion()) as GameObject;
-			curBullet.GetComponent<PhysicsObj>().velocity = 10 * curDirection.PolarToCartesian().normalized;
+			curBullet.GetComponent<PhysicsObj>().velocity = 10*curDirection.PolarToCartesian().magnitude*(curDirection.PolarToCartesian().normalized + targetPlayerVelocity).normalized;
 			curDirection.angle += degreeIncrement * degreeScalar;
 
 			yield return new WaitForFixedUpdate();
