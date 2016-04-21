@@ -23,3 +23,10 @@ Sound Effects:
 
 	Protagonist Ship Explosion:
 		Bottle Rocket Fx
+
+Fonts:
+	Trailer Font:
+		Xirod - Typodermic Fonts
+
+	Game Font:
+		Good Times - Typodermic Fonts
