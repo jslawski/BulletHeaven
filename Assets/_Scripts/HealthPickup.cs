@@ -20,7 +20,7 @@ public class HealthPickup : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!disabledMoveToCenter && (transform.parent.position.x < minX || transform.parent.position.x > maxX)) {
-			transform.parent.position = Vector3.Lerp(transform.parent.position, new Vector3(centerOfWorld.x, transform.parent.position.y, centerOfWorld.z), 0.1f);
+			transform.parent.position = Vector3.Lerp(transform.parent.position, new Vector3(centerOfWorld.x, transform.parent.position.y, centerOfWorld.z), 0.02f);
 		}
 
 		lifespan -= Time.deltaTime;

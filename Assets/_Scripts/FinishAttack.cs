@@ -208,7 +208,7 @@ public class FinishAttack : MonoBehaviour {
 	IEnumerator FireLaser() {
 		Vector3 differenceVector = target.position - transform.position;
 		while (!hasReachedDestination) {
-			if (differenceVector.magnitude <= 0.1f) {
+			if (differenceVector.magnitude <= 0.4f) {
 				hasReachedDestination = true;
 			}
 			differenceVector = target.position - transform.position;

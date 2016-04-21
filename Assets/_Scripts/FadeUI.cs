@@ -15,6 +15,9 @@ public class FadeUI : MonoBehaviour {
 	}
 	
 	IEnumerator Fade() {
+		while (GameManager.S.gameState == GameStates.controllerSelect) {
+			yield return null;
+		}
 		for (float i = 1; i > fadeThreshold; i -= Time.fixedDeltaTime / fadeDuration) {
 			uiImage.color = new Color(uiImage.color.r, uiImage.color.g, uiImage.color.b, i);
 			yield return new WaitForFixedUpdate();
