@@ -46,22 +46,32 @@ public class LeadingShot : MonoBehaviour {
 
 		float degreeIncrement = spreadIncrementPerBullet * Mathf.Deg2Rad;
 
+		
+
 		int degreeScalar = 1;
 		float distanceToPlayer = (target.position - transform.position).magnitude;
 		//Leads more when the explosion happens closer to the player, less when exploded far away
 		float leadingAmount = Mathf.Lerp(0.1f, 0f, Mathf.InverseLerp(4, 20, distanceToPlayer));
-		Vector3 targetPlayerVelocity = leadingAmount*GameManager.S.players[(int)targetPlayer].playerMovement.GetVelocity();
+
+		Vector3 targetPlayerVelocity = Vector3.zero;
+		//Don't try to lead velocity on the title screen
+		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+			targetPlayerVelocity = leadingAmount * GameManager.S.players[(int)targetPlayer].playerMovement.GetVelocity();
+		}
 
 		for (int i = 0; i < bulletsPerBurst; i++) {
 			if (Mathf.Abs(startDirection.angle - curDirection.angle) > degreeOfSpread) {
 				degreeScalar *= -1;
 			}
 
+			float sprayRange = 0.25f;
+			Vector3 sprayVector = new Vector3(Random.Range(-sprayRange, sprayRange), Random.Range(-sprayRange, sprayRange), 0);
+
 			Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 			curBullet.owningPlayer = owningPlayer;
 			curBullet.transform.position = gameObject.transform.position;
 			//GameObject curBullet = Instantiate(bulletPrefab, gameObject.transform.position, new Quaternion()) as GameObject;
-			curBullet.GetComponent<PhysicsObj>().velocity = 10*curDirection.PolarToCartesian().magnitude*(curDirection.PolarToCartesian().normalized + targetPlayerVelocity).normalized;
+			curBullet.GetComponent<PhysicsObj>().velocity = 10*(curDirection.PolarToCartesian().normalized + targetPlayerVelocity + sprayVector).normalized;
 			curDirection.angle += degreeIncrement * degreeScalar;
 
 			yield return new WaitForFixedUpdate();
