@@ -19,6 +19,10 @@ public class StretchText : MonoBehaviour {
 		while (true) {
 			timeElapsed += Time.deltaTime;
 
+			if (amplitude == 0) {
+				yield return 0;
+				continue;
+			}
 			transform.localScale = startSize * amplitude * (Mathf.Sin(2 * Mathf.PI * timeElapsed * frequency) + 1 + (1/amplitude));
 			
 

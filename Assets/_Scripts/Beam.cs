@@ -21,8 +21,8 @@ public class Beam : MonoBehaviour {
 	}
 
 	float chargeDuration = 0.75f;
-	float beamDuration = 3.2f;
-	float damage = 0.65f;
+	float beamDuration = 3.8f;
+	float damage = 0.45f;
 	float slowingFactor = 0.25f;				//Percent of normal movement speed the player experiences while in the beam
 	ParticleSystem[] beams;
 	BoxCollider[] hitboxes;

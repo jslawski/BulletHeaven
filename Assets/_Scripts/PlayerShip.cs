@@ -22,7 +22,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	[HideInInspector]
 	public ShootBomb playerShooting;
 
-	float maxHealth = 100f;
+	float maxHealth = 150f;
 	float _health;
 	float health {
 		get {

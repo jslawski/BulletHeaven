@@ -51,7 +51,7 @@ public class LeadingShot : MonoBehaviour {
 		int degreeScalar = 1;
 		float distanceToPlayer = (target.position - transform.position).magnitude;
 		//Leads more when the explosion happens closer to the player, less when exploded far away
-		float leadingAmount = Mathf.Lerp(0.1f, 0f, Mathf.InverseLerp(4, 20, distanceToPlayer));
+		float leadingAmount = 0;// Mathf.Lerp(0.1f, 0f, Mathf.InverseLerp(4, 20, distanceToPlayer));
 
 		Vector3 targetPlayerVelocity = Vector3.zero;
 		//Don't try to lead velocity on the title screen
@@ -64,7 +64,7 @@ public class LeadingShot : MonoBehaviour {
 				degreeScalar *= -1;
 			}
 
-			float sprayRange = 0.25f;
+			float sprayRange = 0.45f;
 			Vector3 sprayVector = new Vector3(Random.Range(-sprayRange, sprayRange), Random.Range(-sprayRange, sprayRange), 0);
 
 			Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();

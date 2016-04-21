@@ -29,11 +29,13 @@ public class GameManager : MonoBehaviour {
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;
 	
-	float maxDamageAmplification = 4f;
-	float damageAmplificationTime = 300f;       //Time it takes to reach maximum damage amplification
+	[HideInInspector]
+	public float maxDamageAmplification = 3f;
+	float damageAmplificationTime = 120f;       //Time it takes to reach maximum damage amplification
 	public float curDamageAmplification = 1f;
 
 	void Awake() {
+		maxDamageAmplification = 3;
 		S = this;
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
@@ -53,7 +55,10 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (gameHasBegun && curDamageAmplification < maxDamageAmplification) {
-			curDamageAmplification += Time.deltaTime * maxDamageAmplification / damageAmplificationTime;
+			curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
+			if (curDamageAmplification > maxDamageAmplification) {
+				curDamageAmplification = maxDamageAmplification;
+			}
 		}
 
 		if (timeInScene < minTimeInSceneForInput) {

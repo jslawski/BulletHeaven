@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HealthPickup : MonoBehaviour {
 	public bool disabledMoveToCenter = false;
-	float healAmount = 35f;
+	float healAmount = 25f;
 	float lifespan = 15;
 	Vector3 centerOfWorld;
 	float minX;

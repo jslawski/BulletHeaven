@@ -46,9 +46,7 @@ public class Bullet : PooledObj {
 		Invoke("StartTransparencyCheckCoroutine", 0.02f);
 	}
 	void StartTransparencyCheckCoroutine() {
-		if (gameObject.activeSelf) {
-			StartCoroutine(TransparencyCheck());
-		}
+		StartCoroutine(TransparencyCheck());
 	}
 
 	IEnumerator TransparencyCheck() {
