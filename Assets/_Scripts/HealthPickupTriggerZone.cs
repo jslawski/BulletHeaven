@@ -19,21 +19,21 @@ public class HealthPickupTriggerZone : MonoBehaviour {
 	}
 
 	void OnTriggerStay(Collider other) {
-		thisHealthPickup.disabledMoveToCenter = true;
 		if (other.gameObject.tag != "Player") {
 			return;
 		}
 
+		thisHealthPickup.disabledMoveToCenter = true;
 		transform.parent.position = Vector3.Lerp(transform.parent.position, other.gameObject.transform.position, curFollowSpeed);
 		curFollowSpeed *= acceleration;
 	}
 
 	void OnTriggerExit(Collider other) {
-		thisHealthPickup.disabledMoveToCenter = false;
 		if (other.gameObject.tag != "Player") {
 			return;
 		}
 
+		thisHealthPickup.disabledMoveToCenter = false;
 		curFollowSpeed = defaultFollowSpeed;
 	}
 }

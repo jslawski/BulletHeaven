@@ -25,6 +25,8 @@ public class SoundManager : MonoBehaviour {
 	float lowPitchRange = 0.9f;
 	float highPitchRange = 1.1f;
 
+	public bool easterEgg = false;
+
 	bool _muted = false;
 	public bool muted {
 		get {
@@ -92,6 +94,9 @@ public class SoundManager : MonoBehaviour {
 		}
 
 		int channel = GetChannelIndex(soundName);
+		if (easterEgg) {
+			soundName = "PrettyNeat";
+		}
 		float randPitch = Random.Range(lowPitchRange, highPitchRange);
 
 		//Music channel should not have random pitch
@@ -102,7 +107,7 @@ public class SoundManager : MonoBehaviour {
 		}
 		else {
 			soundChannels[channel].clip = sounds[soundName].audio;
-			soundChannels[channel].pitch = randPitch;
+            soundChannels[channel].pitch = randPitch;
 			soundChannels[channel].Play();
 		}
 	}
@@ -114,6 +119,9 @@ public class SoundManager : MonoBehaviour {
 		}
 
 		int channel = GetChannelIndex(soundName);
+		if (easterEgg) {
+			soundName = "PrettyNeat";
+		}
 
 		//Music channel should not have random pitch
 		if (channel == 0) {

@@ -12,9 +12,15 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	float hitVibrateIntensity = 1f;
 	public GameObject finishAttackPrompt;
 
+	bool inHeartbeatCoroutine = false;
+	float lowOnHealthThreshold = 0.3f;
+	float heartbeatPulseDuration = 0.1f;
+	float timeBetweenHeartbeats = 1f;
+	float heartbeatVibration = 0.5f;
 	public Color damageColor;
 
 	//Death particles
+	public GameObject deathExplosionPrefab;
 	public GameObject explosionPrefab;
 	ParticleSystem smokeParticles;
 	float pulsateRedPeriod = 2f;
@@ -75,6 +81,10 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			damageIn *= GameManager.S.curDamageAmplification;
 			CameraEffects.S.CameraShake(0.1f, .5f);
 			VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
+
+			if (health < lowOnHealthThreshold*maxHealth && !inHeartbeatCoroutine) {
+				StartCoroutine(HeartbeatOnLowHealth());
+			}
 		}
 
 		health -= damageIn;
@@ -89,6 +99,19 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		if (!inDamageFlashCoroutine) {
 			StartCoroutine(FlashOnDamage(damageIn));
 		}
+	}
+
+	IEnumerator HeartbeatOnLowHealth() {
+		inHeartbeatCoroutine = true;
+
+		yield return new WaitForSeconds(timeBetweenHeartbeats);
+
+		while (GameManager.S.gameState == GameStates.playing) {
+			VibrateManager.S.RumbleVibrate(player, heartbeatPulseDuration, heartbeatVibration, true);
+			yield return new WaitForSeconds(timeBetweenHeartbeats);
+		}
+
+		inHeartbeatCoroutine = false;
 	}
 
 	IEnumerator FlashOnDamage(float damage) {
@@ -125,6 +148,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		if (dead) {
 			return;
 		}
+
+		VibrateManager.S.RumbleVibrate(player, 0.75f, 0.6f, true);
+
 		SoundManager.instance.Play("NearDeath", 1);
 		dead = true;
 		playerShooting.shootingDisabled = true;
@@ -152,6 +178,14 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	IEnumerator DeathParticles() {
+		GameObject playerExplosion = Instantiate(deathExplosionPrefab, transform.position, new Quaternion()) as GameObject;
+		SoundManager.instance.Play("DestroyProtagShip");
+
+		CameraEffects.S.CameraShake(1f, 1.5f, true);
+		Destroy(playerExplosion, 5f);
+
+		yield return new WaitForSeconds(Random.Range(minTimeBetweenExplosions, maxTimeBetweenExplosions));
+
 		smokeParticles.Play();
 		while (GameManager.S.gameState != GameStates.finalAttack) {
 			Vector3 offset = maxExplosionRadius * Random.insideUnitCircle;
@@ -165,11 +199,14 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	IEnumerator PulsateRed() {
 		float t = 0;
 		while (GameManager.S.gameState != GameStates.finalAttack) {
-			t += Time.deltaTime;
+			for (t = 0; t < pulsateRedPeriod; t += Time.deltaTime) {
+				t += Time.deltaTime;
 
-			shipSprite.color = Color.Lerp(Color.white, damageColor, 0.5f * (Mathf.Sin(2 * Mathf.PI * t / pulsateRedPeriod) + 1));
+				shipSprite.color = Color.Lerp(Color.white, damageColor, 0.5f * (Mathf.Sin(2 * Mathf.PI * t / pulsateRedPeriod) + 1));
 
-			yield return 0;
+				yield return 0;
+			}
 		}
+		shipSprite.color = Color.white;
 	}
 }
