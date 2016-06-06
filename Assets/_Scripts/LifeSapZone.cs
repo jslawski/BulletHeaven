@@ -4,6 +4,10 @@ using System.Collections;
 public class LifeSapZone : MonoBehaviour {
 	public PlayerShip owner;
 
+	float lifespan = 6f;
+	float maxRadius = 6f;
+
+	ParticleSystem zoneParticles;
 	Transform particle;
 	LineRenderer connectingLine;
 	Vector3 startPos;
@@ -21,20 +25,47 @@ public class LifeSapZone : MonoBehaviour {
 	float particleTravelTime = 0.5f;
 	float timeElapsed = 0;
 
-	float damagePerTick = 3f;			//Damage ticks every particleTravelTime seconds
+	float damagePerTick = 3f;           //Damage ticks every particleTravelTime seconds
+	float slowFieldPercent = 0.8f;
 
 	// Use this for initialization
-	void Start () {
+	IEnumerator Start () {
 		particle = transform.FindChild("Particle");
 		particle.gameObject.SetActive(false);
+		zoneParticles = GetComponentInChildren<ParticleSystem>();
 		connectingLine = GetComponentInChildren<LineRenderer>();
 		startPos = transform.position;
 		linePositions = new Vector3[lineResolution];
 		for (int i = 0; i < lineResolution; i++) {
 			linePositions[i] = transform.position;
 		}
+
+		StartCoroutine(GrowInSize());
+
+		//2*lifespan to allow it time to dissipate before being destroyed
+		yield return new WaitForSeconds(2*lifespan);
+		Destroy(this.gameObject);
 	}
 	
+	IEnumerator GrowInSize() {
+		SphereCollider hitbox = GetComponentInChildren<SphereCollider>();
+
+		float t = 0;
+		while (t < lifespan) {
+			t += Time.deltaTime;
+			float percent = t/lifespan;
+
+			float size = Mathf.Lerp(0, maxRadius, Mathf.Sqrt(percent));
+			zoneParticles.transform.localScale = Vector3.one * (size/maxRadius);
+			hitbox.radius = size;
+
+			yield return null;
+		}
+		zoneParticles.Stop();
+		hitbox.enabled = false;
+		EndTether();
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (targetShip == null) {
@@ -118,6 +149,7 @@ public class LifeSapZone : MonoBehaviour {
 
 	IEnumerator DealDamageCoroutine() {
 		while (targetShip != null) {
+			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);
 			owner.TakeDamage(-damagePerTick);
 			yield return new WaitForSeconds(particleTravelTime);

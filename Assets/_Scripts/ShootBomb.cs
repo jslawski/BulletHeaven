@@ -43,7 +43,7 @@ public class ShootBomb : MonoBehaviour {
 	public KeyCode shootBomb, A, B, X, Y;
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		thisPlayer = GetComponent<PlayerShip>();
 		SetBombType(thisPlayer.typeOfShip);
 	}
