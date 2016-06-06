@@ -4,8 +4,9 @@ using System.Collections;
 public class ExplodeAttack : MonoBehaviour {
 	public GameObject explosionPrefab;
 	SphereCollider explosionZone;
+	ParticleSystem explosionParticles;
 
-	float baseDamage = 10f;
+	float baseDamage = 30f;
 	float damageDealt = 1f;
 
 	float GetDistance(Vector3 p1, Vector3 p2) {
@@ -22,6 +23,12 @@ public class ExplodeAttack : MonoBehaviour {
 
 	void Start() {
 		explosionZone = GetComponent<SphereCollider>();
+		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+
+		//Scale the explosion size based on the damage multiplier
+		//Currently this is INSANE
+		explosionZone.radius = explosionZone.radius * Masochist.damageMultiplier;
+		explosionParticles.startSize = explosionParticles.startSize * Masochist.damageMultiplier;
 
 		//Destroy after 1.3 seconds
 		Invoke("DestroyInstance", 1.3f);

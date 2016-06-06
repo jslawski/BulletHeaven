@@ -75,7 +75,12 @@ public class Bullet : PooledObj {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			if (player.player != owningPlayer) {
 				//Do damage to the player hit
-				player.TakeDamage(damage);
+				if (GameManager.S.players[(int)owningPlayer] is Masochist) {  //kinky...
+					player.TakeDamage(damage * Masochist.damageMultiplier);
+				}
+				else {
+					player.TakeDamage(damage);
+				}
 
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
@@ -84,7 +89,12 @@ public class Bullet : PooledObj {
 		}
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			otherShip.TakeDamage(damage);
+			if (GameManager.S.players[(int)owningPlayer] is Masochist) {
+				otherShip.TakeDamage(damage * Masochist.damageMultiplier);
+			}
+			else {
+				otherShip.TakeDamage(damage);
+			}
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
