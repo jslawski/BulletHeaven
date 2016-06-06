@@ -17,33 +17,37 @@ public class GeneralistBomb : Bomb {
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
 
-	public override void Detonate(Attack attackToPerform) {
+	public override void Detonate(AttackButtons attackToPerform) {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
 		SoundManager.instance.Play("BombExplode");
 
 		switch (attackToPerform) {
-			case Attack.leadingShot:
+			//Leading shot
+			case AttackButtons.A:
 				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
 				newShot.owningPlayer = owningPlayer;
 				newShot.FireBurst();
 				break;
-			case Attack.spiral:
+			//Spiral shot
+			case AttackButtons.B:
 				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
 				spiralShot.owningPlayer = owningPlayer;
 				spiralShot.FireBurst();
 				break;
-			case Attack.beam:
+			//Beam attack
+			case AttackButtons.X:
 				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
 				beamShot.owningPlayer = owningPlayer;
 				break;
-			case Attack.reflector:
+			//Reflektor
+			case AttackButtons.Y:
 				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
 				reflectorShot.owningPlayer = owningPlayer;
 				break;
 			default:
-				Debug.LogError("Attack type " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
+				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
 				break;
 		}
 

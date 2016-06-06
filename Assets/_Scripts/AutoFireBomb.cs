@@ -27,7 +27,7 @@ public class AutoFireBomb : MonoBehaviour {
 
 	IEnumerator DetonateBomb() {
 		yield return new WaitForSeconds(Random.Range(1, 4));
-		curBomb.Detonate((Attack)Random.Range(0, 4));
+		curBomb.Detonate((AttackButtons)Random.Range(0, 4));
 	}
 
 	void FireBomb() {

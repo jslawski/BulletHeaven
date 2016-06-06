@@ -3,6 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+public enum AttackButtons {
+	A,
+	B,
+	X,
+	Y,
+	none
+}
+
+//Enum of ALL of the attacks in the game
+public enum Attack {
+	leadingShot,
+	spiral,
+	beam,
+	reflector
+}
+
 public class ShootBomb : MonoBehaviour {
 	GameObject bombPrefab;
 	PlayerShip thisPlayer;
@@ -52,16 +68,16 @@ public class ShootBomb : MonoBehaviour {
 
 			//Detonating bombs
 			if (Input.GetKeyDown(shootLeadingShot)) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.A);
+				DetonateBomb(AttackButtons.A);
 			}
 			else if (Input.GetKeyDown(shootSpiral)) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.B);
+				DetonateBomb(AttackButtons.B);
 			}
 			else if (Input.GetKeyDown(shootBeam)) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.X);
+				DetonateBomb(AttackButtons.X);
 			}
 			else if (Input.GetKeyDown(shootReflector)) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.Y);
+				DetonateBomb(AttackButtons.Y);
 			}
 		}
 		//Controller input
@@ -79,16 +95,16 @@ public class ShootBomb : MonoBehaviour {
 
 			//Detonating bombs
 			if (thisPlayer.device.Action1.WasPressed) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.A);
+				DetonateBomb(AttackButtons.A);
 			}
 			else if (thisPlayer.device.Action2.WasPressed) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.B);
+				DetonateBomb(AttackButtons.B);
 			}
 			else if (thisPlayer.device.Action3.WasPressed) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.X);
+				DetonateBomb(AttackButtons.X);
 			}
 			else if (thisPlayer.device.Action4.WasPressed) {
-				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.Y);
+				DetonateBomb(AttackButtons.Y);
 			}
 		}
 
@@ -146,11 +162,11 @@ public class ShootBomb : MonoBehaviour {
 		curAmmo++;
 	}
 
-	public void DetonateBomb(Attack attackToPerform) {
+	public void DetonateBomb(AttackButtons buttonPressed) {
 		if (bombsInAir.Count == 0) {
 			return;
 		}
-		bombsInAir[0].Detonate(attackToPerform);
+		bombsInAir[0].Detonate(buttonPressed);
 	}
 
 	public static Vector3 ApplySpread(Vector3 aim, float spread) {

@@ -53,7 +53,7 @@ public class Bomb : MonoBehaviour {
 		transform.Rotate(new Vector3(0, 0, 180 * Time.deltaTime));
 	}
 
-	public virtual void Detonate(Attack attackToPerform) { }
+	public virtual void Detonate(AttackButtons attackToPerform) { }
 
 	void OnDestroy() {
 		//print("Destroyed bomb");

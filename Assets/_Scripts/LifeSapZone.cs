@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class LifeSapZone : MonoBehaviour {
+	public PlayerShip owner;
+
 	Transform particle;
 	LineRenderer connectingLine;
 	Vector3 startPos;
@@ -18,6 +20,8 @@ public class LifeSapZone : MonoBehaviour {
 
 	float particleTravelTime = 0.5f;
 	float timeElapsed = 0;
+
+	float damagePerTick = 3f;			//Damage ticks every particleTravelTime seconds
 
 	// Use this for initialization
 	void Start () {
@@ -66,6 +70,8 @@ public class LifeSapZone : MonoBehaviour {
 		targetShip = newTarget;
 		connectingLine.SetVertexCount(lineResolution);
 		particle.gameObject.SetActive(true);
+
+		StartCoroutine(DealDamageCoroutine());
 	}
 	void EndTether() {
 		timeSincePlayerLeftZone = 0;
@@ -79,6 +85,8 @@ public class LifeSapZone : MonoBehaviour {
 
 		particle.gameObject.SetActive(false);
 		timeElapsed = 0;
+
+		StopCoroutine(DealDamageCoroutine());
 	}
 
 	Vector3[] GetPositions(Vector3 otherPos) {
@@ -101,5 +109,13 @@ public class LifeSapZone : MonoBehaviour {
 		particle.position = Vector3.Lerp(linePositions[(int)vertex], linePositions[(int)vertex+1], vertex%1f);
 
 		particle.localScale = Vector3.one * Mathf.Lerp(0.1f, 3f, vertex / lineResolution);
+	}
+
+	IEnumerator DealDamageCoroutine() {
+		while (targetShip != null) {
+			targetShip.TakeDamage(damagePerTick);
+			owner.TakeDamage(-damagePerTick);
+			yield return new WaitForSeconds(particleTravelTime);
+		}
 	}
 }
