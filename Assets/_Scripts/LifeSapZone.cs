@@ -26,6 +26,7 @@ public class LifeSapZone : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		particle = transform.FindChild("Particle");
+		particle.gameObject.SetActive(false);
 		connectingLine = GetComponentInChildren<LineRenderer>();
 		startPos = transform.position;
 		linePositions = new Vector3[lineResolution];

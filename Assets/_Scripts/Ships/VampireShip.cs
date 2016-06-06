@@ -2,6 +2,13 @@
 using System.Collections;
 
 public class VampireShip : PlayerShip {
+	float lifeRegen = 2f;		//Health regained per second
+
+	new void Start() {
+		base.Start();
+		maxHealth = 100;
+		health = maxHealth;
+	}
 
 	// Use this for initialization
 	void Awake () {
@@ -16,6 +23,13 @@ public class VampireShip : PlayerShip {
 		//Subtract percent% of total health from the player
 		else {
 			health -= percent * maxHealth;
+		}
+	}
+
+	void FixedUpdate() {
+		health += lifeRegen * Time.fixedDeltaTime;
+		if (health > maxHealth) {
+			health = maxHealth;
 		}
 	}
 }

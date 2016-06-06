@@ -21,7 +21,7 @@ public enum Attack {
 
 public class ShootBomb : MonoBehaviour {
 	GameObject bombPrefab;
-	PlayerShip thisPlayer;
+	public PlayerShip thisPlayer;
 	public bool shootingDisabled = false;
 
 	public List<Bomb> bombsInAir = new List<Bomb>();         //Bombs that have been fired but not detonated
@@ -40,25 +40,32 @@ public class ShootBomb : MonoBehaviour {
 	public int curAmmo = 2;
 	public Ammo[] ammoImages;
 
-	public KeyCode shootBomb, shootLeadingShot, shootSpiral, shootBeam, shootReflector;
+	public KeyCode shootBomb, A, B, X, Y;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		thisPlayer = GetComponent<PlayerShip>();
+		SetBombType(thisPlayer.typeOfShip);
+	}
+	
+	public void SetBombType(ShipType shipType) {
 		//Attach the correct bomb prefab depending on the ship type
-		switch (thisPlayer.typeOfShip) {
+		switch (shipType) {
 			case ShipType.generalist:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/GeneralistBomb");
 				break;
 			case ShipType.masochist:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/MasochistBomb");
 				break;
+			case ShipType.vampire:
+				bombPrefab = Resources.Load<GameObject>("Prefabs/VampireBomb");
+				break;
 			default:
 				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
 				break;
 		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (shootingDisabled || !GameManager.S.gameHasBegun) {
@@ -70,16 +77,16 @@ public class ShootBomb : MonoBehaviour {
 			}
 
 			//Detonating bombs
-			if (Input.GetKeyDown(shootLeadingShot)) {
+			if (Input.GetKeyDown(A)) {
 				DetonateBomb(AttackButtons.A);
 			}
-			else if (Input.GetKeyDown(shootSpiral)) {
+			else if (Input.GetKeyDown(B)) {
 				DetonateBomb(AttackButtons.B);
 			}
-			else if (Input.GetKeyDown(shootBeam)) {
+			else if (Input.GetKeyDown(X)) {
 				DetonateBomb(AttackButtons.X);
 			}
-			else if (Input.GetKeyDown(shootReflector)) {
+			else if (Input.GetKeyDown(Y)) {
 				DetonateBomb(AttackButtons.Y);
 			}
 		}
