@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ShootBomb : MonoBehaviour {
-	public GameObject bombPrefab;
+	GameObject bombPrefab;
 	PlayerShip thisPlayer;
 	public bool shootingDisabled = false;
 
@@ -29,6 +29,15 @@ public class ShootBomb : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		thisPlayer = GetComponent<PlayerShip>();
+		//Attach the correct bomb prefab depending on the ship type
+		switch (thisPlayer.typeOfShip) {
+			case ShipType.generalist:
+				bombPrefab = Resources.Load<GameObject>("Prefabs/GeneralistBomb");
+				break;
+			default:
+				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
+				break;
+		}
 	}
 	
 	// Update is called once per frame
@@ -43,16 +52,16 @@ public class ShootBomb : MonoBehaviour {
 
 			//Detonating bombs
 			if (Input.GetKeyDown(shootLeadingShot)) {
-				DetonateBomb(Attack.leadingShot);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.A);
 			}
 			else if (Input.GetKeyDown(shootSpiral)) {
-				DetonateBomb(Attack.spiral);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.B);
 			}
 			else if (Input.GetKeyDown(shootBeam)) {
-				DetonateBomb(Attack.beam);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.X);
 			}
 			else if (Input.GetKeyDown(shootReflector)) {
-				DetonateBomb(Attack.reflector);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.Y);
 			}
 		}
 		//Controller input
@@ -70,16 +79,16 @@ public class ShootBomb : MonoBehaviour {
 
 			//Detonating bombs
 			if (thisPlayer.device.Action1.WasPressed) {
-				DetonateBomb(Attack.leadingShot);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.A);
 			}
 			else if (thisPlayer.device.Action2.WasPressed) {
-				DetonateBomb(Attack.spiral);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.B);
 			}
 			else if (thisPlayer.device.Action3.WasPressed) {
-				DetonateBomb(Attack.beam);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.X);
 			}
 			else if (thisPlayer.device.Action4.WasPressed) {
-				DetonateBomb(Attack.reflector);
+				AttackManager.S.ExecuteAttack(thisPlayer, AttackButtons.Y);
 			}
 		}
 
