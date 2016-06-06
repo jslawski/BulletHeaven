@@ -2,45 +2,56 @@
 using System.Collections;
 using InControl;
 
+public enum ShipType {
+	none,
+	generalist,
+	tank,
+	masochist,
+	glassCannon,
+	vampire
+}
+
 public class PlayerShip : MonoBehaviour, DamageableObject {
+	public ShipType typeOfShip;
+
 	public FinishAttack finalAttackPrefab;
 	public Player player;
 	public Color playerColor;
 	public HealthBar healthBar;
 	public InputDevice device;
 	public PressStartPrompt controllerPrompt;
-	float hitVibrateIntensity = 1f;
+	protected float hitVibrateIntensity = 1f;
 	public GameObject finishAttackPrompt;
 
-	bool inHeartbeatCoroutine = false;
-	float lowOnHealthThreshold = 0.3f;
-	float heartbeatPulseDuration = 0.1f;
-	float timeBetweenHeartbeats = 1f;
-	float heartbeatVibration = 0.5f;
+	protected bool inHeartbeatCoroutine = false;
+	protected float lowOnHealthThreshold = 0.3f;
+	protected float heartbeatPulseDuration = 0.1f;
+	protected float timeBetweenHeartbeats = 1f;
+	protected float heartbeatVibration = 0.5f;
 	public Color damageColor;
 
 	//Death particles
 	public GameObject deathExplosionPrefab;
 	public GameObject explosionPrefab;
-	ParticleSystem smokeParticles;
-	float pulsateRedPeriod = 2f;
-	float maxExplosionRadius = 1f;
-	float minTimeBetweenExplosions = 0.1f;
-	float maxTimeBetweenExplosions = 0.5f;
+	protected ParticleSystem smokeParticles;
+	protected float pulsateRedPeriod = 2f;
+	protected float maxExplosionRadius = 1f;
+	protected float minTimeBetweenExplosions = 0.1f;
+	protected float maxTimeBetweenExplosions = 0.5f;
 
-	SpriteRenderer shipSprite;
-	bool inDamageFlashCoroutine = false;
-	float damageFlashDuration = 0.2f;
-	float timeSinceTakenDamage = 0f;
+	protected SpriteRenderer shipSprite;
+	protected bool inDamageFlashCoroutine = false;
+	protected float damageFlashDuration = 0.2f;
+	protected float timeSinceTakenDamage = 0f;
 
 	[HideInInspector]
 	public ShipMovement playerMovement;
 	[HideInInspector]
 	public ShootBomb playerShooting;
 
-	float maxHealth = 150f;
-	float _health;
-	float health {
+	protected float maxHealth = 150f;
+	protected float _health;
+	protected float health {
 		get {
 			return _health;
 		}
@@ -55,11 +66,11 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			}
 		}
 	}
-	bool dead = false;
+	protected bool dead = false;
 	public bool invincible = false;
 
 	// Use this for initialization
-	void Start () {
+	protected void Start () {
 		health = maxHealth;
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
