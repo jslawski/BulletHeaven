@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
-	PlayerShip thisPlayer;
+	public PlayerShip thisPlayer;
 	float shipLerpSpeed = 0.275f;               //Percent ship lerps towards desired position each FixedUpdate()
 	float vertMovespeedDefault = 16f;
 	float horizMovespeedDefault = 12.5f;

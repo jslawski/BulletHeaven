@@ -51,6 +51,8 @@ public class GameManager : MonoBehaviour {
 			Time.timeScale *= 0.15f;
 			Time.fixedDeltaTime *= 0.15f;
 		}
+
+		InitializePlayerShip(Player.player1, ShipType.vampire, Color.red);
 	}
 
 	public void InitializePlayerShip(Player player, ShipType typeOfShip, Color playerColor) {
@@ -75,10 +77,17 @@ public class GameManager : MonoBehaviour {
 		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
 		newPlayerShip.deathExplosionPrefab = oldPlayerShip.deathExplosionPrefab;
 		newPlayerShip.explosionPrefab = oldPlayerShip.explosionPrefab;
+		newPlayerShip.playerShooting = oldPlayerShip.playerShooting;
+		newPlayerShip.playerMovement = oldPlayerShip.playerMovement;
 
 		//Remove the old script and replace the GameManager reference with the new one
 		Destroy(oldPlayerShip);
+
+		//Fix old references to the oldPlayerShip and set new values for ship type and color
 		newPlayerShip.playerColor = playerColor;
+		newPlayerShip.playerShooting.SetBombType(typeOfShip);
+		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
+		newPlayerShip.playerMovement.thisPlayer = newPlayerShip;
 		players[(int)player] = newPlayerShip;
 	}
 	
