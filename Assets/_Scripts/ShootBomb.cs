@@ -50,6 +50,9 @@ public class ShootBomb : MonoBehaviour {
 			case ShipType.generalist:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/GeneralistBomb");
 				break;
+			case ShipType.masochist:
+				bombPrefab = Resources.Load<GameObject>("Prefabs/MasochistBomb");
+				break;
 			default:
 				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
 				break;

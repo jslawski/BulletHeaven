@@ -83,7 +83,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		timeSinceTakenDamage += Time.deltaTime;
 	}
 
-	public void TakeDamage(float damageIn) {
+	public virtual void TakeDamage(float damageIn) {
 		if (invincible || dead) {
 			return;
 		}
