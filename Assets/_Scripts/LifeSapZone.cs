@@ -29,6 +29,9 @@ public class LifeSapZone : MonoBehaviour {
 		connectingLine = GetComponentInChildren<LineRenderer>();
 		startPos = transform.position;
 		linePositions = new Vector3[lineResolution];
+		for (int i = 0; i < lineResolution; i++) {
+			linePositions[i] = transform.position;
+		}
 	}
 	
 	// Update is called once per frame
@@ -91,11 +94,12 @@ public class LifeSapZone : MonoBehaviour {
 
 	Vector3[] GetPositions(Vector3 otherPos) {
 		for (int i = 0; i < lineResolution; i++) {
+			float percent = (float)i / lineResolution;
 			Vector3 prevPos = linePositions[i];
 			Vector3 newPos = Vector3.Lerp(startPos, otherPos, (float)i / lineResolution);
 			//Positions closer to the target player lerp more quickly to their new position than
 			//positions closer to the center of the zone (leads to the swerving effect of the line)
-			linePositions[i] = Vector3.Lerp(prevPos, newPos, Mathf.Lerp(minTetherLerp, maxTetherLerp, (float)i/lineResolution));
+			linePositions[i] = Vector3.Lerp(prevPos, newPos, Mathf.Lerp(minTetherLerp, maxTetherLerp, percent*percent));
 		}
 
 		return linePositions;

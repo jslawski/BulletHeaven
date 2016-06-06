@@ -18,17 +18,21 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Player player;
 	public Color playerColor;
 	public HealthBar healthBar;
+	ParticleSystem healthPickupParticles;
 	public InputDevice device;
 	public PressStartPrompt controllerPrompt;
 	protected float hitVibrateIntensity = 1f;
 	public GameObject finishAttackPrompt;
+
+	bool inHealthPickupCoroutine = false;
+	float healthPickupParticleTime = 0.75f;
 
 	protected bool inHeartbeatCoroutine = false;
 	protected float lowOnHealthThreshold = 0.3f;
 	protected float heartbeatPulseDuration = 0.1f;
 	protected float timeBetweenHeartbeats = 1f;
 	protected float heartbeatVibration = 0.5f;
-	public Color damageColor;
+	Color damageColor = new Color(1f, 56f/255f, 56f/255f);
 
 	//Death particles
 	public GameObject deathExplosionPrefab;
@@ -75,7 +79,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
-		smokeParticles = GetComponentInChildren<ParticleSystem>();
+		smokeParticles = transform.FindChild("SmokeParticleSystem").GetComponent<ParticleSystem>();
+		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
 	}
 	
 	// Update is called once per frame
@@ -142,6 +147,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		}
 		//Healing damage
 		else {
+			PlayHealthPickupParticles();
 			float timeElapsed = 0;
 			while (timeElapsed < 4*damageFlashDuration) {
 				timeElapsed += Time.deltaTime;
@@ -219,5 +225,21 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			}
 		}
 		shipSprite.color = Color.white;
+	}
+
+	void PlayHealthPickupParticles() {
+		if (!inHealthPickupCoroutine) {
+			StartCoroutine(HealthPickupCoroutine());
+		}
+	}
+
+	IEnumerator HealthPickupCoroutine() {
+		inHealthPickupCoroutine = true;
+
+		healthPickupParticles.Play();
+		yield return new WaitForSeconds(healthPickupParticleTime);
+		healthPickupParticles.Stop();
+
+		inHealthPickupCoroutine = false;
 	}
 }

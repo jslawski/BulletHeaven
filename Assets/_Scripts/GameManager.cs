@@ -52,6 +52,35 @@ public class GameManager : MonoBehaviour {
 			Time.fixedDeltaTime *= 0.15f;
 		}
 	}
+
+	public void InitializePlayerShip(Player player, ShipType typeOfShip, Color playerColor) {
+		PlayerShip oldPlayerShip = players[(int)player];
+		GameObject playerShipGO = oldPlayerShip.gameObject;
+		PlayerShip newPlayerShip;
+		switch (typeOfShip) {
+			case ShipType.generalist:
+				newPlayerShip = playerShipGO.AddComponent<Generalist>();
+				break;
+			case ShipType.vampire:
+				newPlayerShip = playerShipGO.AddComponent<VampireShip>();
+				break;
+			default:
+				Debug.LogError("ShipType " + typeOfShip + " not handled in InitializePlayerShip()");
+				return;
+		}
+
+		//Grab some values from the old script to apply them to the new one
+		newPlayerShip.healthBar = oldPlayerShip.healthBar;
+		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
+		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
+		newPlayerShip.deathExplosionPrefab = oldPlayerShip.deathExplosionPrefab;
+		newPlayerShip.explosionPrefab = oldPlayerShip.explosionPrefab;
+
+		//Remove the old script and replace the GameManager reference with the new one
+		Destroy(oldPlayerShip);
+		newPlayerShip.playerColor = playerColor;
+		players[(int)player] = newPlayerShip;
+	}
 	
 	// Update is called once per frame
 	void Update () {
