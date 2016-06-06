@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class LifeSapZone : MonoBehaviour {
+	Transform particle;
 	LineRenderer connectingLine;
 	Vector3 startPos;
 	int lineResolution = 40;           //Number of discrete points on the line
@@ -15,8 +16,12 @@ public class LifeSapZone : MonoBehaviour {
 	float minTetherLerp = 0.01f;
 	float maxTetherLerp = 0.2f;
 
+	float particleTravelTime = 0.5f;
+	float timeElapsed = 0;
+
 	// Use this for initialization
 	void Start () {
+		particle = transform.FindChild("Particle");
 		connectingLine = GetComponentInChildren<LineRenderer>();
 		startPos = transform.position;
 		linePositions = new Vector3[lineResolution];
@@ -30,6 +35,7 @@ public class LifeSapZone : MonoBehaviour {
 
 		//Draw the line between the zone and the player
 		connectingLine.SetPositions(GetPositions(targetShip.transform.position));
+		UpdateParticle();
 
 		//If the player leaves the sap zone, wait tetherReleaseTime seconds before releasing the tether on the player
 		if (!playerInSapZone) {
@@ -49,12 +55,17 @@ public class LifeSapZone : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider other) {
-		playerInSapZone = false;
+		if (other.tag == "Player") {
+			if (other.GetComponentInParent<PlayerShip>() == targetShip) {
+				playerInSapZone = false;
+			}
+		}
 	}
 
 	void StartTether(PlayerShip newTarget) {
 		targetShip = newTarget;
 		connectingLine.SetVertexCount(lineResolution);
+		particle.gameObject.SetActive(true);
 	}
 	void EndTether() {
 		timeSincePlayerLeftZone = 0;
@@ -65,6 +76,9 @@ public class LifeSapZone : MonoBehaviour {
 		for (int i = 0; i < lineResolution; i++) {
 			linePositions[i] = transform.position;
 		}
+
+		particle.gameObject.SetActive(false);
+		timeElapsed = 0;
 	}
 
 	Vector3[] GetPositions(Vector3 otherPos) {
@@ -77,5 +91,15 @@ public class LifeSapZone : MonoBehaviour {
 		}
 
 		return linePositions;
+	}
+
+	void UpdateParticle() {
+		timeElapsed += Time.deltaTime;
+		//Move the particle along the vertices based on time elapsed
+		float vertex = Mathf.Lerp(lineResolution-1, 0, (timeElapsed%particleTravelTime)/particleTravelTime);
+		//Lerps between vertices so that it doesn't "jump" from vertex to vertex
+		particle.position = Vector3.Lerp(linePositions[(int)vertex], linePositions[(int)vertex+1], vertex%1f);
+
+		particle.localScale = Vector3.one * Mathf.Lerp(0.1f, 3f, vertex / lineResolution);
 	}
 }
