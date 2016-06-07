@@ -21,15 +21,15 @@ public class Masochist : PlayerShip {
 
 		//75% health remaining -> 20% damage increase
 		if (remainingHealthRatio <= 0.75f) {
-			damageMultiplier = 2f;
+			damageMultiplier = 1.5f;
 		}
 		//50% health remaining -> 50% damage increase
 		else if (remainingHealthRatio <= 0.5f) {
-			damageMultiplier = 4f;
+			damageMultiplier = 2f;
 		}
 		//25% health remaining -> 75% damage increase
 		else if (remainingHealthRatio <= 0.25f) {
-			damageMultiplier = 6f;
+			damageMultiplier = 2.5f;
 		}
 	}
 }
