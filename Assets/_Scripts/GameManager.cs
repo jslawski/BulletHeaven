@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour {
 		newPlayerShip.explosionPrefab = oldPlayerShip.explosionPrefab;
 		newPlayerShip.playerShooting = oldPlayerShip.playerShooting;
 		newPlayerShip.playerMovement = oldPlayerShip.playerMovement;
+		newPlayerShip.finalAttackPrefab = oldPlayerShip.finalAttackPrefab;
 
 		//Remove the old script and replace the GameManager reference with the new one
 		Destroy(oldPlayerShip);

@@ -12,7 +12,7 @@ public class StatBar : MonoBehaviour {
 	float maxWaitTime = .125f;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		statBars = GetComponentsInChildren<Image>();
 	}
 	
