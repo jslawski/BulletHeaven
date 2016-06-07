@@ -143,10 +143,10 @@ public class ShipMovement : MonoBehaviour {
 		desiredRotation = Quaternion.Euler(startRotation.eulerAngles + new Vector3(0, 0, sign*turnAngle));
 	}
 
-	public void SlowPlayer(float percentOfNormalMovespeed) {
+	public void SlowPlayer(float percentOfNormalMovespeed, float duration=0.2f) {
 		verticalMovespeed = vertMovespeedDefault * percentOfNormalMovespeed;
 		horizontalMovespeed = horizMovespeedDefault * percentOfNormalMovespeed;
-		StartCoroutine(RestoreSpeedCoroutine());
+		StartCoroutine(RestoreSpeedCoroutine(duration));
 	}
 
 	public void RestoreSpeed() {
@@ -154,8 +154,8 @@ public class ShipMovement : MonoBehaviour {
 		horizontalMovespeed = horizMovespeedDefault;
 	}
 
-	IEnumerator RestoreSpeedCoroutine() {
-		yield return new WaitForSeconds(0.2f);
+	IEnumerator RestoreSpeedCoroutine(float duration=0.2f) {
+		yield return new WaitForSeconds(duration);
 		RestoreSpeed();
 	}
 
