@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class StatBar : MonoBehaviour {
 	Image[] statBars;
-	Color fillColor = Color.green;
 	Color unfilledColor = new Color(118f/255f,118f/255f,118f/255f);
 
 	bool inStatValueCoroutine = false;
@@ -21,15 +20,15 @@ public class StatBar : MonoBehaviour {
 	
 	}
 
-	public void SetStatValue(int stat) {//, Color fillColor) {
+	public void SetStatValue(int stat, Color fillColor) {
 		if (inStatValueCoroutine) {
 			inStatValueCoroutine = false;
 			StopAllCoroutines();
 		}
-		StartCoroutine(SetStatValueCoroutine(stat));
+		StartCoroutine(SetStatValueCoroutine(stat, fillColor));
 	}
 
-	IEnumerator SetStatValueCoroutine(int stat) {
+	IEnumerator SetStatValueCoroutine(int stat, Color fillColor) {
 		inStatValueCoroutine = true;
 
 		for (int i = 0; i < statBars.Length; i++) {

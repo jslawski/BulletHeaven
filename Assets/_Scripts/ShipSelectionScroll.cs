@@ -84,24 +84,24 @@ public class ShipSelectionScroll : MonoBehaviour {
 		if (shipInfo == null) {
 			selectedShipNameField.text = "";
 
-			offenseStat.SetStatValue(0);
-			defenseStat.SetStatValue(0);
-			speedStat.SetStatValue(0);
-			maxHealthStat.SetStatValue(0);
-			fireRateStat.SetStatValue(0);
+			offenseStat.SetStatValue(0, Color.white);
+			defenseStat.SetStatValue(0, Color.white);
+			speedStat.SetStatValue(0, Color.white);
+			maxHealthStat.SetStatValue(0, Color.white);
+			fireRateStat.SetStatValue(0, Color.white);
 			miscStatLabel.text = "Miscellaneous Stat";
-			miscStat.SetStatValue(0);
+			miscStat.SetStatValue(0, Color.white);
 			return;
 		}
 
 		selectedShipNameField.text = shipInfo.shipName;
 
-		offenseStat.SetStatValue(shipInfo.offense);
-		defenseStat.SetStatValue(shipInfo.defense);
-		speedStat.SetStatValue(shipInfo.speed);
-		maxHealthStat.SetStatValue(shipInfo.maxHealth);
-		fireRateStat.SetStatValue(shipInfo.fireRate);
+		offenseStat.SetStatValue(shipInfo.offense, shipInfo.shipColor);
+		defenseStat.SetStatValue(shipInfo.defense, shipInfo.shipColor);
+		speedStat.SetStatValue(shipInfo.speed, shipInfo.shipColor);
+		maxHealthStat.SetStatValue(shipInfo.maxHealth, shipInfo.shipColor);
+		fireRateStat.SetStatValue(shipInfo.fireRate, shipInfo.shipColor);
 		miscStatLabel.text = shipInfo.miscLabel;
-		miscStat.SetStatValue(shipInfo.miscStat);
+		miscStat.SetStatValue(shipInfo.miscStat, shipInfo.shipColor);
 	}
 }

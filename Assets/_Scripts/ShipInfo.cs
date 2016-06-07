@@ -6,6 +6,7 @@ public class ShipInfo : MonoBehaviour {
 
 	public SelectionPosition position;
 	public string shipName;
+	public Color shipColor;
 	public SpriteRenderer spriteRenderer;
 
 	[Header("Ship Display Stats")]
