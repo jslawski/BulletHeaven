@@ -9,7 +9,7 @@ public class StatBar : MonoBehaviour {
 
 	bool inStatValueCoroutine = false;
 	float minWaitTime = 0.025f;
-	float maxWaitTime = .15f;
+	float maxWaitTime = .125f;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +22,10 @@ public class StatBar : MonoBehaviour {
 	}
 
 	public void SetStatValue(int stat) {//, Color fillColor) {
+		if (inStatValueCoroutine) {
+			inStatValueCoroutine = false;
+			StopAllCoroutines();
+		}
 		StartCoroutine(SetStatValueCoroutine(stat));
 	}
 
