@@ -8,7 +8,8 @@ public enum ShipType {
 	tank,
 	masochist,
 	glassCannon,
-	vampire
+	vampire,
+	random
 }
 
 public class PlayerShip : MonoBehaviour, DamageableObject {
@@ -74,13 +75,16 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public bool invincible = false;
 
 	// Use this for initialization
-	protected void Start () {
-		health = maxHealth;
+	protected void Awake () {
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
 		smokeParticles = transform.FindChild("SmokeParticleSystem").GetComponent<ParticleSystem>();
 		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
+	}
+
+	protected void Start() {
+		health = maxHealth;
 	}
 	
 	// Update is called once per frame

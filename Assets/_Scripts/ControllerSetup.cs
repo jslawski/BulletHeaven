@@ -5,8 +5,9 @@ using System.Collections.Generic;
 
 public class ControllerSetup : MonoBehaviour {
 	public static ControllerSetup S;
+	public ShipSelectionManager[] shipSelectionMenus;
 
-	int maxNumberOfPlayers = 2;
+	public int maxNumberOfPlayers = 2;
 	List<InputDevice> controllersInUse = new List<InputDevice>();
 	public Player curPlayer = Player.player1;
 
@@ -37,8 +38,15 @@ public class ControllerSetup : MonoBehaviour {
 				InputDevice curDevice = InputManager.Devices[i];
 				//If start was pressed by a device not already in use, add it
 				if (curDevice.MenuWasPressed && !controllersInUse.Contains(curDevice)) {
-					GameManager.S.players[(int)curPlayer].device = curDevice;
-					GameManager.S.players[(int)curPlayer].controllerPrompt.HidePressStartPrompt();
+					//In-game controller addition
+					if (GameManager.S != null) {
+						GameManager.S.players[(int)curPlayer].device = curDevice;
+						GameManager.S.players[(int)curPlayer].controllerPrompt.HidePressStartPrompt();
+					}
+					//Ship selection menu
+					if (shipSelectionMenus.Length > 0 && shipSelectionMenus[(int)curPlayer] != null) {
+						shipSelectionMenus[(int)curPlayer].device = curDevice;
+					}
 					controllersInUse.Add(curDevice);
 					print("Player " + controllersInUse.Count + " added.");
 

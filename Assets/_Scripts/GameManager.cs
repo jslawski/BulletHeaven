@@ -52,10 +52,10 @@ public class GameManager : MonoBehaviour {
 			Time.fixedDeltaTime *= 0.15f;
 		}
 
-		InitializePlayerShip(Player.player1, ShipType.vampire, Color.red);
+		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
 	}
 
-	public void InitializePlayerShip(Player player, ShipType typeOfShip, Color playerColor) {
+	public void InitializePlayerShip(Player player, ShipType typeOfShip, Color playerColor, InputDevice device=null) {
 		PlayerShip oldPlayerShip = players[(int)player];
 		GameObject playerShipGO = oldPlayerShip.gameObject;
 		PlayerShip newPlayerShip;
@@ -65,6 +65,9 @@ public class GameManager : MonoBehaviour {
 				break;
 			case ShipType.vampire:
 				newPlayerShip = playerShipGO.AddComponent<VampireShip>();
+				break;
+			case ShipType.masochist:
+				newPlayerShip = playerShipGO.AddComponent<Masochist>();
 				break;
 			default:
 				Debug.LogError("ShipType " + typeOfShip + " not handled in InitializePlayerShip()");
@@ -85,6 +88,10 @@ public class GameManager : MonoBehaviour {
 		Destroy(oldPlayerShip);
 
 		//Fix old references to the oldPlayerShip and set new values for ship type and color
+		newPlayerShip.device = device;
+		if (newPlayerShip.controllerPrompt && PressStartPrompt.promptsEnabled) {
+			newPlayerShip.controllerPrompt.HidePressStartPrompt();
+		}
 		newPlayerShip.playerColor = playerColor;
 		newPlayerShip.playerShooting.SetBombType(typeOfShip);
 		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;

@@ -10,14 +10,14 @@ public class Bomb : MonoBehaviour {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				spriteRenderer.sprite = playerBombSprites[(int)value];
+				//spriteRenderer.sprite = playerBombSprites[(int)value];
 				//Set the color of each of the wing's particle systems
 				for (int i = 0; i < 3; i++) {
 					particleSystems[i].startColor = GameManager.S.players[(int)value].playerColor;
 				}
-				//Only turn on the prewarmed particle glow for this player
-				particleSystems[3].gameObject.SetActive((value == Player.player1));
-				particleSystems[4].gameObject.SetActive((value == Player.player2));
+				////Only turn on the prewarmed particle glow for this player
+				//particleSystems[3].gameObject.SetActive((value == Player.player1));
+				//particleSystems[4].gameObject.SetActive((value == Player.player2));
             }
 		}
 	}
@@ -25,7 +25,7 @@ public class Bomb : MonoBehaviour {
 	protected PhysicsObj physics;
 	protected SpriteRenderer spriteRenderer;
 	protected ParticleSystem[] particleSystems;
-	protected Sprite[] playerBombSprites = new Sprite[2];
+	//protected Sprite[] playerBombSprites = new Sprite[2];
 
 
 	protected float decelerationRate = 0.005f;
@@ -33,8 +33,8 @@ public class Bomb : MonoBehaviour {
 	protected void Awake() {
 		physics = GetComponent<PhysicsObj>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		playerBombSprites[0] = Resources.Load<Sprite>("Images/Bomb1");
-		playerBombSprites[1] = Resources.Load<Sprite>("Images/Bomb2");
+		//playerBombSprites[0] = Resources.Load<Sprite>("Images/Bomb1");
+		//playerBombSprites[1] = Resources.Load<Sprite>("Images/Bomb2");
 		particleSystems = GetComponentsInChildren<ParticleSystem>();
 	}
 	

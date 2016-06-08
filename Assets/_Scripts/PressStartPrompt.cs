@@ -4,12 +4,12 @@ using System.Collections;
 
 public class PressStartPrompt : MonoBehaviour {
 	//Set this to false if the prompt is annoying you in development
-	public static readonly bool promptsEnabled = true;
+	public static readonly bool promptsEnabled = false;
 	public static bool[] playersReady;
 	public Player thisPlayer;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		playersReady = null;
 		if (playersReady == null) {
 			playersReady = new bool[GameManager.S.players.Length];

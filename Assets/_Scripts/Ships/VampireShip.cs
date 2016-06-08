@@ -12,7 +12,11 @@ public class VampireShip : PlayerShip {
 
 	// Use this for initialization
 	void Awake () {
+		base.Awake();
 		typeOfShip = ShipType.vampire;
+		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/VampireShip/VampireShip6");
+		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
+			"Images/VampireShip/VampireShipAnimationController");
 	}
 	
 	public void PercentHealthCost(float percent, bool ofCurrentHealth=true) {

@@ -8,7 +8,11 @@ public class Masochist : PlayerShip {
 	public static float damageMultiplier = 1f;
 
 	void Awake() {
+		base.Awake();
 		typeOfShip = ShipType.masochist;
+		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/MasochistShip/MShip6");
+		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
+			"Images/MasochistShip/MShipAnimationController");
 	}
 
 	//Opted for a discrete method of doing a damage multiplier

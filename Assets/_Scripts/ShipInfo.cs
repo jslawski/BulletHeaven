@@ -2,12 +2,16 @@
 using System.Collections;
 
 public class ShipInfo : MonoBehaviour {
-	ShipSelectionScroll selectionMenu;
-
+	ShipSelectionManager selectionMenu;
+	
+	public Player selectingPlayer = Player.none;
 	public SelectionPosition position;
+	public ShipType typeOfShip;
 	public string shipName;
 	public Color shipColor;
 	public SpriteRenderer spriteRenderer;
+
+	float scrollSpeed = 0.1f;
 
 	[Header("Ship Display Stats")]
 	[Range(0,10)]
@@ -27,8 +31,7 @@ public class ShipInfo : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		selectionMenu = GetComponentInParent<ShipSelectionScroll>();
-
+		selectionMenu = GetComponentInParent<ShipSelectionManager>();
 	}
 
 	void Start() {
@@ -39,11 +42,33 @@ public class ShipInfo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		PositionInfo posInfo = selectionMenu.positionInfos[(int)position];
-        transform.position = Vector3.Lerp(transform.position, posInfo.position, 0.1f);
-		transform.localScale = Vector3.Lerp(transform.localScale, posInfo.scale, 0.1f);
-		spriteRenderer.color = Color.Lerp(spriteRenderer.color, posInfo.alphaColor, 0.1f);
-		spriteRenderer.sortingOrder = (int)Mathf.Lerp(spriteRenderer.sortingOrder, posInfo.orderInLayer, 0.1f);
+		PositionInfo posInfo;
+
+		//Player has locked in, hide the non-selected ships off-screen
+		if (position != SelectionPosition.selected && selectionMenu.playerReady) {
+			//Determine whether to hide this ship to the left or right offscreen area
+			if (position > SelectionPosition.selected) {
+				posInfo = selectionMenu.positionInfos[(int)SelectionPosition.offscreenRight];
+			}
+			else {
+				posInfo = selectionMenu.positionInfos[(int)SelectionPosition.offscreenLeft];
+			}
+		}
+		//Player isn't locked in, show the non-selected ships off to the side
+		else {
+			posInfo = selectionMenu.positionInfos[(int)position];
+		}
+
+		//Apply the new position information gradually to this ship selection
+		transform.position = Vector3.Lerp(transform.position, posInfo.position, scrollSpeed);
+		transform.localScale = Vector3.Lerp(transform.localScale, posInfo.scale, scrollSpeed);
+		if (typeOfShip == ShipType.random) {
+			spriteRenderer.color = Color.Lerp(spriteRenderer.color, new Color(1,1,1,0.75f*posInfo.alphaColor.a), scrollSpeed);
+		}
+		else {
+			spriteRenderer.color = Color.Lerp(spriteRenderer.color, posInfo.alphaColor, scrollSpeed);
+		}
+		spriteRenderer.sortingOrder = (int)Mathf.Lerp(spriteRenderer.sortingOrder, posInfo.orderInLayer, scrollSpeed);
 	}
 
 	public void Scroll(bool toTheRight) {
@@ -55,12 +80,12 @@ public class ShipInfo : MonoBehaviour {
 
 		//Move the ship's position
 		//Handle wrap-around from left to right side
-		if (position == SelectionPosition.offscreenLeft && !toTheRight) {
-			position = SelectionPosition.offscreenRight;
+		if ((int)position == 0 && !toTheRight) {
+			position = (SelectionPosition)(((int)SelectionPosition.numPositions)-1);
 		}
 		//Handle wrap-around from right to left side
-		else if (position == SelectionPosition.offscreenRight && toTheRight) {
-			position = SelectionPosition.offscreenLeft;
+		else if ((int)position == ((int)SelectionPosition.numPositions)-1 && toTheRight) {
+			position = (SelectionPosition)0;
 		}
 		else {
 			position += (toTheRight ? 1 : -1);
