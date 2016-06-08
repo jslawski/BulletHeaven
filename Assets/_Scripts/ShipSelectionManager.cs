@@ -96,6 +96,25 @@ public class ShipSelectionManager : MonoBehaviour {
 			Scroll(false);
 		}
 
+		//Ready up
+		if (Input.GetKeyDown(KeyCode.Alpha1) && !playerReady) {
+			if (selectedShip.typeOfShip == ShipType.random) {
+				StartCoroutine(RandomShip());
+			}
+			else {
+				print(player + " is ready.");
+				playerReady = true;
+			}
+		}
+		else if (Input.GetKeyDown(KeyCode.Alpha2) && playerReady) {
+			print(player + " is no longer ready.");
+			playerReady = false;
+		}
+
+		if (Input.GetKeyDown(KeyCode.Return) && AllPlayersReady()) {
+			Application.LoadLevel("_Scene_Main");
+		}
+
 		//Controller support
 		if (device != null) {
 			if ((device.LeftStick.Right.WasPressed || device.DPadRight.WasPressed) && !playerReady) {
