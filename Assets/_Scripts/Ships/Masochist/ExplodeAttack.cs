@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class ExplodeAttack : MonoBehaviour {
+	public Player owningPlayer;
 	public GameObject explosionPrefab;
 	SphereCollider explosionZone;
 	ParticleSystem explosionParticles;
@@ -26,9 +27,9 @@ public class ExplodeAttack : MonoBehaviour {
 		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
 
 		//Scale the explosion size based on the damage multiplier
-		//Currently this is INSANE
-		explosionZone.radius = explosionZone.radius * Masochist.damageMultiplier;
-		explosionParticles.startSize = explosionParticles.startSize * Masochist.damageMultiplier;
+		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+		explosionZone.radius = explosionZone.radius * masochistPlayer.damageMultiplier;
+		explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.damageMultiplier;
 
 		//Destroy after 1.3 seconds
 		Invoke("DestroyInstance", 1.3f);
@@ -43,7 +44,8 @@ public class ExplodeAttack : MonoBehaviour {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			//Do damage to the player hit
-			damageDealt = CalculateDamageDealt(other.transform) * Masochist.damageMultiplier;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
 			player.TakeDamage(damageDealt);
 			print("Damage Dealt: " + damageDealt);
 
@@ -52,7 +54,8 @@ public class ExplodeAttack : MonoBehaviour {
 		}
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			damageDealt = CalculateDamageDealt(other.transform) * Masochist.damageMultiplier;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
 			otherShip.TakeDamage(damageDealt);
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;

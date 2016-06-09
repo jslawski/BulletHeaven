@@ -7,13 +7,12 @@ public class Masochist : PlayerShip {
 	public MasochistShield shield;
 	public bool shieldUp = false;
 
-	//JPS: This assumes that there will only every be one masochist on the battlefield
-	//This will have to change if we don't like that limitation
-	public static float damageMultiplier = 1f;
+	public float damageMultiplier = 1f;
 
 	void Awake() {
 		base.Awake();
 		typeOfShip = ShipType.masochist;
+		shield = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/MasochistShip/MShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/MasochistShip/MShipAnimationController");

@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour {
 		newPlayerShip.deathExplosionPrefab = oldPlayerShip.deathExplosionPrefab;
 		newPlayerShip.explosionPrefab = oldPlayerShip.explosionPrefab;
 		newPlayerShip.playerShooting = oldPlayerShip.playerShooting;
+		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
 		newPlayerShip.playerMovement = oldPlayerShip.playerMovement;
 		newPlayerShip.finalAttackPrefab = oldPlayerShip.finalAttackPrefab;
 

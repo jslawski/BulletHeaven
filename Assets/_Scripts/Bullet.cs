@@ -16,8 +16,9 @@ public class Bullet : PooledObj {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				sprite.color = GameManager.S.players[(int)value].playerColor;
-				owningPlayerMovement = GameManager.S.players[(int)value].playerMovement;
+				PlayerShip playerShip = GameManager.S.players[(int)value];
+                sprite.color = playerShip.playerColor;
+				owningPlayerMovement = playerShip.playerMovement;
 				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
 				otherPlayer = GameManager.S.players[(int)other].playerMovement;
 			}
@@ -71,26 +72,30 @@ public class Bullet : PooledObj {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
 			ReturnToPool();
 		}
-
-		
-
+		//Deal damage to any other player hit
 		else if (other.tag == "Player") {
-			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
+			PlayerShip playerHit = other.gameObject.GetComponentInParent<PlayerShip>();
 
-			if (player.typeOfShip == ShipType.masochist) {
-				return;
-			}
+			if (playerHit.player != owningPlayer) {
+				//Masochists with the shield up are immune to incoming bullets
+				if (playerHit.typeOfShip == ShipType.masochist) {
+					Masochist masochistHit = playerHit as Masochist;
+					if (masochistHit.shieldUp) {
+						return;
+					}
+				}
 
-			if (player.player != owningPlayer) {
 				//Do damage to the player hit
 				if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {  //kinky...
-					player.TakeDamage(damage * Masochist.damageMultiplier);
+					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+					playerHit.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 				}
 				else {
-					player.TakeDamage(damage);
+					playerHit.TakeDamage(damage);
 				}
 
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
@@ -98,10 +103,12 @@ public class Bullet : PooledObj {
 				ReturnToPool();
 			}
 		}
+		//Deal damage to any ProtagShip hit
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
 			if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {
-				otherShip.TakeDamage(damage * Masochist.damageMultiplier);
+				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+				otherShip.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 			}
 			else {
 				otherShip.TakeDamage(damage);
