@@ -69,12 +69,16 @@ public class GameManager : MonoBehaviour {
 			case ShipType.masochist:
 				newPlayerShip = playerShipGO.AddComponent<Masochist>();
 				break;
+			case ShipType.tank:
+				newPlayerShip = playerShipGO.AddComponent<TankyShip>();
+				break;
 			default:
 				Debug.LogError("ShipType " + typeOfShip + " not handled in InitializePlayerShip()");
 				return;
 		}
 
 		//Grab some values from the old script to apply them to the new one
+		newPlayerShip.player = player;
 		newPlayerShip.healthBar = oldPlayerShip.healthBar;
 		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
 		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;

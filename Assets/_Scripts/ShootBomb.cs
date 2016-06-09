@@ -63,6 +63,9 @@ public class ShootBomb : MonoBehaviour {
 			case ShipType.vampire:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/VampireBomb");
 				break;
+			case ShipType.tank:
+				bombPrefab = Resources.Load<GameObject>("Prefabs/TankBomb");
+				break;
 			default:
 				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
 				break;

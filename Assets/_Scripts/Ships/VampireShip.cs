@@ -11,7 +11,7 @@ public class VampireShip : PlayerShip {
 	}
 
 	// Use this for initialization
-	void Awake () {
+	new void Awake () {
 		base.Awake();
 		typeOfShip = ShipType.vampire;
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/VampireShip/VampireShip6");
