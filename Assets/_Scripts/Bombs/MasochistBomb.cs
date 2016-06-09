@@ -4,14 +4,14 @@ using System.Collections;
 public class MasochistBomb : Bomb {
 	GameObject shockwavePrefab;
 	LeadingShot leadingShotPrefab;
-	SpiralShot spiralShotPrefab;
+	SpreadShot spreadShotPrefab;
 	ExplodeAttack explodeAttackPrefab;
 
 	void Awake() {
 		base.Awake();
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
-		spiralShotPrefab = Resources.Load<SpiralShot>("Prefabs/SpiralShot");
+		spreadShotPrefab = Resources.Load<SpreadShot>("Prefabs/SpreadShot");
 		explodeAttackPrefab = Resources.Load<ExplodeAttack>("Prefabs/ExplodeAttack");
 	}
 
@@ -23,18 +23,20 @@ public class MasochistBomb : Bomb {
 				newShot.owningPlayer = owningPlayer;
 				newShot.FireBurst();
 				break;
-			//Spiral shot
+			//Spread shot
 			case AttackButtons.B:
-				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
-				spiralShot.owningPlayer = owningPlayer;
-				spiralShot.FireBurst();
+				SpreadShot spreadShot = Instantiate(spreadShotPrefab, transform.position, new Quaternion()) as SpreadShot;
+				spreadShot.owningPlayer = owningPlayer;
+				spreadShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+				spreadShot.FireBurst();
 				break;
 			//Explode attack
 			case AttackButtons.X:
 				ExplodeAttack explodeAttack = Instantiate(explodeAttackPrefab, transform.position, new Quaternion()) as ExplodeAttack;
 				explodeAttack.owningPlayer = owningPlayer;
+				explodeAttack.ExecuteExplosion();
 				break;
-			//Reflektor
+			//Shield
 			case AttackButtons.Y:
 				return;
 			default:

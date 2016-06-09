@@ -5,13 +5,14 @@ using System.Collections.Generic;
 
 public class MasochistShield : MonoBehaviour {
 	SphereCollider thisCollider;
+	SpriteRenderer shieldSprite;
 	Player otherPlayer;
 
 	List<PhysicsObj> absorbedBullets;
 
 	float rotationSpeed_c = 100f;
 	public Masochist thisPlayer;
-	float shieldDuration = 3f;
+	float shieldDuration = 1.5f;
 
 	bool shooting = false;
 
@@ -27,6 +28,7 @@ public class MasochistShield : MonoBehaviour {
 
 	void Start() {
 		thisCollider = GetComponent<SphereCollider>();
+		shieldSprite = GetComponentInChildren<SpriteRenderer>();
 		absorbedBullets = new List<PhysicsObj>();
 	}
 
@@ -48,9 +50,13 @@ public class MasochistShield : MonoBehaviour {
 
 	IEnumerator FireBullets() {
 		float sprayRange = 1.5f;
-		float reflectionVelocity = 20f;
+		float reflectionVelocity = thisPlayer.damageMultiplier == 1 ? 20f : 30f;
 
 		shooting = true;
+
+		//Remove the shield visual while shooting.  The player can be hit at this point
+		shieldSprite.enabled = false;
+		thisPlayer.shieldUp = false;
 
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
@@ -69,7 +75,6 @@ public class MasochistShield : MonoBehaviour {
 		}
 
 		//Destroy the shield after it finishes shooting all of the bullets
-		thisPlayer.shieldUp = false;
 		Destroy(gameObject);
 	}
 

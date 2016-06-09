@@ -5,6 +5,9 @@ public class Masochist : PlayerShip {
 	KeyCode Y;
 
 	public MasochistShield shield;
+
+	MasochistAura curAura;
+	MasochistAura auraPrefab;
 	public bool shieldUp = false;
 
 	public float damageMultiplier = 1f;
@@ -13,6 +16,7 @@ public class Masochist : PlayerShip {
 		base.Awake();
 		typeOfShip = ShipType.masochist;
 		shield = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
+		auraPrefab = Resources.Load<MasochistAura>("Prefabs/MasochistAura");
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/MasochistShip/MShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/MasochistShip/MShipAnimationController");
@@ -32,17 +36,15 @@ public class Masochist : PlayerShip {
 		//Determine the current damage multiplier
 		float remainingHealthRatio = health / maxHealth;
 
-		//75% health remaining -> 20% damage increase
-		if (remainingHealthRatio <= 0.75f) {
-			damageMultiplier = 1.5f;
-		}
 		//50% health remaining -> 50% damage increase
-		else if (remainingHealthRatio <= 0.5f) {
-			damageMultiplier = 2f;
+		if (remainingHealthRatio <= 0.5f && damageMultiplier == 1) {
+			damageMultiplier = 1.5f;
+			curAura = Instantiate(auraPrefab, transform.position, new Quaternion()) as MasochistAura;
+			curAura.player = this;
 		}
-		//25% health remaining -> 75% damage increase
-		else if (remainingHealthRatio <= 0.25f) {
-			damageMultiplier = 2.5f;
+		else if (remainingHealthRatio > 0.5f && damageMultiplier == 1.5f) {
+			Destroy(curAura);
+			damageMultiplier = 1f;
 		}
 	}
 
