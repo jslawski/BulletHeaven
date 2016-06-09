@@ -19,6 +19,12 @@ public class ExplodeAttack : MonoBehaviour {
 		//Normalize the distance to be a value between 0 (center of explosion) and 1 (edge of explosion)
 		//Explosion deals more damage closer to the center, so a normalized value of 0 should yield the highest scalar of 1
 		float damageScalar = Mathf.Abs(1 - (GetDistance(transform.position, victim.position) / explosionRadius));
+
+		//Minimum damage dealt by the explosion is a third of the base damage
+		if (damageScalar < 0.30f) {
+			damageScalar = 0.30f;
+		}
+
 		return baseDamage * damageScalar;
 	}
 
