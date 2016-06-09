@@ -12,6 +12,9 @@ public class ShipInfo : MonoBehaviour {
 	public SpriteRenderer spriteRenderer;
 
 	float scrollSpeed = 0.1f;
+	float timeSelected = 0f;
+	float bounceAmplitude = 0.5f;
+	float bounceFrequency = 2f;
 
 	[Header("Ship Display Stats")]
 	[Range(0,10)]
@@ -54,9 +57,15 @@ public class ShipInfo : MonoBehaviour {
 				posInfo = selectionMenu.positionInfos[(int)SelectionPosition.offscreenLeft];
 			}
 		}
-		//Player isn't locked in, show the non-selected ships off to the side
+		//Player isn't locked in, show the non-selected ships onscreen off to the side
 		else {
 			posInfo = selectionMenu.positionInfos[(int)position];
+		}
+
+		//Bounce the selected ship
+		if (position == SelectionPosition.selected && !selectionMenu.playerReady) {
+			posInfo.position.y += bounceAmplitude*Mathf.Cos((2*Mathf.PI)*timeSelected/bounceFrequency);
+			timeSelected += Time.deltaTime;
 		}
 
 		//Apply the new position information gradually to this ship selection
