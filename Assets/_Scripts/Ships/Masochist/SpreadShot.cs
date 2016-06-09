@@ -23,6 +23,8 @@ public class SpreadShot : MonoBehaviour {
 		//Normal: 5 directions, Aura: 8 directions
 		float firingSeparation = masochistPlayer.damageMultiplier == 1 ? 72 * Mathf.Deg2Rad : 45 * Mathf.Deg2Rad;
 		float startingAngle = masochistPlayer.damageMultiplier == 1 ? 18 * Mathf.Deg2Rad : 0;
+		float bulletOffset = 3f * Mathf.Deg2Rad;
+
 
 		float bulletVelocity = 10f;
 
@@ -30,10 +32,22 @@ public class SpreadShot : MonoBehaviour {
 			//Fire burst of bullets
 			for (float curAngle = startingAngle; curAngle < startingAngle + (2 * Mathf.PI); curAngle += firingSeparation) {
 				PolarCoordinate direction = new PolarCoordinate(1, curAngle);
+				PolarCoordinate offset = new PolarCoordinate(1, bulletOffset);
+				PolarCoordinate offsetDirection;
+
+				//Bullet 1
+				offsetDirection = new PolarCoordinate(1, curAngle + bulletOffset);
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 				curBullet.owningPlayer = owningPlayer;
 				curBullet.transform.position = gameObject.transform.position;
-				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * direction.PolarToCartesian().normalized;
+				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * (offsetDirection.PolarToCartesian()).normalized;
+
+				//Bullet 2
+				offsetDirection = new PolarCoordinate(1, curAngle - bulletOffset);
+				curBullet = bulletPrefab.GetPooledInstance<Bullet>();
+				curBullet.owningPlayer = owningPlayer;
+				curBullet.transform.position = gameObject.transform.position;
+				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * (offsetDirection.PolarToCartesian()).normalized;
 			}
 
 			yield return new WaitForSeconds(bulletDelay);
