@@ -8,6 +8,7 @@ public class ShipInfo : MonoBehaviour {
 	public SelectionPosition position;
 	public ShipType typeOfShip;
 	public string shipName;
+	public string description;
 	public Color shipColor;
 	public SpriteRenderer spriteRenderer;
 
