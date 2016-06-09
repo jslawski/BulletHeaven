@@ -126,7 +126,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 		yield return new WaitForSeconds(timeBetweenHeartbeats);
 
-		while (GameManager.S.gameState == GameStates.playing) {
+		while (GameManager.S.gameState == GameStates.playing && health < lowOnHealthThreshold*maxHealth) {
 			VibrateManager.S.RumbleVibrate(player, heartbeatPulseDuration, heartbeatVibration, true);
 			yield return new WaitForSeconds(timeBetweenHeartbeats);
 		}

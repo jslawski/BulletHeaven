@@ -6,7 +6,7 @@ public class VampireShip : PlayerShip {
 
 	new void Start() {
 		base.Start();
-		maxHealth = 100;
+		maxHealth = 85f;
 		health = maxHealth;
 	}
 
