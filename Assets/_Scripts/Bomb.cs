@@ -56,11 +56,9 @@ public class Bomb : MonoBehaviour {
 	public virtual void Detonate(AttackButtons attackToPerform) { }
 
 	void OnDestroy() {
-		print("OnDestroyBomb");
 		//print("Destroyed bomb");
 		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
 		if (GameManager.S && owningPlayer != Player.none && Application.loadedLevelName != GameManager.S.titleSceneName) {
-			print("OnDestroyRemoveBomb");
 			GameManager.S.players[(int)owningPlayer].GetComponent<ShootBomb>().bombsInAir.Remove(this);
 		}
 	}

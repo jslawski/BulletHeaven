@@ -15,12 +15,14 @@ public class Reflector : MonoBehaviour {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				if (value == Player.player1) {
-					reflectorParticles[0].Play();
-				}
-				else {
-					reflectorParticles[1].Play();
-				}
+				//if (value == Player.player1) {
+				//	reflectorParticles[0].Play();
+				//}
+				//else {
+				//	reflectorParticles[1].Play();
+				//}
+				reflectorParticles[0].startColor = GameManager.S.players[(int)value].playerColor;
+				reflectorParticles[0].Play();
 			}
 		}
 	}

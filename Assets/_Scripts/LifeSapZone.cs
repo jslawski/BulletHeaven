@@ -5,7 +5,7 @@ public class LifeSapZone : MonoBehaviour {
 	public PlayerShip owner;
 
 	float lifespan = 6f;
-	float maxRadius = 6f;
+	float maxRadius = 9f;
 
 	ParticleSystem zoneParticles;
 	Transform particle;
@@ -56,7 +56,7 @@ public class LifeSapZone : MonoBehaviour {
 			float percent = t/lifespan;
 
 			float size = Mathf.Lerp(0, maxRadius, Mathf.Sqrt(percent));
-			zoneParticles.transform.localScale = Vector3.one * (size/maxRadius);
+			zoneParticles.transform.localScale = Vector3.one * (size/6f);
 			hitbox.radius = size;
 
 			yield return null;
@@ -88,7 +88,11 @@ public class LifeSapZone : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
-			StartTether(other.GetComponentInParent<PlayerShip>());
+			PlayerShip otherShip = other.GetComponentInParent<PlayerShip>();
+			if (otherShip == owner) {
+				return;
+			}
+            StartTether(otherShip);
 			playerInSapZone = true;
 		}
 	}
