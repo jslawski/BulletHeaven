@@ -84,7 +84,7 @@ public class MasochistShield : MonoBehaviour {
 			yield break;
 		}
 
-		float radius = transform.localScale.y;
+		float radius = transform.localScale.y + 1.5f;
 		float lerpSpeed = 0.5f;
 		float orbitSpeed = Random.Range(-10 * Mathf.Deg2Rad, 10 * Mathf.Deg2Rad);
 

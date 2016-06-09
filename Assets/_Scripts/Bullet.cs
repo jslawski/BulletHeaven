@@ -74,8 +74,16 @@ public class Bullet : PooledObj {
 		if (other.tag == "KillZone") {
 			ReturnToPool();
 		}
+
+		
+
 		else if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
+
+			if (player.typeOfShip == ShipType.masochist) {
+				return;
+			}
+
 			if (player.player != owningPlayer) {
 				//Do damage to the player hit
 				if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {  //kinky...
