@@ -88,7 +88,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 		timeSinceTakenDamage += Time.deltaTime;
 	}
 

@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Masochist : PlayerShip {
+	public MasochistShield shield;
+	public bool shieldUp = false;
 
 	//JPS: This assumes that there will only every be one masochist on the battlefield
 	//This will have to change if we don't like that limitation
@@ -34,6 +36,22 @@ public class Masochist : PlayerShip {
 		//25% health remaining -> 75% damage increase
 		else if (remainingHealthRatio <= 0.25f) {
 			damageMultiplier = 2.5f;
+		}
+	}
+
+	protected override void Update() {
+		base.Update();
+
+		if (device != null) {
+			//Activate a shield if the button was pressed
+			if (device.Action4.WasPressed && playerShooting.curAmmo != 0 && !shieldUp) {
+				MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
+				newShield.transform.parent = gameObject.transform;
+				newShield.thisPlayer = GetComponent<Masochist>();
+				newShield.owningPlayer = player;
+				newShield.ActivateShield();
+				playerShooting.ExpendAttackSlot();
+			}
 		}
 	}
 }

@@ -33,6 +33,9 @@ public class Bullet : PooledObj {
 			SetTransparency(value);
 		}
 	}
+
+	public bool absorbedByMasochist = false;
+
 	float transparencyAlpha = 71f/255f;
 	ShipMovement owningPlayerMovement;
 
@@ -56,7 +59,7 @@ public class Bullet : PooledObj {
 				yield break;
 			}
 
-			if (!transparent && InOwnPlayersTerritory()) {
+			if (!transparent && InOwnPlayersTerritory() && !absorbedByMasochist) {
 				SetTransparency(true);
 			}
 			else if (transparent && !InOwnPlayersTerritory()) {

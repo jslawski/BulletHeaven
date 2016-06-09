@@ -153,6 +153,12 @@ public class ShootBomb : MonoBehaviour {
 
 		//Add this bomb to the end of the queue
 		bombsInAir.Add(newBomb);
+		ExpendAttackSlot();
+
+	}
+
+	//Executing any attack results in expending an ammo slot
+	public void ExpendAttackSlot() {
 		bombShootCooldownRemaining = bombShootCooldown;
 
 		curAmmo--;
@@ -164,7 +170,6 @@ public class ShootBomb : MonoBehaviour {
 		else if (ammoImages[1].reloading == false) {
 			StartCoroutine(ammoImages[1].DisplayReloadCoroutine(reloadDuration));
 		}
-
 	}
 
 	IEnumerator ReloadBomb() {
