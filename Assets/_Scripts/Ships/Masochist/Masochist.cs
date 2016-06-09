@@ -32,17 +32,9 @@ public class Masochist : PlayerShip {
 		//Determine the current damage multiplier
 		float remainingHealthRatio = health / maxHealth;
 
-		//75% health remaining -> 20% damage increase
-		if (remainingHealthRatio <= 0.75f) {
-			damageMultiplier = 1.5f;
-		}
 		//50% health remaining -> 50% damage increase
-		else if (remainingHealthRatio <= 0.5f) {
-			damageMultiplier = 2f;
-		}
-		//25% health remaining -> 75% damage increase
-		else if (remainingHealthRatio <= 0.25f) {
-			damageMultiplier = 2.5f;
+		if (remainingHealthRatio <= 0.5f) {
+			damageMultiplier = 1.5f;
 		}
 	}
 

@@ -33,6 +33,7 @@ public class MasochistBomb : Bomb {
 			case AttackButtons.X:
 				ExplodeAttack explodeAttack = Instantiate(explodeAttackPrefab, transform.position, new Quaternion()) as ExplodeAttack;
 				explodeAttack.owningPlayer = owningPlayer;
+				explodeAttack.ExecuteExplosion();
 				break;
 			//Reflektor
 			case AttackButtons.Y:
