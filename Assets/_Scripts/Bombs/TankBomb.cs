@@ -5,7 +5,7 @@ public class TankBomb : Bomb {
 	GameObject shockwavePrefab;
 	LeadingShot leadingShotPrefab;
 	SpiralShot spiralShotPrefab;
-	Beam beamShotPrefab;
+	ClusterBomb clusterBombPrefab;
 	Reflector reflectorPrefab;
 
 	void Awake() {
@@ -13,7 +13,7 @@ public class TankBomb : Bomb {
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
 		spiralShotPrefab = Resources.Load<SpiralShot>("Prefabs/SpiralShot");
-		beamShotPrefab = Resources.Load<Beam>("Prefabs/Beam");
+		//clusterBombPrefab = Resources.Load<ClusterBomb>("Prefabs/Beam");
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
 
@@ -36,10 +36,10 @@ public class TankBomb : Bomb {
 				spiralShot.owningPlayer = owningPlayer;
 				spiralShot.FireBurst();
 				break;
-			//Beam attack
+			//ClusterBomb attack
 			case AttackButtons.X:
-				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
-				beamShot.owningPlayer = owningPlayer;
+				ClusterBomb clusterBomb = Instantiate(clusterBombPrefab, transform.position, new Quaternion()) as ClusterBomb;
+				clusterBomb.owningPlayer = owningPlayer;
 				break;
 			//Reflektor
 			case AttackButtons.Y:

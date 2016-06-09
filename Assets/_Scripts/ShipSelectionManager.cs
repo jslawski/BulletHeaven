@@ -51,6 +51,7 @@ public class ShipSelectionManager : MonoBehaviour {
 												//such as the world position, alpha value, and orderInLayer value
 
 	public Text selectedShipNameField;
+	public Text selectedShipDescriptionField;
 	[Header("Stat Bar References")]
 	public StatBar offenseStat;
 	public StatBar defenseStat;
@@ -160,6 +161,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		//Gracefully handle the case of no ship selected
 		if (shipInfo == null) {
 			selectedShipNameField.text = "";
+			selectedShipDescriptionField.text = "";
 
 			offenseStat.SetStatValue(0, Color.white);
 			defenseStat.SetStatValue(0, Color.white);
@@ -173,6 +175,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		//Animate the random ship selection
 		else if (shipInfo.typeOfShip == ShipType.random) {
 			selectedShipNameField.text = shipInfo.shipName;
+			selectedShipDescriptionField.text = shipInfo.description;
 			miscStatLabel.text = shipInfo.miscLabel;
 
 			offenseStat.AnimateRandomStats();
@@ -181,10 +184,12 @@ public class ShipSelectionManager : MonoBehaviour {
 			maxHealthStat.AnimateRandomStats();
 			fireRateStat.AnimateRandomStats();
 			miscStat.SetStatValue(shipInfo.miscStat, shipInfo.shipColor);
+			return;
 		}
 
 		//Set the stat values for non-special case ships
 		selectedShipNameField.text = shipInfo.shipName;
+		selectedShipDescriptionField.text = shipInfo.description;
 
 		offenseStat.SetStatValue(shipInfo.offense, shipInfo.shipColor);
 		defenseStat.SetStatValue(shipInfo.defense, shipInfo.shipColor);
