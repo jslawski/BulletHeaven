@@ -233,7 +233,11 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	bool AllPlayersReady() {
-		Debug.LogWarning("Stub function AllPlayersReady() called, returning false.");
-		return false;
+		foreach (var player in selectionMenus) {
+			if (!player.playerReady) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
