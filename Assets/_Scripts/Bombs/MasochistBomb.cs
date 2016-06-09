@@ -16,11 +16,6 @@ public class MasochistBomb : Bomb {
 	}
 
 	public override void Detonate(AttackButtons attackToPerform) {
-		//Stop moving the bomb
-		physics.velocity = Vector3.zero;
-
-		SoundManager.instance.Play("BombExplode");
-
 		switch (attackToPerform) {
 			//Leading shot
 			case AttackButtons.A:
@@ -34,18 +29,22 @@ public class MasochistBomb : Bomb {
 				spiralShot.owningPlayer = owningPlayer;
 				spiralShot.FireBurst();
 				break;
-			//Beam attack
+			//Explode attack
 			case AttackButtons.X:
 				ExplodeAttack explodeAttack = Instantiate(explodeAttackPrefab, transform.position, new Quaternion()) as ExplodeAttack;
 				break;
 			//Reflektor
 			case AttackButtons.Y:
-				break;
+				return;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
 				break;
 		}
 
+		//Stop moving the bomb
+		physics.velocity = Vector3.zero;
+
+		SoundManager.instance.Play("BombExplode");
 		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
 		Destroy(shockwave, 5f);
 		Destroy(gameObject);
