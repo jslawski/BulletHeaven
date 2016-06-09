@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Masochist : PlayerShip {
+	KeyCode Y;
+
 	public MasochistShield shield;
 	public bool shieldUp = false;
 
@@ -15,6 +17,8 @@ public class Masochist : PlayerShip {
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/MasochistShip/MShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/MasochistShip/MShipAnimationController");
+
+		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4; 
 	}
 
 	//Opted for a discrete method of doing a damage multiplier
@@ -49,6 +53,16 @@ public class Masochist : PlayerShip {
 		if (device != null) {
 			//Activate a shield if the button was pressed
 			if (device.Action4.WasPressed && playerShooting.curAmmo != 0 && !shieldUp) {
+				MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
+				newShield.transform.parent = gameObject.transform;
+				newShield.thisPlayer = GetComponent<Masochist>();
+				newShield.owningPlayer = player;
+				newShield.ActivateShield();
+				playerShooting.ExpendAttackSlot();
+			}
+		}
+		else if (device == null) {
+			if (Input.GetKeyDown(Y) && playerShooting.curAmmo != 0 && !shieldUp) {
 				MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
 				newShield.transform.parent = gameObject.transform;
 				newShield.thisPlayer = GetComponent<Masochist>();
