@@ -13,7 +13,7 @@ public class TankBomb : Bomb {
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
 		spiralShotPrefab = Resources.Load<SpiralShot>("Prefabs/SpiralShot");
-		//clusterBombPrefab = Resources.Load<ClusterBomb>("Prefabs/Beam");
+		clusterBombPrefab = Resources.Load<ClusterBomb>("Prefabs/ClusterBomb");
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
 
