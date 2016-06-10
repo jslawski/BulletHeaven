@@ -43,7 +43,7 @@ public class Masochist : PlayerShip {
 			curAura.player = this;
 		}
 		else if (remainingHealthRatio > 0.5f && damageMultiplier == 1.5f) {
-			Destroy(curAura);
+			Destroy(curAura.gameObject);
 			damageMultiplier = 1f;
 		}
 	}
