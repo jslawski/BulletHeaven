@@ -88,6 +88,9 @@ public class GameManager : MonoBehaviour {
 			case ShipType.tank:
 				newPlayerShip = playerShipGO.AddComponent<TankyShip>();
 				break;
+			case ShipType.glassCannon:
+				newPlayerShip = playerShipGO.AddComponent<GlassCannon>();
+				break;
 			default:
 				Debug.LogError("ShipType " + typeOfShip + " not handled in InitializePlayerShip()");
 				return;

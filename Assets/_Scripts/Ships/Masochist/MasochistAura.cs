@@ -14,5 +14,8 @@ public class MasochistAura : MonoBehaviour {
 		if (player != null) {
 			gameObject.transform.position = player.transform.position;
 		}
+		else {
+			Destroy(gameObject);
+		}
 	}
 }

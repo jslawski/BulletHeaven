@@ -12,7 +12,7 @@ public class Masochist : PlayerShip {
 
 	public float damageMultiplier = 1f;
 
-	void Awake() {
+	new void Awake() {
 		base.Awake();
 		typeOfShip = ShipType.masochist;
 		shield = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
@@ -22,9 +22,12 @@ public class Masochist : PlayerShip {
 			"Images/MasochistShip/MShipAnimationController");
 	}
 
-	void Start() {
+	new void Start() {
 		base.Start();
 		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
+
+		maxHealth = 190f;
+		health = maxHealth;
 	}
 
 	//Opted for a discrete method of doing a damage multiplier

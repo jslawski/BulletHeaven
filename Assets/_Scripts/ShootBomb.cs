@@ -66,6 +66,10 @@ public class ShootBomb : MonoBehaviour {
 			case ShipType.tank:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/TankBomb");
 				break;
+			case ShipType.glassCannon:
+				Debug.LogWarning("GlassCannon ship doesn't have a bomb prefab yet.");
+				bombPrefab = null;
+				break;
 			default:
 				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
 				break;
