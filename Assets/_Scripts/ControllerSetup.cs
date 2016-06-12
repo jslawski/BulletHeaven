@@ -40,8 +40,11 @@ public class ControllerSetup : MonoBehaviour {
 				if (curDevice.MenuWasPressed && !controllersInUse.Contains(curDevice)) {
 					//In-game controller addition
 					if (GameManager.S != null) {
-						GameManager.S.players[(int)curPlayer].device = curDevice;
-						GameManager.S.players[(int)curPlayer].controllerPrompt.HidePressStartPrompt();
+						PlayerShip player = GameManager.S.players[(int)curPlayer];
+						player.device = curDevice;
+						if (player.controllerPrompt != null) {
+							player.controllerPrompt.HidePressStartPrompt();
+						}
 					}
 					//Ship selection menu
 					if (shipSelectionMenus.Length > 0 && shipSelectionMenus[(int)curPlayer] != null) {

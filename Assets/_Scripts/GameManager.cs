@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using InControl;
+using UnityEngine.UI;
 
 public enum Player {
 	player1,
@@ -52,6 +53,9 @@ public class GameManager : MonoBehaviour {
 			Time.fixedDeltaTime *= 0.15f;
 		}
 
+		if (!PressStartPrompt.promptsEnabled) {
+			StartGame();
+		}
 		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
 	}
 
@@ -104,12 +108,22 @@ public class GameManager : MonoBehaviour {
 		//Remove the old script and replace the GameManager reference with the new one
 		Destroy(oldPlayerShip);
 
-		//Fix old references to the oldPlayerShip and set new values for ship type and color
+		//Remember the controller in PlayerShip
 		newPlayerShip.device = device;
+
+		//If the controller prompt is up, hide it
 		if (newPlayerShip.controllerPrompt && PressStartPrompt.promptsEnabled) {
 			newPlayerShip.controllerPrompt.HidePressStartPrompt();
 		}
+
+		//Set player's color
 		newPlayerShip.playerColor = playerColor;
+		foreach (var ammo in newPlayerShip.playerShooting.ammoImages) {
+			ammo.GetComponent<Image>().color = playerColor;
+		}
+		newPlayerShip.healthBar.SetColor(playerColor);
+
+		//Set the type of bomb and fix old references
 		newPlayerShip.playerShooting.SetBombType(typeOfShip);
 		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
 		newPlayerShip.playerMovement.thisPlayer = newPlayerShip;
@@ -154,6 +168,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void StartGame() {
+		StartCoroutine(StartGameCoroutine());
+	}
+
+	IEnumerator StartGameCoroutine() {
+		for	(int i = 3; i >= 0; i--) {
+			print(i);
+			yield return new WaitForSeconds(1);
+		}
+
 		gameState = GameStates.playing;
 		gameHasBegun = true;
 	}

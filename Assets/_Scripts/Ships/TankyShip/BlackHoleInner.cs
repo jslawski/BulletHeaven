@@ -46,7 +46,7 @@ public class BlackHoleInner : MonoBehaviour {
 		}
 		else if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
-			if (bullet.owningPlayer == blackHole.owningPlayer) {
+			if (bullet.gameObject.layer == LayerMask.NameToLayer("TrappedBullet")) {
 				bullet.physics.acceleration = (transform.position - other.transform.position).normalized * blackHole.gravityForce;
 			}
 		}
