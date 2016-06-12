@@ -12,6 +12,11 @@ public class ShipInfo : MonoBehaviour {
 	public Color shipColor;
 	public SpriteRenderer spriteRenderer;
 
+	[Range(-4f,4f)]
+	public float hitBoxOffset;
+	[Range(0.1f,0.6f)]
+	public float hitBoxRadius;
+
 	float scrollSpeed = 0.1f;
 	float timeSelected = 0f;
 	float bounceAmplitude = 0.5f;
@@ -27,7 +32,7 @@ public class ShipInfo : MonoBehaviour {
 	[Range(0,10)]
 	public int maxHealth;
 	[Range(0,10)]
-	public int fireRate;
+	public int difficulty;
 	public string miscLabel;
 	[Range(0,10)]
 	public int miscStat;

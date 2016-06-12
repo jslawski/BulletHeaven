@@ -8,6 +8,8 @@ public class Bullet : PooledObj {
 	float transparencyCheckCooldown = 0.4f;
 
 	SpriteRenderer sprite;
+	public PhysicsObj physics;
+	public SphereCollider hitbox;
 	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
 		get {
@@ -41,16 +43,22 @@ public class Bullet : PooledObj {
 	ShipMovement owningPlayerMovement;
 
 	void Awake() {
+		physics = GetComponent<PhysicsObj>();
 		sprite = GetComponent<SpriteRenderer>();
+		hitbox = GetComponent<SphereCollider>();
 		damage = 1;
 	}
 
 	void OnEnable() {
+		physics.acceleration = Vector3.zero;
+		physics.velocity = Vector3.zero;
 		transparent = false;
 		Invoke("StartTransparencyCheckCoroutine", 0.02f);
 	}
 	void StartTransparencyCheckCoroutine() {
-		StartCoroutine(TransparencyCheck());
+		if (gameObject.activeSelf) {
+			StartCoroutine(TransparencyCheck());
+		}
 	}
 
 	IEnumerator TransparencyCheck() {

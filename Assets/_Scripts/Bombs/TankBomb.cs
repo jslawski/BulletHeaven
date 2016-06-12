@@ -6,7 +6,7 @@ public class TankBomb : Bomb {
 	LeadingShot leadingShotPrefab;
 	SpiralShot spiralShotPrefab;
 	ClusterBomb clusterBombPrefab;
-	Reflector reflectorPrefab;
+	BlackHole blackHolePrefab;
 
 	void Awake() {
 		base.Awake();
@@ -14,7 +14,7 @@ public class TankBomb : Bomb {
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
 		spiralShotPrefab = Resources.Load<SpiralShot>("Prefabs/SpiralShot");
 		clusterBombPrefab = Resources.Load<ClusterBomb>("Prefabs/ClusterBomb");
-		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
+		blackHolePrefab = Resources.Load<BlackHole>("Prefabs/BlackHole");
 	}
 
 	public override void Detonate(AttackButtons attackToPerform) {
@@ -41,10 +41,10 @@ public class TankBomb : Bomb {
 				ClusterBomb clusterBomb = Instantiate(clusterBombPrefab, transform.position, new Quaternion()) as ClusterBomb;
 				clusterBomb.owningPlayer = owningPlayer;
 				break;
-			//Reflektor
+			//BlackHole attack
 			case AttackButtons.Y:
-				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
-				reflectorShot.owningPlayer = owningPlayer;
+				BlackHole blackHole = Instantiate(blackHolePrefab, transform.position, new Quaternion()) as BlackHole;
+				blackHole.owningPlayer = owningPlayer;
 				break;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");

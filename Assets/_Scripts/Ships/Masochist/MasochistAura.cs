@@ -11,6 +11,8 @@ public class MasochistAura : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		gameObject.transform.position = player.transform.position;
+		if (player != null) {
+			gameObject.transform.position = player.transform.position;
+		}
 	}
 }

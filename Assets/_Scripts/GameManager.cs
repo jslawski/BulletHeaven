@@ -55,9 +55,21 @@ public class GameManager : MonoBehaviour {
 		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
 	}
 
-	public void InitializePlayerShip(Player player, ShipType typeOfShip, Color playerColor, InputDevice device=null) {
+	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
+		Player player = shipInfo.selectingPlayer;
+		ShipType typeOfShip = shipInfo.typeOfShip;
+		Color playerColor = shipInfo.shipColor;
+
 		PlayerShip oldPlayerShip = players[(int)player];
 		GameObject playerShipGO = oldPlayerShip.gameObject;
+
+		//Set up the hitboxes appropriately
+		SphereCollider hitbox = playerShipGO.GetComponentInChildren<SphereCollider>();
+		hitbox.radius = shipInfo.hitBoxRadius;
+		Vector3 hitboxPos = hitbox.transform.localPosition;
+		hitboxPos.y = shipInfo.hitBoxOffset;
+		hitbox.transform.localPosition = hitboxPos;
+
 		PlayerShip newPlayerShip;
 		switch (typeOfShip) {
 			case ShipType.generalist:

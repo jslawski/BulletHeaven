@@ -57,13 +57,15 @@ public class ShipSelectionManager : MonoBehaviour {
 	public StatBar defenseStat;
 	public StatBar speedStat;
 	public StatBar maxHealthStat;
-	public StatBar fireRateStat;
+	public StatBar difficultyStat;
 	public Text miscStatLabel;
 	public StatBar miscStat;
 
 	bool inChooseRandomShipCoroutine = false;
 	float minWaitTime = 0.075f;
 	float maxWaitTime = 0.075f;
+
+	KeyCode left,right,A,B,start;
 
 	void Awake() {
 		DontDestroyOnLoad(this.gameObject);
@@ -75,6 +77,21 @@ public class ShipSelectionManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		if (player == Player.player1) {
+			left = KeyCode.A;
+			right = KeyCode.D;
+			A = KeyCode.Alpha1;
+			B = KeyCode.Alpha2;
+			start = KeyCode.Space;
+		}
+		else if	(player == Player.player2) {
+			left = KeyCode.LeftArrow;
+			right = KeyCode.RightArrow;
+			A = KeyCode.Keypad1;
+			B = KeyCode.Keypad2;
+			start = KeyCode.KeypadEnter;
+		}
+
 		ships = GetComponentsInChildren<ShipInfo>();
 		foreach (var ship in ships) {
 			ship.selectingPlayer = player;
@@ -90,15 +107,15 @@ public class ShipSelectionManager : MonoBehaviour {
 		}
 
 		//Keyboard support
-		if (Input.GetKeyDown(KeyCode.RightArrow) && !playerReady) {
+		if (Input.GetKeyDown(right) && !playerReady) {
 			Scroll(true);
 		}
-		else if (Input.GetKeyDown(KeyCode.LeftArrow) && !playerReady) {
+		else if (Input.GetKeyDown(left) && !playerReady) {
 			Scroll(false);
 		}
 
 		//Ready up
-		if (Input.GetKeyDown(KeyCode.Alpha1) && !playerReady) {
+		if (Input.GetKeyDown(A) && !playerReady) {
 			if (selectedShip.typeOfShip == ShipType.random) {
 				StartCoroutine(RandomShip());
 			}
@@ -107,12 +124,12 @@ public class ShipSelectionManager : MonoBehaviour {
 				playerReady = true;
 			}
 		}
-		else if (Input.GetKeyDown(KeyCode.Alpha2) && playerReady) {
+		else if (Input.GetKeyDown(B) && playerReady) {
 			print(player + " is no longer ready.");
 			playerReady = false;
 		}
 
-		if (Input.GetKeyDown(KeyCode.Return) && AllPlayersReady()) {
+		if (Input.GetKeyDown(start) && AllPlayersReady()) {
 			Application.LoadLevel("_Scene_Main");
 		}
 
@@ -167,7 +184,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			defenseStat.SetStatValue(0, Color.white);
 			speedStat.SetStatValue(0, Color.white);
 			maxHealthStat.SetStatValue(0, Color.white);
-			fireRateStat.SetStatValue(0, Color.white);
+			difficultyStat.SetStatValue(0, Color.white);
 			miscStatLabel.text = "Miscellaneous Stat";
 			miscStat.SetStatValue(0, Color.white);
 			return;
@@ -182,7 +199,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			defenseStat.AnimateRandomStats();
 			speedStat.AnimateRandomStats();
 			maxHealthStat.AnimateRandomStats();
-			fireRateStat.AnimateRandomStats();
+			difficultyStat.AnimateRandomStats();
 			miscStat.SetStatValue(shipInfo.miscStat, shipInfo.shipColor);
 			return;
 		}
@@ -195,7 +212,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		defenseStat.SetStatValue(shipInfo.defense, shipInfo.shipColor);
 		speedStat.SetStatValue(shipInfo.speed, shipInfo.shipColor);
 		maxHealthStat.SetStatValue(shipInfo.maxHealth, shipInfo.shipColor);
-		fireRateStat.SetStatValue(shipInfo.fireRate, shipInfo.shipColor);
+		difficultyStat.SetStatValue(shipInfo.difficulty, shipInfo.shipColor);
 		miscStatLabel.text = shipInfo.miscLabel;
 		miscStat.SetStatValue(shipInfo.miscStat, shipInfo.shipColor);
 	}
@@ -209,7 +226,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		}
 
 		//Initialize this player's information
-		GameManager.S.InitializePlayerShip(player, selectedShip.typeOfShip, selectedShip.shipColor, device);
+		GameManager.S.InitializePlayerShip(selectedShip, device);
 
 		Destroy(gameObject);
 	}

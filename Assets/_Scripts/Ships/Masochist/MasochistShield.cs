@@ -58,6 +58,7 @@ public class MasochistShield : MonoBehaviour {
 		shieldSprite.enabled = false;
 		thisPlayer.shieldUp = false;
 
+		Vector3 reflectionVector = GameManager.S.players[(int)otherPlayer].player == Player.player1 ? Vector3.left : Vector3.right;
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
 			Vector3 bulletPosition = bullet.gameObject.transform.position;
@@ -66,7 +67,6 @@ public class MasochistShield : MonoBehaviour {
 			if (otherPlayer != Player.none) {
 				//Determine shooting vector
 				Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);
-				Vector3 reflectionVector = GameManager.S.players[(int)otherPlayer].player == Player.player1 ? Vector3.left : Vector3.right;
 
 				//Shoot the bullet back at the opponent
 				bullet.velocity = reflectionVector * reflectionVelocity;

@@ -20,7 +20,7 @@ public class ExplodeAttack : MonoBehaviour {
 		//Explosion deals more damage closer to the center, so a normalized value of 0 should yield the highest scalar of 1
 		float damageScalar = Mathf.Abs(1 - (GetDistance(transform.position, victim.position) / explosionRadius));
 
-		//Minimum damage dealt by the explosion is a third of the base damage
+		//Minimum damage dealt by the explosion is about a third of the base damage
 		if (damageScalar < 0.30f) {
 			damageScalar = 0.30f;
 		}
@@ -43,11 +43,7 @@ public class ExplodeAttack : MonoBehaviour {
 		}
 
 		//Destroy after an arbitrary amount of time (explosion will be finished quick, this is just clean-up)
-		Invoke("DestroyInstance", 2f);
-	}
-
-	void DestroyInstance() {
-		Destroy(gameObject);
+		Destroy(gameObject, 2f);
 	}
 
 	//Damage any player or protag ship that is within the explosion

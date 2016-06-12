@@ -20,8 +20,11 @@ public class Masochist : PlayerShip {
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/MasochistShip/MShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/MasochistShip/MShipAnimationController");
+	}
 
-		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4; 
+	void Start() {
+		base.Start();
+		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 	}
 
 	//Opted for a discrete method of doing a damage multiplier

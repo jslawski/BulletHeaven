@@ -16,6 +16,11 @@ public class TerritoryBorder : MonoBehaviour {
 		yield return null;
 		thisPlayer = GameManager.S.players[(int)owningPlayer].playerMovement;
 
+		yield return new WaitForSeconds(0.1f);
+		Color startColor = thisPlayer.thisPlayer.playerColor;
+		startColor.a = 0;
+		territoryImage.color = startColor;
+
 		if (owningPlayer == Player.player1) {
 			threshold = thisPlayer.worldSpaceMaxX - GameManager.S.players[1].playerMovement.worldSpaceMinX;
 		}
