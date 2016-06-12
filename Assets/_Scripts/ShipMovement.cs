@@ -166,4 +166,12 @@ public class ShipMovement : MonoBehaviour {
 		moveVector /= Time.deltaTime; // m/s
 		return moveVector;
 	}
+
+	public void SetBaseSpeed(float percent) {
+		vertMovespeedDefault *= percent;
+		horizMovespeedDefault *= percent;
+
+		verticalMovespeed = vertMovespeedDefault;
+		horizontalMovespeed = horizMovespeedDefault;
+	}
 }

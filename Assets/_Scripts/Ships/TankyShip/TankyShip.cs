@@ -17,6 +17,8 @@ public class TankyShip : PlayerShip {
 		base.Start();
 		maxHealth = 300;
 		health = maxHealth;
+
+		playerMovement.SetBaseSpeed(0.6f);
 	}
 
 	public override void TakeDamage(float damageIn) {
