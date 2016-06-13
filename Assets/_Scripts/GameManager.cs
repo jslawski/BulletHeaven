@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour {
 			Time.fixedDeltaTime *= 0.15f;
 		}
 
-		if (!PressStartPrompt.promptsEnabled) {
+		if (!PressStartPrompt.promptsEnabled && gameState != GameStates.titleScreen) {
 			StartGame();
 		}
 		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
@@ -163,9 +163,10 @@ public class GameManager : MonoBehaviour {
 
 			if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SceneManager.LoadScene("_Scene_Title");
+				gameState = GameStates.titleScreen;
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-				SceneManager.LoadScene("_Scene_Main");
+				SceneManager.LoadScene("_Scene_Ship_Selection");
 			}
 		}
 	}

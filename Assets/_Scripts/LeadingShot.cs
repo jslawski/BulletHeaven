@@ -55,7 +55,7 @@ public class LeadingShot : MonoBehaviour {
 
 		Vector3 targetPlayerVelocity = Vector3.zero;
 		//Don't try to lead velocity on the title screen
-		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+		if (GameManager.S.gameState != GameStates.titleScreen) {
 			targetPlayerVelocity = leadingAmount * GameManager.S.players[(int)targetPlayer].playerMovement.GetVelocity();
 		}
 

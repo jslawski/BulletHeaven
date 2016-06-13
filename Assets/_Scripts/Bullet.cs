@@ -146,8 +146,9 @@ public class Bullet : PooledObj {
 	}
 
 	bool InOwnPlayersTerritory() {
+
 		//Don't do this check on the title screen
-		if (Application.loadedLevelName == GameManager.S.titleSceneName) {
+		if (GameManager.S.gameState == GameStates.titleScreen) {
 			return false;
 		}
 

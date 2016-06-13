@@ -39,7 +39,7 @@ public class Beam : MonoBehaviour {
 	void StartBeam() {
 		SoundManager.instance.Play("Beam");
 
-		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+		if (GameManager.S.gameState != GameStates.titleScreen) {
 			VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
 			VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
 			CameraEffects.S.CameraShake(1.5f, 0.75f, true);

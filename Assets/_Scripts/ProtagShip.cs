@@ -44,7 +44,7 @@ public class ProtagShip : MonoBehaviour, DamageableObject {
 		GameObject explosion = Instantiate(shipExplosionPrefab, transform.position, new Quaternion()) as GameObject;
 
 		//Don't spawn health on the title screen
-		if (Application.loadedLevelName != GameManager.S.titleSceneName) {
+		if (GameManager.S.gameState != GameStates.titleScreen) {
 			Instantiate(healthSpawnPrefab, transform.position, new Quaternion());
 		}
 

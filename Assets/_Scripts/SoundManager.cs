@@ -103,7 +103,7 @@ public class SoundManager : MonoBehaviour {
 	
 	public void Play(string soundName){
 		//Only play the main theme on the title screen
-		if (Application.loadedLevelName == GameManager.S.titleSceneName && soundName != "MainTheme") {
+		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "MainTheme") {
 			return;
 		}
 
@@ -128,7 +128,7 @@ public class SoundManager : MonoBehaviour {
 	
 	public void Play(string soundName, float pitch){
 		//Only play the main theme on the title screen
-		if (Application.loadedLevelName == GameManager.S.titleSceneName && soundName != "MainTheme") {
+		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "MainTheme") {
 			return;
 		}
 
