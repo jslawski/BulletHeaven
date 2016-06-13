@@ -16,6 +16,10 @@ public class VibrateManager : MonoBehaviour {
 	}
 
 	void OnDestroy() {
+		if (GameManager.S == null || GameManager.S.players[0] == null || GameManager.S.players[1] == null) {
+			return;
+		}
+
 		if (GameManager.S.players[0].device != null) {
 			GameManager.S.players[0].device.Vibrate(0);
 		}

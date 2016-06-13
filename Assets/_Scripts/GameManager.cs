@@ -12,17 +12,18 @@ public enum Player {
 
 public enum GameStates {
 	titleScreen,
-	controllerSelect,
+	shipSelect,
+	countdown,
 	playing,
 	finalAttack,
 	winnerScreen
 }
 
 public class GameManager : MonoBehaviour {
+public static bool CHECKING_MENU = false;
 	public static GameManager S;
-	public GameStates gameState = GameStates.controllerSelect;
+	public GameStates gameState;
 	public static bool emergencyBumperControls = false;
-	public bool gameHasBegun = false;
 	public bool slowMo = false;
 
 	public PlayerShip[] players;
@@ -37,8 +38,15 @@ public class GameManager : MonoBehaviour {
 	public float curDamageAmplification = 1f;
 
 	void Awake() {
-		maxDamageAmplification = 3;
+		if (S != null) {
+			Destroy(this);
+			return;
+		}
 		S = this;
+
+		DontDestroyOnLoad(this);
+
+		maxDamageAmplification = 3;
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
@@ -140,13 +148,15 @@ public class GameManager : MonoBehaviour {
 			Application.Quit();
 		}
 
-		if (gameHasBegun && curDamageAmplification < maxDamageAmplification) {
+		if (gameState == GameStates.playing && curDamageAmplification < maxDamageAmplification) {
 			curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
 			if (curDamageAmplification > maxDamageAmplification) {
 				curDamageAmplification = maxDamageAmplification;
 			}
 		}
 
+		//print((timeInScene < minTimeInSceneForInput) + "\n" + (gameState != GameStates.winnerScreen) + "\n" + (gameState == GameStates.titleScreen) + "\n" +
+		//	  (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space")));
 		if (timeInScene < minTimeInSceneForInput) {
 			timeInScene += Time.deltaTime;
 		}
@@ -161,13 +171,16 @@ public class GameManager : MonoBehaviour {
 				print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
 			}
 
-			if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+			CHECKING_MENU = true;
+			bool menuWasPressed = InputManager.ActiveDevice.MenuWasPressed;
+            if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SceneManager.LoadScene("_Scene_Title");
 				gameState = GameStates.titleScreen;
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SceneManager.LoadScene("_Scene_Ship_Selection");
 			}
+			CHECKING_MENU = false;
 		}
 	}
 
@@ -176,6 +189,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	IEnumerator StartGameCoroutine() {
+		gameState = GameStates.countdown;
 		for	(int i = 3; i >= 0; i--) {
 			print(i);
 			yield return null;
@@ -183,10 +197,38 @@ public class GameManager : MonoBehaviour {
 		}
 
 		gameState = GameStates.playing;
-		gameHasBegun = true;
 	}
 
 	public void EndGame(Player winner) {
 		WinnerPanel.S.DisplayWinner(winner);
+		gameState = GameStates.winnerScreen;
+	}
+
+	void Reset() {
+		maxDamageAmplification = 3;
+		players = new PlayerShip[2];
+		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
+		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+		curDamageAmplification = 1f;
+		timeInScene = 0;
+		slowMo = false;
+	}
+
+	IEnumerator OnLevelWasLoaded(int levelIndex) {
+		yield return null;
+		print("Level " + SceneManager.GetActiveScene().name + " was loaded.");
+		switch (SceneManager.GetActiveScene().name) {
+			case "_Scene_Title":
+				Reset();
+				gameState = GameStates.titleScreen;
+				break;
+			case "_Scene_Ship_Selection":
+				gameState = GameStates.shipSelect;
+				break;
+			case "_Scene_Main":
+				Reset();
+				StartGame();
+				break;
+		}
 	}
 }

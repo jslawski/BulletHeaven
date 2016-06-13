@@ -15,7 +15,7 @@ public class FadeUI : MonoBehaviour {
 	}
 	
 	IEnumerator Fade() {
-		while (GameManager.S.gameState == GameStates.controllerSelect) {
+		while (GameManager.S.gameState != GameStates.playing) {
 			yield return null;
 		}
 		for (float i = 1; i > fadeThreshold; i -= Time.fixedDeltaTime / fadeDuration) {

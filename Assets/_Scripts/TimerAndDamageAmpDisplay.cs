@@ -31,7 +31,7 @@ public class TimerAndDamageAmpDisplay : MonoBehaviour {
 	}
 
 	IEnumerator UpdateTimer() {
-		while (GameManager.S.gameState == GameStates.controllerSelect) {
+		while (GameManager.S.gameState != GameStates.playing) {
 			yield return null;
 		}
 		while (GameManager.S.gameState == GameStates.playing) {
@@ -45,7 +45,7 @@ public class TimerAndDamageAmpDisplay : MonoBehaviour {
 	}
 
 	IEnumerator UpdateDamageAmp() {
-		while (GameManager.S.gameState == GameStates.controllerSelect) {
+		while (GameManager.S.gameState != GameStates.playing) {
 			yield return null;
 		}
 		while (GameManager.S.gameState == GameStates.playing && GameManager.S.curDamageAmplification < GameManager.S.maxDamageAmplification) {

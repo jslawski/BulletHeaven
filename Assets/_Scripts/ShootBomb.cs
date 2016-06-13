@@ -78,7 +78,7 @@ public class ShootBomb : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (shootingDisabled || !GameManager.S.gameHasBegun) {
+		if (shootingDisabled || GameManager.S.gameState != GameStates.playing) {
 			return;
 		}
 		if (thisPlayer.device == null) {

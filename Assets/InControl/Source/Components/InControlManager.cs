@@ -9,6 +9,7 @@ namespace InControl
 {
 	public class InControlManager : MonoBehaviour
 	{
+		public static InControlManager originalInstance;
 		public bool logDebugInfo = false;
 		public bool invertYAxis = false;
 		public bool enableXInput = false;
@@ -19,6 +20,12 @@ namespace InControl
 
 		void OnEnable()
 		{
+			if (originalInstance != null && originalInstance != this){
+				//Remove the duplicate
+				Destroy(this.gameObject);
+				return;
+			}
+			originalInstance = this;
 			if (logDebugInfo)
 			{
 				Debug.Log( "InControl (version " + InputManager.Version + ")" );
@@ -52,7 +59,8 @@ namespace InControl
 
 		void OnDisable()
 		{
-			InputManager.ResetInternal();
+			Debug.LogWarning("InputManager.ResetInternal() has been commented out by Josh Sauter. If this causes bugs uncomment out the following line.");
+			//InputManager.ResetInternal();
 		}
 
 

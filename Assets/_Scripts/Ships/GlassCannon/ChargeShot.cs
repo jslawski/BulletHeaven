@@ -28,7 +28,7 @@ public class ChargeShot : MonoBehaviour {
 
 	ChargeState state;
 
-	float damage = 40f;
+	float damage = 400f;
 
 	KeyCode B;
 

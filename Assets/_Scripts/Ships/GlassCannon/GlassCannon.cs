@@ -32,6 +32,10 @@ public class GlassCannon : PlayerShip {
 	protected override void Update() {
 		base.Update();
 
+		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+			return;
+		}
+
 		//Dual laser attack
 		if (Input.GetKeyDown(A) && playerShooting.curAmmo != 0) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;

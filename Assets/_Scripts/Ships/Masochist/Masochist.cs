@@ -57,6 +57,9 @@ public class Masochist : PlayerShip {
 	protected override void Update() {
 		base.Update();
 
+		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+			return;
+		}
 		if (device != null) {
 			//Activate a shield if the button was pressed
 			if (device.Action4.WasPressed && playerShooting.curAmmo != 0 && !shieldUp) {

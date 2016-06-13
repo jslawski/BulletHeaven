@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using InControl;
+using UnityEngine.SceneManagement;
 
 public enum SelectionPosition {
 	offscreenLeft,
@@ -218,12 +219,18 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	IEnumerator OnLevelWasLoaded(int levelIndex) {
-		print("Level with index " + levelIndex + " was loaded");
+		if (SceneManager.GetActiveScene().name != "_Scene_Main") {
+			yield break;
+		}
 
 		//Wait for GameManager to initialize itself
 		while (GameManager.S == null) {
 			yield return null;
 		}
+
+		//Wait 2 frames, since GameManager takes 1 frame to re-assign player references
+		yield return null;
+		yield return null;
 
 		//Initialize this player's information
 		GameManager.S.InitializePlayerShip(selectedShip, device);

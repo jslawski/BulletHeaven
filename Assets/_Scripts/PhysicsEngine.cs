@@ -3,11 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PhysicsEngine : MonoBehaviour {
+	public static PhysicsEngine S;
 	public static List<PhysicsObj> physicsObjects;
 
 	public Vector3 gravity = new Vector3(0,-9.8f,0);
 
 	void Awake() {
+		if (S != null) {
+			Destroy(this);
+			return;
+		}
+		S = this;
 		physicsObjects = new List<PhysicsObj>();
 	}
 

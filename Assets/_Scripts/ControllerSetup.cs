@@ -16,7 +16,6 @@ public class ControllerSetup : MonoBehaviour {
 
 	void Awake() {
 		S = this;
-		GameManager.S.gameState = GameStates.controllerSelect;
 	}
 
 	// Use this for initialization
