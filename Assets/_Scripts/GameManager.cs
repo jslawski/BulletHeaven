@@ -177,7 +177,8 @@ public class GameManager : MonoBehaviour {
 	IEnumerator StartGameCoroutine() {
 		for	(int i = 3; i >= 0; i--) {
 			print(i);
-			yield return new WaitForSeconds(1);
+			yield return null;
+			//yield return new WaitForSeconds(1);
 		}
 
 		gameState = GameStates.playing;
