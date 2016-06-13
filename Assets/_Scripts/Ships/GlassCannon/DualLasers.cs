@@ -9,11 +9,18 @@ public class DualLasers : MonoBehaviour {
 	public ParticleSystem[] lasers;
 	public BoxCollider[] hitboxes;
 
-	float damage = 0.45f;
+	float damage;
+	float maxDamage = 0.45f;
+	float minDamage = 0.1f;
 	float useSlowingFactor = 0.4f;
 	float slowingFactor = 0.35f;
 	float chargeTime = 0.75f;
-	float maxDuration = 6f;
+	float maxDuration = 4f;
+
+	float maxStartSize = 2f;
+	float minStartSize = 0.45f;
+	float maxHitboxSize = 1.35f;
+	float minHitboxSize = 0.6f;
 
 	KeyCode A;
 	bool hasEnded = false;
@@ -25,6 +32,7 @@ public class DualLasers : MonoBehaviour {
 
 	IEnumerator Start() {
 		A = (owningPlayer == Player.player1) ? KeyCode.Alpha1 : KeyCode.Keypad1;
+		damage = maxDamage;
 
 		//Set this as a child of the player
 		if (owningPlayer != Player.none) {
@@ -34,6 +42,7 @@ public class DualLasers : MonoBehaviour {
 		}
 		//Wait while charging
 		yield return new WaitForSeconds(chargeTime);
+		StartCoroutine(LoseEnergy());
 		//Turn on the hitboxes
 		foreach (var hitbox in hitboxes) {
 			hitbox.enabled = !hasEnded;
@@ -44,6 +53,26 @@ public class DualLasers : MonoBehaviour {
 		}
 		yield return new WaitForSeconds(maxDuration);
 		EndLaserAttack();
+	}
+
+	IEnumerator LoseEnergy() {
+		float timeElapsed = 0;
+		while (!hasEnded) {
+			timeElapsed += Time.deltaTime;
+			float percent = timeElapsed/maxDuration;
+
+			foreach (var laser in lasers) {
+				laser.startSize = Mathf.Lerp(maxStartSize, minStartSize, percent);
+			}
+			foreach (var hitbox in hitboxes) {
+				Vector3 size = hitbox.size;
+				size.x = Mathf.Lerp(maxHitboxSize, minHitboxSize, percent);
+				hitbox.size = size;
+			}
+			damage = Mathf.Lerp(maxDamage, minDamage, percent);
+
+			yield return null;
+		}
 	}
 
 	void EndLaserAttack() {

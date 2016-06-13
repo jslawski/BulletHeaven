@@ -15,7 +15,7 @@ public class ChargeShot : MonoBehaviour {
 	ParticleSystem chargeParticle;
 	ParticleSystem shotParticle;
 
-	float chargeTime = 3f;
+	float chargeTime = 1.5f;
 	float maxChargeAngle = 30f;
 	float minChargeAngle = 0f;
 	float minChargeRotationSpeed = 1f;

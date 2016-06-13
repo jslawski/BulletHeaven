@@ -33,28 +33,32 @@ public class GlassCannon : PlayerShip {
 		base.Update();
 
 		//Dual laser attack
-		if (Input.GetKeyDown(A)) {
+		if (Input.GetKeyDown(A) && playerShooting.curAmmo != 0) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 			dualLaser.owningPlayer = player;
+			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action1.WasPressed) {
+			if (device.Action1.WasPressed && playerShooting.curAmmo != 0) {
 				DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 				dualLaser.owningPlayer = player;
+				playerShooting.ExpendAttackSlot();
 			}
 		}
 
 		//Charge shot attack
-		if (Input.GetKeyDown(B)) {
+		if (Input.GetKeyDown(B) && playerShooting.curAmmo != 0) {
 			ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 			chargeShot.owningPlayer = player;
 			chargeShot.player = this;
+			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action2.WasPressed) {
+			if (device.Action2.WasPressed && playerShooting.curAmmo != 0) {
 				ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 				chargeShot.owningPlayer = player;
 				chargeShot.player = this;
+				playerShooting.ExpendAttackSlot();
 			}
 		}
 	}
