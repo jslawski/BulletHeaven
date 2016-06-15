@@ -3,23 +3,23 @@ using System.Collections;
 
 public class MasochistBomb : Bomb {
 	GameObject shockwavePrefab;
-	LeadingShot leadingShotPrefab;
+	SineShot sineShotPrefab;
 	SpreadShot spreadShotPrefab;
 	ExplodeAttack explodeAttackPrefab;
 
 	void Awake() {
 		base.Awake();
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
-		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
+		sineShotPrefab = Resources.Load<SineShot>("Prefabs/SineShot");
 		spreadShotPrefab = Resources.Load<SpreadShot>("Prefabs/SpreadShot");
 		explodeAttackPrefab = Resources.Load<ExplodeAttack>("Prefabs/ExplodeAttack");
 	}
 
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
-			//Leading shot
+			//Sine shot
 			case AttackButtons.A:
-				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
+				SineShot newShot = Instantiate(sineShotPrefab, transform.position, new Quaternion()) as SineShot;
 				newShot.owningPlayer = owningPlayer;
 				newShot.FireBurst();
 				break;

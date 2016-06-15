@@ -5,12 +5,12 @@ public class Bullet : PooledObj {
 	public GameObject explosionPrefab;
 	public float damage;
 
-	float transparencyCheckCooldown = 0.4f;
+	protected float transparencyCheckCooldown = 0.4f;
 
-	SpriteRenderer sprite;
+	protected SpriteRenderer sprite;
 	public PhysicsObj physics;
 	public SphereCollider hitbox;
-	Player _owningPlayer = Player.none;
+	protected Player _owningPlayer = Player.none;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -26,9 +26,9 @@ public class Bullet : PooledObj {
 			}
 		}
 	}
-	ShipMovement otherPlayer;
-	bool _transparent = false;
-	bool transparent {
+	protected ShipMovement otherPlayer;
+	protected bool _transparent = false;
+	protected bool transparent {
 		get {
 			return _transparent;
 		}
@@ -39,29 +39,29 @@ public class Bullet : PooledObj {
 
 	public bool absorbedByMasochist = false;
 
-	float transparencyAlpha = 71f/255f;
-	ShipMovement owningPlayerMovement;
+	protected float transparencyAlpha = 71f/255f;
+	protected ShipMovement owningPlayerMovement;
 
-	void Awake() {
+	protected void Awake() {
 		physics = GetComponent<PhysicsObj>();
 		sprite = GetComponent<SpriteRenderer>();
 		hitbox = GetComponent<SphereCollider>();
 		damage = 1;
 	}
 
-	void OnEnable() {
+	protected void OnEnable() {
 		physics.acceleration = Vector3.zero;
 		physics.velocity = Vector3.zero;
 		transparent = false;
 		Invoke("StartTransparencyCheckCoroutine", 0.02f);
 	}
-	void StartTransparencyCheckCoroutine() {
+	protected void StartTransparencyCheckCoroutine() {
 		if (gameObject.activeSelf) {
 			StartCoroutine(TransparencyCheck());
 		}
 	}
 
-	IEnumerator TransparencyCheck() {
+	protected IEnumerator TransparencyCheck() {
 		while (true) {
 			if (!sprite.isVisible) {
 				ReturnToPool();
@@ -79,7 +79,7 @@ public class Bullet : PooledObj {
 		}
 	}
 
-	void OnTriggerEnter(Collider other) {
+	protected void OnTriggerEnter(Collider other) {
 		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
 			ReturnToPool();
@@ -128,7 +128,7 @@ public class Bullet : PooledObj {
 		}
 	}
 
-	void SetTransparency(bool isTransparent) {
+	protected void SetTransparency(bool isTransparent) {
 		_transparent = isTransparent;
 
 		if (transparent) {
@@ -145,7 +145,7 @@ public class Bullet : PooledObj {
 		}
 	}
 
-	bool InOwnPlayersTerritory() {
+	protected bool InOwnPlayersTerritory() {
 
 		//Don't do this check on the title screen
 		if (GameManager.S.gameState == GameStates.titleScreen) {
