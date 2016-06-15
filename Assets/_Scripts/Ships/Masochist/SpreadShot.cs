@@ -9,6 +9,11 @@ public class SpreadShot : MonoBehaviour {
 	float bulletDelay = 0.05f;
 	public Masochist masochistPlayer;
 
+	float firingSeparationNoAura = 72 * Mathf.Deg2Rad;
+	float firingSeparationWithAura = 45 * Mathf.Deg2Rad;
+	float startingAngleNoAura = 18 * Mathf.Deg2Rad;
+	float startingAngleWithAura = 0;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -21,8 +26,8 @@ public class SpreadShot : MonoBehaviour {
 	IEnumerator FireBurstCoroutine() {
 		//Separation of bullets is smaller when the masochist has his aura up
 		//Normal: 5 directions, Aura: 8 directions
-		float firingSeparation = masochistPlayer.damageMultiplier == 1 ? 72 * Mathf.Deg2Rad : 45 * Mathf.Deg2Rad;
-		float startingAngle = masochistPlayer.damageMultiplier == 1 ? 18 * Mathf.Deg2Rad : 0;
+		float firingSeparation = masochistPlayer.damageMultiplier == 1 ? firingSeparationNoAura : firingSeparationWithAura;
+		float startingAngle = masochistPlayer.damageMultiplier == 1 ? startingAngleNoAura : startingAngleWithAura;
 		float bulletOffset = 3f * Mathf.Deg2Rad;
 
 
