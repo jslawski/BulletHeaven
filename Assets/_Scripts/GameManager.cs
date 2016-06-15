@@ -68,9 +68,17 @@ public static bool CHECKING_MENU = false;
 	}
 
 	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
+		print("Start initializing " + shipInfo.selectingPlayer);
 		Player player = shipInfo.selectingPlayer;
+		Player otherPlayer = (player == Player.player1) ? Player.player2 : Player.player1;
 		ShipType typeOfShip = shipInfo.typeOfShip;
 		Color playerColor = shipInfo.shipColor;
+
+		//If both players are running the same type of ship, use the secondary color for the ship instead
+		print(typeOfShip + " " + players[(int)otherPlayer].typeOfShip);
+		if (typeOfShip == players[(int)otherPlayer].typeOfShip) {
+			playerColor = shipInfo.shipSecondaryColor;
+		}
 
 		PlayerShip oldPlayerShip = players[(int)player];
 		GameObject playerShipGO = oldPlayerShip.gameObject;
@@ -106,6 +114,7 @@ public static bool CHECKING_MENU = false;
 
 		//Grab some values from the old script to apply them to the new one
 		newPlayerShip.player = player;
+		newPlayerShip.typeOfShip = typeOfShip;
 		newPlayerShip.healthBar = oldPlayerShip.healthBar;
 		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
 		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
@@ -139,6 +148,8 @@ public static bool CHECKING_MENU = false;
 		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
 		newPlayerShip.playerMovement.thisPlayer = newPlayerShip;
 		players[(int)player] = newPlayerShip;
+
+		print("Done initializing " + player);
 	}
 	
 	// Update is called once per frame

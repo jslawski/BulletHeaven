@@ -10,6 +10,7 @@ public class ShipInfo : MonoBehaviour {
 	public string shipName;
 	public string description;
 	public Color shipColor;
+	public Color shipSecondaryColor;
 	public SpriteRenderer spriteRenderer;
 
 	[Range(-4f,4f)]

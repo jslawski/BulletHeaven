@@ -231,6 +231,10 @@ public class ShipSelectionManager : MonoBehaviour {
 		//Wait 2 frames, since GameManager takes 1 frame to re-assign player references
 		yield return null;
 		yield return null;
+		//Wait an additional frame to initialize player 2's ship to guarantee initialization order
+		if (selectedShip.selectingPlayer == Player.player2) {
+			yield return null;
+		}
 
 		//Initialize this player's information
 		GameManager.S.InitializePlayerShip(selectedShip, device);
