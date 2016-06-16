@@ -22,7 +22,12 @@ public class PhysicsEngine : MonoBehaviour {
 		foreach (var obj in physicsObjects) {
 			//keep still objects from moving
 			if (obj.still) {
-				obj.posNow = obj.posNext = obj.transform.position;
+				if (obj.actOnLocalSpace) {
+					obj.posNow = obj.posNext = obj.transform.localPosition;
+				}
+				else {
+					obj.posNow = obj.posNext = obj.transform.position;
+				}
 				continue;
 			}
 
@@ -38,9 +43,16 @@ public class PhysicsEngine : MonoBehaviour {
 			obj.velocity = curVel;
 
 			//apply the updated velocity to change the object's position
-			obj.posNow = obj.transform.position;
-			obj.posNext = obj.posNow + curVel * Time.fixedDeltaTime;
-			obj.transform.position = obj.posNext;
+			if (obj.actOnLocalSpace) {
+				obj.posNow = obj.transform.localPosition;
+				obj.posNext = obj.posNow + curVel * Time.fixedDeltaTime;
+				obj.transform.localPosition = obj.posNext;
+			}
+			else {
+				obj.posNow = obj.transform.position;
+				obj.posNext = obj.posNow + curVel * Time.fixedDeltaTime;
+				obj.transform.position = obj.posNext;
+			}
 		}
 	}
 }

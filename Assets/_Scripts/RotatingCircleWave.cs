@@ -7,13 +7,17 @@ public class RotatingCircleWave : MonoBehaviour {
 	public Player owningPlayer;
 	NonPooledBullet bulletPrefab;
 	int numBulletsPerBurst = 12;
-	float timeBetweenBursts = 0.1f;
-	int numBurstsPerWave = 3;
+	public float timeBetweenBursts = 0.1f;
+	public int numBurstsPerWave = 3;
 
 	float bulletDamage = 1.5f;
-	float bulletVelocity = 5f;
+	float bulletVelocity = 6f;
 
-	float rotationSpeed = 180f;
+	float rotationSpeed = 40;
+	float minRotationSpeed = 2f;
+
+	float timeAlive = 0;
+	float maxLifespan = 10f;
 
 	// Use this for initialization
 	void Awake () {
@@ -34,6 +38,7 @@ public class RotatingCircleWave : MonoBehaviour {
 				newBullet.owningPlayer = owningPlayer;
 				newBullet.transform.SetParent(transform);
 				newBullet.transform.position = gameObject.transform.position;
+				newBullet.physics.actOnLocalSpace = true;
 				newBullet.physics.velocity = bulletVelocity * direction.PolarToCartesian().normalized;
 
 				curAngle += radDelta;
@@ -45,6 +50,13 @@ public class RotatingCircleWave : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate(new Vector3(0, 0, 180 * Time.deltaTime));
+		timeAlive += Time.deltaTime;
+		float curRotSpeed = Mathf.Lerp(rotationSpeed, minRotationSpeed, timeAlive/maxLifespan);
+
+		transform.Rotate(new Vector3(0, 0, direction * rotationSpeed * Time.deltaTime));
+
+		if (timeAlive > maxLifespan) {
+			Destroy(gameObject);
+		}
 	}
 }

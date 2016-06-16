@@ -4,7 +4,7 @@ using System.Collections;
 public class VampireBomb : Bomb {
 	GameObject shockwavePrefab;
 	LeadingShot leadingShotPrefab;
-	SpiralShot spiralShotPrefab;
+	RotatingCircleShot rotatingCircleShotPrefab;
 	LifeSapZone lifeSapZonePrefab;
 	Reflector reflectorPrefab;
 
@@ -12,7 +12,7 @@ public class VampireBomb : Bomb {
 		base.Awake();
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
-		spiralShotPrefab = Resources.Load<SpiralShot>("Prefabs/SpiralShot");
+		rotatingCircleShotPrefab = Resources.Load<RotatingCircleShot>("Prefabs/RotatingCircleShot");
 		lifeSapZonePrefab = Resources.Load<LifeSapZone>("Prefabs/LifeSapZone");
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
@@ -32,9 +32,8 @@ public class VampireBomb : Bomb {
 				break;
 			//Spiral shot
 			case AttackButtons.B:
-				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
-				spiralShot.owningPlayer = owningPlayer;
-				spiralShot.FireBurst();
+				RotatingCircleShot rotatingCircleShot = Instantiate(rotatingCircleShotPrefab, transform.position, new Quaternion()) as RotatingCircleShot;
+				rotatingCircleShot.owningPlayer = owningPlayer;
 				break;
 			//LifeSapZone attack
 			case AttackButtons.X:
