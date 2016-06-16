@@ -5,7 +5,7 @@ public class GlassCannon : PlayerShip {
 	DualLasers dualLaserPrefab;
 	ChargeShot chargeShotPrefab;
 
-	KeyCode A, B;
+	KeyCode X, Y;
 
 	new void Awake() {
 		base.Awake();
@@ -21,8 +21,8 @@ public class GlassCannon : PlayerShip {
 	new void Start () {
 		base.Start();
 
-		A = (player == Player.player1) ? KeyCode.Alpha1 : KeyCode.Keypad1;
-		B = (player == Player.player1) ? KeyCode.Alpha2 : KeyCode.Keypad2;
+		X = (player == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
+		Y = (player == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
 		maxHealth = 110f;
 		health = maxHealth;
 
@@ -37,13 +37,13 @@ public class GlassCannon : PlayerShip {
 		}
 
 		//Dual laser attack
-		if (Input.GetKeyDown(A) && playerShooting.curAmmo != 0) {
+		if (Input.GetKeyDown(X) && playerShooting.curAmmo != 0) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 			dualLaser.owningPlayer = player;
 			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action1.WasPressed && playerShooting.curAmmo != 0) {
+			if (device.Action3.WasPressed && playerShooting.curAmmo != 0) {
 				DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 				dualLaser.owningPlayer = player;
 				playerShooting.ExpendAttackSlot();
@@ -51,14 +51,14 @@ public class GlassCannon : PlayerShip {
 		}
 
 		//Charge shot attack
-		if (Input.GetKeyDown(B) && playerShooting.curAmmo != 0) {
+		if (Input.GetKeyDown(Y) && playerShooting.curAmmo != 0) {
 			ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 			chargeShot.owningPlayer = player;
 			chargeShot.player = this;
 			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action2.WasPressed && playerShooting.curAmmo != 0) {
+			if (device.Action4.WasPressed && playerShooting.curAmmo != 0) {
 				ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 				chargeShot.owningPlayer = player;
 				chargeShot.player = this;

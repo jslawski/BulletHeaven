@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using InControl;
+using UnityEngine.UI;
 
 public enum ShipType {
 	none,
@@ -188,6 +189,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	public void InitializeFinalAttack() {
 		finishAttackPrompt.SetActive(true);
+		finishAttackPrompt.GetComponentInChildren<Text>().color = playerColor;
+		finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = playerColor;
 
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;

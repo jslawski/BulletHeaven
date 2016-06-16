@@ -22,7 +22,7 @@ public class DualLasers : MonoBehaviour {
 	float maxHitboxSize = 1.35f;
 	float minHitboxSize = 0.6f;
 
-	KeyCode A;
+	KeyCode X;
 	bool hasEnded = false;
 
 	// Use this for initialization
@@ -31,7 +31,7 @@ public class DualLasers : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		A = (owningPlayer == Player.player1) ? KeyCode.Alpha1 : KeyCode.Keypad1;
+		X = (owningPlayer == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
 		damage = maxDamage;
 
 		//Set this as a child of the player
@@ -99,11 +99,11 @@ public class DualLasers : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyUp(A)) {
+		if (Input.GetKeyUp(X)) {
 			EndLaserAttack();
 		}
 		if (thisPlayer.device != null) {
-			if (thisPlayer.device.Action1.WasReleased) {
+			if (thisPlayer.device.Action3.WasReleased) {
 				EndLaserAttack();
 			}
 		}

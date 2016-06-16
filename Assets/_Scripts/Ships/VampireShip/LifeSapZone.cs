@@ -6,7 +6,7 @@ public class LifeSapZone : MonoBehaviour {
 
 	float lifespan = 6f;
 	float timeToGrow = 3f;
-	float maxRadius = 12f;
+	float maxRadius = 9f;
 
 	ParticleSystem zoneParticles;
 	Transform particle;

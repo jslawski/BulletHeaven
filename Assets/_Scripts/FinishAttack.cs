@@ -64,10 +64,12 @@ public class FinishAttack : MonoBehaviour {
 		float closestGradientValue = 0;
 		float minDistance = Mathf.Infinity;
 
+		//Find the closest color by distance (what?)
 		Vector3 c2 = new Vector3(targetColor.r, targetColor.g, targetColor.b);
 		for (float i = 0; i < 1; i += delta) {
 			Color curColor = beamPulse.Evaluate(i);
 			Vector3 c1 = new Vector3(curColor.r, curColor.g, curColor.b);
+			//Distance between 2 colors
 			float distance = (c1-c2).magnitude;
 			if (distance < minDistance) {
 				minDistance = distance;

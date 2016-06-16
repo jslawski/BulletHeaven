@@ -27,6 +27,7 @@ public static bool CHECKING_MENU = false;
 	public bool slowMo = false;
 
 	public PlayerShip[] players;
+	InputDevice[] controllers;
 	public string titleSceneName = "_Scene_Title";
 
 	float minTimeInSceneForInput = 0.25f;
@@ -53,6 +54,7 @@ public static bool CHECKING_MENU = false;
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+		controllers = new InputDevice[2];
 	}
 
 	// Use this for initialization
@@ -131,7 +133,8 @@ public static bool CHECKING_MENU = false;
 		//Remove the old script and replace the GameManager reference with the new one
 		Destroy(oldPlayerShip);
 
-		//Remember the controller in PlayerShip
+		//Remember the controller in PlayerShip and GameManager
+		controllers[(int)player] = device;
 		newPlayerShip.device = device;
 
 		//If the controller prompt is up, hide it
@@ -249,11 +252,24 @@ public static bool CHECKING_MENU = false;
 				break;
 			case "_Scene_Ship_Selection":
 				gameState = GameStates.shipSelect;
+				PassControllersToShipSelect();
 				break;
 			case "_Scene_Main":
 				Reset();
 				StartGame();
 				break;
+		}
+	}
+	
+	void PassControllersToShipSelect() {
+		foreach (var controller in controllers) {
+			if (controller != null) {
+				ControllerSetup.S.AddCurrentPlayer(controller);
+			}
+			//If player1 failed to have a controller, player2 shouldn't have one either
+			else {
+				return;
+			}
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class ChargeShot : MonoBehaviour {
 
 	float damage = 40f;
 
-	KeyCode B;
+	KeyCode Y;
 
 	// Use this for initialization
 	void Start () {
@@ -43,13 +43,13 @@ public class ChargeShot : MonoBehaviour {
 			transform.localRotation = Quaternion.Euler(Vector3.zero);
 		}
 
-		B = (owningPlayer == Player.player1) ? KeyCode.Alpha2 : KeyCode.Keypad2;
+		Y = (owningPlayer == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
 		StartCoroutine(Charge());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyUp(B) || (player != null && player.device != null && player.device.Action2.WasReleased)) {
+		if (Input.GetKeyUp(Y) || (player != null && player.device != null && player.device.Action4.WasReleased)) {
 			//Cancel the charge if we're not ready yet
 			if (state == ChargeState.charging) {
 				state = ChargeState.cancelled;

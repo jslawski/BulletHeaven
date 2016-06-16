@@ -15,23 +15,23 @@ public class GlassCannonBomb : Bomb {
 
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
-			//Dual Lasers
+			//Homing group shot
 			case AttackButtons.A:
-				return;
-			//Charge Shot
+				HomingGroupShot homingGroupShot = Instantiate(homingGroupShotPrefab, transform.position, new Quaternion()) as HomingGroupShot;
+				homingGroupShot.owningPlayer = owningPlayer;
+				break;
+			//AltCircleShot Shot
 			case AttackButtons.B:
-				return;
-			//AltCircleShot attack
-			case AttackButtons.X:
 				AltCircleShot altCircleShot = Instantiate(altCircleShotPrefab, transform.position, new Quaternion()) as AltCircleShot;
 				altCircleShot.owningPlayer = owningPlayer;
 				altCircleShot.FireBurst();
 				break;
-			//Reflektor
+			//Dual lasers
+			case AttackButtons.X:
+				return;
+			//Charge attack
 			case AttackButtons.Y:
-				HomingGroupShot homingGroupShot = Instantiate(homingGroupShotPrefab, transform.position, new Quaternion()) as HomingGroupShot;
-				homingGroupShot.owningPlayer = owningPlayer;
-				break;
+				return;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
 				break;

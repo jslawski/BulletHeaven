@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ProtagShipExplosion : MonoBehaviour {
-	GameObject bulletPrefab;
+	Bullet bulletPrefab;
 
 	float bulletMovespeed = 10f;
 	float bulletAcceleration = 2f;
@@ -18,17 +18,16 @@ public class ProtagShipExplosion : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		bulletPrefab = Resources.Load<GameObject>("Prefabs/Bullet");
+		bulletPrefab = Resources.Load<Bullet>("Prefabs/ProtagBullet");
 		int bulletsFired = 0;
 		while (bulletsFired < numBullets) {
 			for (int i = 0; i < numBulletsPerFrame; i++) {
 				Vector2 randCircle = Random.insideUnitCircle;
 				Vector3 spawnPos = transform.position + new Vector3(randCircle.x, randCircle.y, 0);
 
-				GameObject newBullet = Instantiate(bulletPrefab, spawnPos, new Quaternion()) as GameObject;
-				PhysicsObj bulletPhysics = newBullet.GetComponent<PhysicsObj>();
-				bulletPhysics.velocity = (transform.position - spawnPos).normalized * bulletMovespeed;
-				bulletPhysics.acceleration = (transform.position - spawnPos).normalized * bulletAcceleration;
+				Bullet newBullet = bulletPrefab.GetPooledInstance<Bullet>(transform.position);
+				newBullet.physics.velocity = (transform.position - spawnPos).normalized * bulletMovespeed;
+				newBullet.physics.acceleration = (transform.position - spawnPos).normalized * bulletAcceleration;
 			}
 
 			bulletsFired += numBulletsPerFrame;
