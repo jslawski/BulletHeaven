@@ -13,8 +13,8 @@ public class RotatingCircleWave : MonoBehaviour {
 	float bulletDamage = 1.5f;
 	float bulletVelocity = 6f;
 
-	float rotationSpeed = 40;
-	float minRotationSpeed = 2f;
+	float rotationSpeed = 20;
+	float minRotationSpeed = 1f;
 
 	float timeAlive = 0;
 	float maxLifespan = 10f;
