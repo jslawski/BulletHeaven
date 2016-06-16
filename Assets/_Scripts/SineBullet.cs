@@ -4,7 +4,7 @@ using System.Collections;
 public class SineBullet : Bullet {
 
 	float amplitude = 10f;
-	float period = 10f;
+	float period = 0.5f;
 
 	public void ApplySineWave(int waveDirection) {
 		//For readability in the coroutine call
@@ -23,9 +23,8 @@ public class SineBullet : Bullet {
 		//Apply variable additional velocity based on a sine pattern
 		float t = 0;
 		while (true) {
-			t += Time.deltaTime;
-			//Sssshhh...It's a secret to everyone...
-			Vector3 newVelocity = perpendicularDirection * (waveDirection * amplitude * Mathf.Cos(period * t));
+			t += Time.fixedDeltaTime;
+			Vector3 newVelocity = perpendicularDirection * (waveDirection * amplitude * Mathf.Cos(2*Mathf.PI * t/period));
 			thisPhysicsObj.velocity = startingVelocity + newVelocity;
 			yield return new WaitForFixedUpdate();
 		}

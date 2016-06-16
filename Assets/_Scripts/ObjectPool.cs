@@ -41,6 +41,7 @@ public class ObjectPool : MonoBehaviour {
 	}
 
 	public void ReturnObject(PooledObj obj) {
+		obj.transform.SetParent(transform);
 		obj.gameObject.SetActive(false);
 		availableObjects.Push(obj);
 	}
