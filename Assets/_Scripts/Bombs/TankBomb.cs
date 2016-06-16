@@ -3,7 +3,7 @@ using System.Collections;
 
 public class TankBomb : Bomb {
 	GameObject shockwavePrefab;
-	LeadingShot leadingShotPrefab;
+	ConeShot coneShotPrefab;
 	WeaveShot weaveShotPrefab;
 	ClusterBomb clusterBombPrefab;
 	BlackHole blackHolePrefab;
@@ -11,7 +11,7 @@ public class TankBomb : Bomb {
 	void Awake() {
 		base.Awake();
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
-		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
+		coneShotPrefab = Resources.Load<ConeShot>("Prefabs/ConeShot");
 		weaveShotPrefab = Resources.Load<WeaveShot>("Prefabs/WeaveShot");
 		clusterBombPrefab = Resources.Load<ClusterBomb>("Prefabs/ClusterBomb");
 		blackHolePrefab = Resources.Load<BlackHole>("Prefabs/BlackHole");
@@ -26,9 +26,9 @@ public class TankBomb : Bomb {
 		switch (attackToPerform) {
 			//Leading shot
 			case AttackButtons.A:
-				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
-				newShot.owningPlayer = owningPlayer;
-				newShot.FireBurst();
+				ConeShot coneShot = Instantiate(coneShotPrefab, transform.position, new Quaternion()) as ConeShot;
+				coneShot.owningPlayer = owningPlayer;
+				coneShot.FireBurst();
 				break;
 			//Spiral shot
 			case AttackButtons.B:

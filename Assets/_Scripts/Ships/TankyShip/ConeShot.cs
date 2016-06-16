@@ -1,0 +1,55 @@
+﻿using UnityEngine;
+using System.Collections;
+using PolarCoordinates;
+
+public class ConeShot : MonoBehaviour {
+	public Player owningPlayer = Player.none;
+
+	public Transform target;
+	int bulletsPerBurst = 30;
+	int numLines = 3;
+	public Bullet bulletPrefab;
+
+	float bulletDelay = 0.1f;
+	float bulletVelocity = 10f;
+	float coneSpread = 30f * Mathf.Deg2Rad;
+
+	public void FireBurst() {
+		StartCoroutine(FireBurstCoroutine());
+	}
+
+	IEnumerator FireBurstCoroutine() {
+		if (owningPlayer == Player.none) {
+			Debug.LogError("Cone shot does not have owning player set");
+			yield break;
+		}
+
+		//Get target
+		Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
+		target = GameManager.S.players[(int)targetPlayer].transform;
+
+		//Set direction and separation between bullets
+		PolarCoordinate direction = new PolarCoordinate(1, target.position - gameObject.transform.position);
+		float bulletSeparation = coneSpread / numLines;
+
+		for (int i = 0; i < bulletsPerBurst; i++) {
+			//Start the new direction set at the edge of the cone
+			PolarCoordinate newDirection = new PolarCoordinate(1, direction.angle - (Mathf.Floor(numLines / 2) * bulletSeparation));
+
+			//Fire bullet wave
+			for (int j = 0; j < numLines; j++) {
+				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
+				curBullet.owningPlayer = owningPlayer;
+				curBullet.transform.position = gameObject.transform.position;
+				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * newDirection.PolarToCartesian().normalized;
+				newDirection.angle += bulletSeparation;
+			}
+
+			yield return new WaitForSeconds(bulletDelay);
+		}
+
+		//Destroy this gameObject after the burst has been fired
+		Destroy(gameObject);
+	}
+
+}
