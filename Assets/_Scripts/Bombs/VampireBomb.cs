@@ -42,9 +42,7 @@ public class VampireBomb : Bomb {
 				break;
 			//Reflektor
 			case AttackButtons.Y:
-				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
-				reflectorShot.owningPlayer = owningPlayer;
-				break;
+				return;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
 				break;

@@ -2,10 +2,18 @@
 using System.Collections;
 
 public class VampireShip : PlayerShip {
-	float lifeRegen = 2f;		//Health regained per second
+	KeyCode Y;
+
+	float lifeRegen = 2f;       //Health regained per second
+
+	public VampireShield shield;
+	public bool shieldUp = false;
 
 	new void Start() {
 		base.Start();
+
+		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
+
 		maxHealth = 85f;
 		health = maxHealth;
 	}
@@ -14,6 +22,7 @@ public class VampireShip : PlayerShip {
 	new void Awake () {
 		base.Awake();
 		typeOfShip = ShipType.vampire;
+		shield = Resources.Load<VampireShield>("Prefabs/VampireShield");
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/VampireShip/VampireShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/VampireShip/VampireShipAnimationController");
@@ -37,6 +46,36 @@ public class VampireShip : PlayerShip {
 		health += lifeRegen * Time.fixedDeltaTime;
 		if (health > maxHealth) {
 			health = maxHealth;
+		}
+	}
+
+	new void Update() {
+		base.Update();
+
+		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+			return;
+		}
+
+		if (device != null) {
+			//Activate a shield if the button was pressed
+			if (device.Action4.WasPressed && playerShooting.curAmmo != 0 && !shieldUp) {
+				VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
+				newShield.transform.parent = gameObject.transform;
+				newShield.thisPlayer = GetComponent<VampireShip>();
+				newShield.owningPlayer = player;
+				newShield.ActivateShield();
+				playerShooting.ExpendAttackSlot();
+			}
+		}
+		else if (device == null) {
+			if (Input.GetKeyDown(Y) && playerShooting.curAmmo != 0 && !shieldUp) {
+				VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
+				newShield.transform.parent = gameObject.transform;
+				newShield.thisPlayer = GetComponent<VampireShip>();
+				newShield.owningPlayer = player;
+				newShield.ActivateShield();
+				playerShooting.ExpendAttackSlot();
+			}
 		}
 	}
 }

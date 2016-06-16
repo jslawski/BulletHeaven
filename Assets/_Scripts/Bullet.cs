@@ -7,7 +7,7 @@ public class Bullet : PooledObj {
 
 	protected float transparencyCheckCooldown = 0.4f;
 
-	protected SpriteRenderer sprite;
+	public SpriteRenderer sprite;
 	public PhysicsObj physics;
 	public SphereCollider hitbox;
 	protected Player _owningPlayer = Player.none;
@@ -38,6 +38,7 @@ public class Bullet : PooledObj {
 	}
 
 	public bool absorbedByMasochist = false;
+	public bool absorbedByVampire = false;
 
 	protected float transparencyAlpha = 71f/255f;
 	protected ShipMovement owningPlayerMovement;
@@ -79,7 +80,7 @@ public class Bullet : PooledObj {
 		}
 	}
 
-	protected void OnTriggerEnter(Collider other) {
+	protected virtual void OnTriggerEnter(Collider other) {
 		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
 			ReturnToPool();
@@ -109,6 +110,16 @@ public class Bullet : PooledObj {
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
 				ReturnToPool();
+			}
+			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
+			else if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is VampireShip) {
+				VampireShip vampireOwningPlayer = GameManager.S.players[(int)owningPlayer] as VampireShip;
+				if (absorbedByVampire == true) {
+					absorbedByVampire = false;
+					damage *= -0.25f;
+					playerHit.TakeDamage(damage);
+					ReturnToPool();
+				}
 			}
 		}
 		//Deal damage to any ProtagShip hit

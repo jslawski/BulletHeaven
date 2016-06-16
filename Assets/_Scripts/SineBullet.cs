@@ -23,6 +23,9 @@ public class SineBullet : Bullet {
 		//Apply variable additional velocity based on a sine pattern
 		float t = 0;
 		while (true) {
+			if (absorbedByMasochist || absorbedByVampire) {
+				break;
+			}
 			t += Time.fixedDeltaTime;
 			Vector3 newVelocity = perpendicularDirection * (waveDirection * amplitude * Mathf.Cos(2*Mathf.PI * t/period));
 			thisPhysicsObj.velocity = startingVelocity + newVelocity;

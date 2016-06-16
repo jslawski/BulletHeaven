@@ -19,6 +19,9 @@ public class TrailBullet : Bullet {
 
 	IEnumerator BeginHomingCoroutine() {
 		while (true) {
+			if (absorbedByMasochist || absorbedByVampire) {
+				break;
+			}
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed / timeToReachFullSpeed;
 			physics.velocity = physics.velocity.normalized * Mathf.Lerp(startVelocity, endVelocity, percent);
