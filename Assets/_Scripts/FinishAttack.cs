@@ -216,6 +216,7 @@ public class FinishAttack : MonoBehaviour {
 			transform.Translate(differenceVector.normalized * Time.deltaTime * laserSpeed, Space.World);
 			yield return null;
 		}
+		StartCoroutine(RidiculousDamageValues());
 		yield return new WaitForSeconds(pulseTime);
 		StartCoroutine(Explode());
 		yield return new WaitForSeconds(explosionDuration / 2f);
@@ -224,6 +225,25 @@ public class FinishAttack : MonoBehaviour {
 		if (target != null) {
 			Destroy(target.gameObject);
 		}
+	}
+
+	IEnumerator RidiculousDamageValues() {
+		float timeElapsed = 0;
+		float totalTime = pulseTime + explosionDuration;
+		Player otherPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
+
+		float minDamageTick = 1f;
+		float maxDamageTick = 20000f;
+
+        while (timeElapsed < totalTime) {
+			timeElapsed += Time.deltaTime;
+			float percent = timeElapsed / totalTime;
+
+			GameManager.S.DisplayDamage(otherPlayer, Mathf.Lerp(minDamageTick, maxDamageTick, Mathf.Pow(percent, 8)));
+
+			yield return null;
+		}
+		
 	}
 
 	IEnumerator Explode() {
