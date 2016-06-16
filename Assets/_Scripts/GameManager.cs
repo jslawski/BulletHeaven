@@ -37,6 +37,9 @@ public static bool CHECKING_MENU = false;
 	float damageAmplificationTime = 120f;       //Time it takes to reach maximum damage amplification
 	public float curDamageAmplification = 1f;
 
+	[SerializeField]
+	DamageValues[] damageValues;
+
 	void Awake() {
 		if (S != null) {
 			Destroy(this);
@@ -193,6 +196,10 @@ public static bool CHECKING_MENU = false;
 			}
 			CHECKING_MENU = false;
 		}
+	}
+
+	public void DisplayDamage(Player playerDamaged, float damageIn) {
+		damageValues[(int)playerDamaged].DisplayDamage(damageIn);
 	}
 
 	public void StartGame() {

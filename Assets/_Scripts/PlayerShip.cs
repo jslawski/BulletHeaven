@@ -101,6 +101,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			damageIn *= GameManager.S.curDamageAmplification;
 			CameraEffects.S.CameraShake(0.1f, .5f);
 			VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
+			GameManager.S.DisplayDamage(player, damageIn);
 
 			if (health < lowOnHealthThreshold*maxHealth && !inHeartbeatCoroutine) {
 				StartCoroutine(HeartbeatOnLowHealth());

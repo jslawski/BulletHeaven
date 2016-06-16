@@ -31,6 +31,9 @@ public class VampireShip : PlayerShip {
 	}
 
 	void FixedUpdate() {
+		if (dead) {
+			return;
+		}
 		health += lifeRegen * Time.fixedDeltaTime;
 		if (health > maxHealth) {
 			health = maxHealth;
