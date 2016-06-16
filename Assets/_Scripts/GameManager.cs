@@ -230,8 +230,10 @@ public static bool CHECKING_MENU = false;
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
 		damageValues = new DamageValues[players.Length];
-		damageValues[0] = GameObject.Find("Player1DamageValues").GetComponent<DamageValues>();
-		damageValues[1] = GameObject.Find("Player2DamageValues").GetComponent<DamageValues>();
+		if (gameState != GameStates.titleScreen) {
+			damageValues[0] = GameObject.Find("Player1DamageValues").GetComponent<DamageValues>();
+			damageValues[1] = GameObject.Find("Player2DamageValues").GetComponent<DamageValues>();
+		}
 		curDamageAmplification = 1f;
 		timeInScene = 0;
 		slowMo = false;
@@ -242,8 +244,8 @@ public static bool CHECKING_MENU = false;
 		print("Level " + SceneManager.GetActiveScene().name + " was loaded.");
 		switch (SceneManager.GetActiveScene().name) {
 			case "_Scene_Title":
-				Reset();
 				gameState = GameStates.titleScreen;
+				Reset();
 				break;
 			case "_Scene_Ship_Selection":
 				gameState = GameStates.shipSelect;
