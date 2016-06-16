@@ -5,7 +5,8 @@ public class LifeSapZone : MonoBehaviour {
 	public PlayerShip owner;
 
 	float lifespan = 6f;
-	float maxRadius = 9f;
+	float timeToGrow = 3f;
+	float maxRadius = 12f;
 
 	ParticleSystem zoneParticles;
 	Transform particle;
@@ -51,9 +52,9 @@ public class LifeSapZone : MonoBehaviour {
 		SphereCollider hitbox = GetComponentInChildren<SphereCollider>();
 
 		float t = 0;
-		while (t < lifespan) {
+		while (t < timeToGrow) {
 			t += Time.deltaTime;
-			float percent = t/lifespan;
+			float percent = t/timeToGrow;
 
 			float size = Mathf.Lerp(0, maxRadius, Mathf.Sqrt(percent));
 			zoneParticles.transform.localScale = Vector3.one * (size/6f);
@@ -61,6 +62,7 @@ public class LifeSapZone : MonoBehaviour {
 
 			yield return null;
 		}
+		yield return new WaitForSeconds(lifespan - timeToGrow);
 		zoneParticles.Stop();
 		hitbox.enabled = false;
 		EndTether();
