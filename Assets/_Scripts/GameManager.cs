@@ -199,7 +199,9 @@ public static bool CHECKING_MENU = false;
 	}
 
 	public void DisplayDamage(Player playerDamaged, float damageIn) {
-		damageValues[(int)playerDamaged].DisplayDamage(damageIn);
+		if (damageValues.Length == 2 && damageValues[(int)playerDamaged] != null) {
+			damageValues[(int)playerDamaged].DisplayDamage(damageIn);
+		}
 	}
 
 	public void StartGame() {
@@ -227,6 +229,9 @@ public static bool CHECKING_MENU = false;
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+		damageValues = new DamageValues[players.Length];
+		damageValues[0] = GameObject.Find("Player1DamageValues").GetComponent<DamageValues>();
+		damageValues[1] = GameObject.Find("Player2DamageValues").GetComponent<DamageValues>();
 		curDamageAmplification = 1f;
 		timeInScene = 0;
 		slowMo = false;
