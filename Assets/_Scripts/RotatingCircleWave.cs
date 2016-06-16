@@ -8,7 +8,7 @@ public class RotatingCircleWave : MonoBehaviour {
 	NonPooledBullet bulletPrefab;
 	int numBulletsPerBurst = 12;
 	public float timeBetweenBursts = 0.1f;
-	public int numBurstsPerWave = 3;
+	public int numBurstsPerWave = 5;
 
 	float bulletDamage = 1.5f;
 	float bulletVelocity = 6f;

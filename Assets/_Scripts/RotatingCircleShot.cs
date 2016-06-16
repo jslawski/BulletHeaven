@@ -6,7 +6,7 @@ public class RotatingCircleShot : MonoBehaviour {
 	RotatingCircleWave rotatingCircleWavePrefab;
 
 	float timeBetweenWaves = 0.2f;
-	int numWaves = 9;
+	int numWaves = 6;
 
 	// Use this for initialization
 	void Awake () {

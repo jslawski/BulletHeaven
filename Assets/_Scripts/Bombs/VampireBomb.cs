@@ -24,13 +24,13 @@ public class VampireBomb : Bomb {
 		SoundManager.instance.Play("BombExplode");
 
 		switch (attackToPerform) {
-			//Leading shot
+			//Trail Shot
 			case AttackButtons.A:
 				TrailShot trailShot = Instantiate(trailShotPrefab, transform.position, new Quaternion()) as TrailShot;
 				trailShot.owningPlayer = owningPlayer;
 				trailShot.FireBurst();
 				break;
-			//Spiral shot
+			//Rotating Circle shot
 			case AttackButtons.B:
 				RotatingCircleShot rotatingCircleShot = Instantiate(rotatingCircleShotPrefab, transform.position, new Quaternion()) as RotatingCircleShot;
 				rotatingCircleShot.owningPlayer = owningPlayer;
