@@ -6,7 +6,7 @@ public class ConeShot : MonoBehaviour {
 	public Player owningPlayer = Player.none;
 
 	public Transform target;
-	int bulletsPerBurst = 25;
+	int bulletsPerBurst = 15;
 	int numLines = 5;
 	public Bullet bulletPrefab;
 
