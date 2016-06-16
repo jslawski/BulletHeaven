@@ -12,8 +12,9 @@ public class Bomb : MonoBehaviour {
 			if (value != Player.none) {
 				//spriteRenderer.sprite = playerBombSprites[(int)value];
 				//Set the color of each of the wing's particle systems
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < particleSystems.Length; i++) {
 					particleSystems[i].startColor = GameManager.S.players[(int)value].playerColor;
+					particleSystems[i].Play();
 				}
 				////Only turn on the prewarmed particle glow for this player
 				//particleSystems[3].gameObject.SetActive((value == Player.player1));
