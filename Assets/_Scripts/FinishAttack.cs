@@ -14,15 +14,15 @@ public class FinishAttack : MonoBehaviour {
 				int otherPlayer = (value == Player.player1) ? (int)Player.player2 : (int)Player.player1;
 				target = GameManager.S.players[otherPlayer].transform;
 				thisPlayer = GameManager.S.players[(int)value];
-				beamPulse = (value == Player.player1) ? beamPulseP1 : beamPulseP2;
+				startingGradientValue = FindClosestGradientValue(thisPlayer.playerColor);
+				//print("Color chosen: " + beamPulse.Evaluate(startingGradientValue) + "\nColor target: " + thisPlayer.playerColor);
 			}
 		}
 	}
 	PlayerShip thisPlayer;
 	Transform target;
-	public Gradient beamPulseP1;
-	public Gradient beamPulseP2;
-	Gradient beamPulse;
+	public Gradient beamPulse;
+	float startingGradientValue = 0;
 	ParticleSystem charge;
 	ParticleSystem background;
 	ParticleSystem explosion;
@@ -58,7 +58,25 @@ public class FinishAttack : MonoBehaviour {
 		background = transform.FindChild("BackgroundEffect").GetComponent<ParticleSystem>();
 		explosion = transform.FindChild("MassiveExplosion").GetComponent<ParticleSystem>();
 	}
-	
+
+	float FindClosestGradientValue(Color targetColor) {
+		float delta = 0.02f;
+		float closestGradientValue = 0;
+		float minDistance = Mathf.Infinity;
+
+		Vector3 c2 = new Vector3(targetColor.r, targetColor.g, targetColor.b);
+		for (float i = 0; i < 1; i += delta) {
+			Color curColor = beamPulse.Evaluate(i);
+			Vector3 c1 = new Vector3(curColor.r, curColor.g, curColor.b);
+			float distance = (c1-c2).magnitude;
+			if (distance < minDistance) {
+				minDistance = distance;
+				closestGradientValue = i;
+			}
+		}
+		return closestGradientValue;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (owningPlayer == Player.none || hasBeenFired) {
@@ -105,7 +123,7 @@ public class FinishAttack : MonoBehaviour {
 		float timeElapsed = 0;
 
 		Color startColor = Color.black;
-		Color endColor = beamPulse.Evaluate(0);
+		Color endColor = beamPulse.Evaluate(startingGradientValue);
 
 		ParticleSystemRenderer backgroundRenderer = background.GetComponent<ParticleSystemRenderer>();
 		
@@ -187,8 +205,8 @@ public class FinishAttack : MonoBehaviour {
 			while (t < pulseTime) {
 				t += Time.deltaTime;
 
-				charge.startColor = beamPulse.Evaluate(t / pulseTime);
-				background.startColor = beamPulse.Evaluate(t / pulseTime);
+				charge.startColor = beamPulse.Evaluate(((t / pulseTime) + startingGradientValue)%1f);
+				background.startColor = beamPulse.Evaluate(((t / pulseTime) + startingGradientValue) % 1f);
 				yield return null;
 			}
 		}
@@ -198,8 +216,8 @@ public class FinishAttack : MonoBehaviour {
 			while (t < pulseTime) {
 				t += Time.deltaTime;
 
-				charge.startColor = beamPulse.Evaluate(t / pulseTime);
-				background.startColor = beamPulse.Evaluate(t / pulseTime);
+				charge.startColor = beamPulse.Evaluate(((t / pulseTime) + startingGradientValue) % 1f);
+				background.startColor = beamPulse.Evaluate(((t / pulseTime) + startingGradientValue) % 1f);
 				yield return null;
 			}
 		}
