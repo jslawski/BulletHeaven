@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PhysicsObj : MonoBehaviour {
+	public bool actOnLocalSpace = false;
 	public bool still = true;
 	public bool affectedByGravity = true;
 	public Vector3 acceleration, velocity, posNow, posNext;

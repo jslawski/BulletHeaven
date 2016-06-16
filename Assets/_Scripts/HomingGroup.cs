@@ -84,6 +84,7 @@ public class HomingGroup : MonoBehaviour {
 					bullet.physics.velocity = (bullet.physics.velocity.normalized) * Mathf.Lerp(bulletSpeed, 0, percent);
                 }
 
+				transform.Rotate(new Vector3(0, 0, 180 * Time.deltaTime));
 				yield return null;
 			}
 		}
@@ -108,6 +109,7 @@ public class HomingGroup : MonoBehaviour {
 				Vector3 targetVector = (target.position - transform.position).normalized;
 				physics.acceleration = targetVector * homingForce;
 			}
+			transform.Rotate(new Vector3(0, 0, 180 * Time.deltaTime));
 
 			yield return null;
 		}
