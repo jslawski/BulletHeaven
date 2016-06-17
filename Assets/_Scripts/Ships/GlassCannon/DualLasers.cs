@@ -49,10 +49,14 @@ public class DualLasers : MonoBehaviour {
 			hitbox.enabled = !hasEnded;
 		}
 		//Slow the player while firing the beam
-		if (thisPlayer != null && !hasEnded) {
-			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor, maxDuration);
+		float timeFired = 0;
+		if (thisPlayer != null && !hasEnded && timeFired < maxDuration) {
+			timeFired += Time.deltaTime;
+
+			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor);
+
+			yield return null;
 		}
-		yield return new WaitForSeconds(maxDuration);
 		EndLaserAttack();
 	}
 

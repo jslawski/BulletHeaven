@@ -10,6 +10,7 @@ public class VampireShield : MonoBehaviour {
 	float rotationSpeed_c = 100f;
 	public VampireShip thisPlayer;
 	float shieldDuration = 1.5f;
+	float hitboxOffset = 0;
 
 	Bullet lastAbsorbedBullet = null;
 
@@ -22,6 +23,10 @@ public class VampireShield : MonoBehaviour {
 		}
 		set {
 			_owningPlayer = value;
+			hitboxOffset = GameManager.S.players[(int)value].transform.FindChild("Hitbox").localPosition.y;
+			if (value == Player.player2) {
+				hitboxOffset = -hitboxOffset;
+			}
 		}
 	}
 
@@ -53,7 +58,7 @@ public class VampireShield : MonoBehaviour {
 		//directly to the player's hitbox
 		for (int i = 0; i < absorbedBullets.Count; i++) {
 			if (absorbedBullets[i].absorbedByVampire == true) {
-				Vector3 endPosition = new Vector3(transform.position.x + 1, transform.position.y, 0);
+				Vector3 endPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 				absorbedBullets[i].transform.position = endPosition;
 			}
 			yield return new WaitForFixedUpdate();
@@ -89,10 +94,13 @@ public class VampireShield : MonoBehaviour {
 		thisBullet.GetComponent<PhysicsObj>().velocity = Vector3.zero;
 
 		//Lerp to a position inside the shield
-		Vector3 targetPosition = new Vector3(transform.position.x + 1, transform.position.y, 0);
+		Vector3 targetPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 
 		while (thisBullet.absorbedByVampire == true && (targetPosition - thisBullet.transform.position).magnitude >= 0.01f) {
-			targetPosition = new Vector3(transform.position.x + 1, transform.position.y, 0);
+			if (thisBullet == null) {
+				yield break;
+			}
+			targetPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 			thisBullet.transform.position = Vector3.Lerp(thisBullet.transform.position, targetPosition, lerpSpeed);
 			yield return new WaitForFixedUpdate();
 		}

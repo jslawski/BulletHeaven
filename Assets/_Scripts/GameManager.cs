@@ -256,6 +256,7 @@ public static bool CHECKING_MENU = false;
 				break;
 			case "_Scene_Main":
 				Reset();
+				yield return null;
 				StartGame();
 				break;
 		}
