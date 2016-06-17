@@ -23,7 +23,7 @@ public class SineBullet : Bullet {
 		//Apply variable additional velocity based on a sine pattern
 		float t = 0;
 		while (true) {
-			if (absorbedByMasochist || absorbedByVampire) {
+			if (CheckFlags()) {
 				break;
 			}
 			t += Time.fixedDeltaTime;

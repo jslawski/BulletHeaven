@@ -39,9 +39,22 @@ public class Bullet : PooledObj {
 
 	public bool absorbedByMasochist = false;
 	public bool absorbedByVampire = false;
+	public bool reflected = false;
+	public bool absorbedByBlackHole = false;
 
 	protected float transparencyAlpha = 71f/255f;
 	protected ShipMovement owningPlayerMovement;
+
+	public bool CheckFlags() {
+		return (absorbedByMasochist || absorbedByVampire || absorbedByBlackHole || reflected);
+	}
+
+	public void ClearFlags() {
+		absorbedByMasochist = false;
+		absorbedByVampire = false;
+		absorbedByBlackHole = false;
+		reflected = false;
+	}
 
 	protected void Awake() {
 		physics = GetComponent<PhysicsObj>();
@@ -109,13 +122,14 @@ public class Bullet : PooledObj {
 
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
+				ClearFlags();
 				ReturnToPool();
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
 			else if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is VampireShip) {
 				VampireShip vampireOwningPlayer = GameManager.S.players[(int)owningPlayer] as VampireShip;
 				if (absorbedByVampire == true) {
-					absorbedByVampire = false;
+					ClearFlags();
 					damage *= -0.25f;
 					playerHit.TakeDamage(damage);
 					ReturnToPool();
@@ -135,6 +149,7 @@ public class Bullet : PooledObj {
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
+			ClearFlags();
 			ReturnToPool();
 		}
 	}

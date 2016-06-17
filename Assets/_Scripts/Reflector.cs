@@ -38,7 +38,7 @@ public class Reflector : MonoBehaviour {
 		Destroy(gameObject);
 	}
 
-	void OnTriggerEnter(Collider other) {
+	void OnTriggerStay(Collider other) {
 		//Convert any bullet that enters the reflector, and shoot it back at the opponent
 		if (other.tag == "Bullet" && other.gameObject.GetComponent<Bullet>().owningPlayer != owningPlayer) {
 			float sprayRange = 3f;
@@ -50,6 +50,8 @@ public class Reflector : MonoBehaviour {
 			//Get the opponent player value of the bullet
 			Player otherPlayer = otherBullet.owningPlayer;
 			if (otherPlayer != Player.none) {
+				otherBullet.reflected = true;
+
 				Vector3 otherPlayerPosition = GameManager.S.players[(int)otherPlayer].transform.position;
 
 				//Determine reflection vector

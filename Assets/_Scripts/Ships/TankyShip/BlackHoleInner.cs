@@ -19,6 +19,7 @@ public class BlackHoleInner : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
+			bullet.absorbedByBlackHole = true;
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				bullet.physics.velocity *= 0.2f;
 				blackHole.AddBullet(bullet);
