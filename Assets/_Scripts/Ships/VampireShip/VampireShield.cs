@@ -72,7 +72,10 @@ public class VampireShield : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (shieldSprite.enabled == true && other.tag == "Bullet" && other.GetComponent<Bullet>().owningPlayer != owningPlayer) {
-			StartCoroutine(AbsorbBullet(other.GetComponent<Bullet>()));
+			Bullet thisBullet = other.GetComponent<Bullet>();
+			if (thisBullet.CheckFlagsInteractable()) {
+				StartCoroutine(AbsorbBullet(other.GetComponent<Bullet>()));
+			}
 		}
 	}
 
@@ -82,7 +85,7 @@ public class VampireShield : MonoBehaviour {
 
 		absorbedBullets.Add(thisBullet);
 		thisBullet.absorbedByVampire = true;
-		thisBullet.partOfHomingGroup = false;
+		thisBullet.parentedBullet = false;
 
 		//Change color of the bullet and halt its velocity
 		thisBullet.owningPlayer = thisPlayer.player;

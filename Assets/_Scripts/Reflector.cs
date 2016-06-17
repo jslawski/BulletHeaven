@@ -51,7 +51,7 @@ public class Reflector : MonoBehaviour {
 			Player otherPlayer = otherBullet.owningPlayer;
 			if (otherPlayer != Player.none) {
 				otherBullet.reflected = true;
-				otherBullet.partOfHomingGroup = false;
+				otherBullet.parentedBullet = false;
 
 				Vector3 otherPlayerPosition = GameManager.S.players[(int)otherPlayer].transform.position;
 

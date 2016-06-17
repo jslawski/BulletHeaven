@@ -33,9 +33,6 @@ public class Masochist : PlayerShip {
 	//Opted for a discrete method of doing a damage multiplier
 	//Open to discuss the possibility of implementing a continuous method instead
 	public override void TakeDamage(float damageIn) {
-		if (shieldUp) {
-			return;
-		}
 
 		base.TakeDamage(damageIn);
 
