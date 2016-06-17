@@ -19,6 +19,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public FinishAttack finalAttackPrefab;
 	public Player player;
 	public Color playerColor;
+	public DurationBar durationBar;
 	public HealthBar healthBar;
 	ParticleSystem healthPickupParticles;
 	public InputDevice device;
@@ -86,6 +87,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	protected void Start() {
 		health = maxHealth;
+		durationBar.SetPercent(0);
 	}
 	
 	// Update is called once per frame

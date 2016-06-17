@@ -30,10 +30,20 @@ public class VampireShield : MonoBehaviour {
 		}
 	}
 
-	void Start() {
+	IEnumerator Start() {
 		thisCollider = GetComponent<SphereCollider>();
 		shieldSprite = GetComponentInChildren<SpriteRenderer>();
 		absorbedBullets = new List<Bullet>();
+
+		float timeElapsed = 0;
+		while (timeElapsed < shieldDuration) {
+			timeElapsed += Time.deltaTime;
+
+			thisPlayer.durationBar.SetPercent(1 - timeElapsed / shieldDuration);
+
+			yield return null;
+		}
+		thisPlayer.durationBar.SetPercent(0);
 	}
 
 	// Use this for initialization

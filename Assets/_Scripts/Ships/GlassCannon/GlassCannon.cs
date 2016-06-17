@@ -40,13 +40,11 @@ public class GlassCannon : PlayerShip {
 		if (Input.GetKeyDown(X)) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 			dualLaser.owningPlayer = player;
-			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
 			if (device.Action3.WasPressed) {
 				DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 				dualLaser.owningPlayer = player;
-				playerShooting.ExpendAttackSlot();
 			}
 		}
 
@@ -55,14 +53,12 @@ public class GlassCannon : PlayerShip {
 			ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 			chargeShot.owningPlayer = player;
 			chargeShot.player = this;
-			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
 			if (device.Action4.WasPressed) {
 				ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 				chargeShot.owningPlayer = player;
 				chargeShot.player = this;
-				playerShooting.ExpendAttackSlot();
 			}
 		}
 	}

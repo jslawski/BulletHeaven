@@ -50,10 +50,11 @@ public class DualLasers : MonoBehaviour {
 		}
 		//Slow the player while firing the beam
 		float timeFired = 0;
-		if (thisPlayer != null && !hasEnded && timeFired < maxDuration) {
+		while (thisPlayer != null && !hasEnded && timeFired < maxDuration) {
 			timeFired += Time.deltaTime;
 
-			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor);
+			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor, 0.2f, true);
+			thisPlayer.durationBar.SetPercent(1 - timeFired / maxDuration);
 
 			yield return null;
 		}
@@ -85,6 +86,7 @@ public class DualLasers : MonoBehaviour {
 			return;
 		}
 		hasEnded = true;
+		print("End Laser Attack");
 
 		//Turn off the lasers
 		foreach (var laser in lasers) {
@@ -97,6 +99,7 @@ public class DualLasers : MonoBehaviour {
 		//Restore the player's speed
 		if (owningPlayer != Player.none) {
 			thisPlayer.playerMovement.RestoreSpeed();
+			thisPlayer.durationBar.SetPercent(0);
 		}
 
 		Destroy(gameObject, 2f);

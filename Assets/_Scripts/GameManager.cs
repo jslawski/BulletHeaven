@@ -121,6 +121,7 @@ public static bool CHECKING_MENU = false;
 		newPlayerShip.player = player;
 		newPlayerShip.typeOfShip = typeOfShip;
 		newPlayerShip.healthBar = oldPlayerShip.healthBar;
+		newPlayerShip.durationBar = oldPlayerShip.durationBar;
 		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
 		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
 		newPlayerShip.deathExplosionPrefab = oldPlayerShip.deathExplosionPrefab;
@@ -148,6 +149,7 @@ public static bool CHECKING_MENU = false;
 			ammo.GetComponent<Image>().color = playerColor;
 		}
 		newPlayerShip.healthBar.SetColor(playerColor);
+		newPlayerShip.durationBar.SetColor(playerColor);
 
 		//Set the type of bomb and fix old references
 		newPlayerShip.playerShooting.SetBombType(typeOfShip);
