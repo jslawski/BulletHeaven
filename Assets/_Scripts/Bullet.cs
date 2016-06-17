@@ -39,6 +39,18 @@ public class Bullet : PooledObj {
 
 	public bool absorbedByMasochist = false;
 	public bool absorbedByVampire = false;
+	bool _partOfHomingGroup = false;
+	public bool partOfHomingGroup {
+		get {
+			return _partOfHomingGroup;
+		}
+		set {
+			//If this was part of a homing group and we're telling it not to be, unparent it
+			if (_partOfHomingGroup && !value) {
+				transform.parent = null;
+			}
+		}
+	}
 
 	protected float transparencyAlpha = 71f/255f;
 	protected float vampShieldHealAmount = 0.1f;
