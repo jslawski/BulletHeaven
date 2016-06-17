@@ -168,6 +168,9 @@ public class ShootBomb : MonoBehaviour {
 
 	//Executing any attack results in expending an ammo slot
 	public void ExpendAttackSlot() {
+		if (curAmmo == 0) {
+			return;
+		}
 		bombShootCooldownRemaining = bombShootCooldown;
 
 		curAmmo--;

@@ -9,4 +9,11 @@ public class Generalist : PlayerShip {
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
 			"Images/GeneralistShip/GShipAnimationController");
 	}
+
+	new void Start() {
+		base.Start();
+
+		maxHealth = 200f;
+		health = maxHealth;
+	}
 }

@@ -23,7 +23,7 @@ public class GlassCannon : PlayerShip {
 
 		X = (player == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
 		Y = (player == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
-		maxHealth = 110f;
+		maxHealth = 145f;
 		health = maxHealth;
 
 		playerMovement.SetBaseSpeed(1.3f);
@@ -37,13 +37,13 @@ public class GlassCannon : PlayerShip {
 		}
 
 		//Dual laser attack
-		if (Input.GetKeyDown(X) && playerShooting.curAmmo != 0) {
+		if (Input.GetKeyDown(X)) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 			dualLaser.owningPlayer = player;
 			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action3.WasPressed && playerShooting.curAmmo != 0) {
+			if (device.Action3.WasPressed) {
 				DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
 				dualLaser.owningPlayer = player;
 				playerShooting.ExpendAttackSlot();
@@ -51,14 +51,14 @@ public class GlassCannon : PlayerShip {
 		}
 
 		//Charge shot attack
-		if (Input.GetKeyDown(Y) && playerShooting.curAmmo != 0) {
+		if (Input.GetKeyDown(Y)) {
 			ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 			chargeShot.owningPlayer = player;
 			chargeShot.player = this;
 			playerShooting.ExpendAttackSlot();
 		}
 		if (device != null) {
-			if (device.Action4.WasPressed && playerShooting.curAmmo != 0) {
+			if (device.Action4.WasPressed) {
 				ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
 				chargeShot.owningPlayer = player;
 				chargeShot.player = this;

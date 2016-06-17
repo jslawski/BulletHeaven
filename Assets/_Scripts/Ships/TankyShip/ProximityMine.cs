@@ -6,12 +6,12 @@ public class ProximityMine : MonoBehaviour {
 	PhysicsObj physics;
 	SphereCollider hitbox;
 
-	float minRandSpeed = 6f;
-	float maxRandSpeed = 12f;
+	float minRandSpeed = 9f;
+	float maxRandSpeed = 15f;
 	float decelerationRate = 0.02f;
 
 	float flatDamage = 15f;
-	float explosionRadius = 2f;
+	float explosionRadius = 3f;
 
 	float otherMineDetonationDelay = 0.15f;
 

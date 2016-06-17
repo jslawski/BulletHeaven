@@ -43,6 +43,7 @@ public class DualLasers : MonoBehaviour {
 		//Wait while charging
 		yield return new WaitForSeconds(chargeTime);
 		StartCoroutine(LoseEnergy());
+		thisPlayer.playerShooting.ExpendAttackSlot();
 		//Turn on the hitboxes
 		foreach (var hitbox in hitboxes) {
 			hitbox.enabled = !hasEnded;
