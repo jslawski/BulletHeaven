@@ -28,6 +28,7 @@ public class LifeSapZone : MonoBehaviour {
 
 	float damagePerTick = 3f;           //Damage ticks every particleTravelTime seconds
 	float slowFieldPercent = 0.8f;
+	float healScalar = 0.25f;
 
 	// Use this for initialization
 	IEnumerator Start () {
@@ -58,7 +59,7 @@ public class LifeSapZone : MonoBehaviour {
 
 			float size = Mathf.Lerp(0, maxRadius, Mathf.Sqrt(percent));
 			zoneParticles.transform.localScale = Vector3.one * (size/6f);
-			hitbox.radius = size;
+			hitbox.radius = (7f/9f)*size;
 
 			yield return null;
 		}
@@ -157,7 +158,7 @@ public class LifeSapZone : MonoBehaviour {
 		while (targetShip != null) {
 			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);
-			owner.TakeDamage(-damagePerTick);
+			owner.TakeDamage(-damagePerTick * healScalar);
 			yield return new WaitForSeconds(particleTravelTime);
 		}
 	}

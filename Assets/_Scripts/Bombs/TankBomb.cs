@@ -18,11 +18,6 @@ public class TankBomb : Bomb {
 	}
 
 	public override void Detonate(AttackButtons attackToPerform) {
-		//Stop moving the bomb
-		physics.velocity = Vector3.zero;
-
-		SoundManager.instance.Play("BombExplode");
-
 		switch (attackToPerform) {
 			//Leading shot
 			case AttackButtons.A:
@@ -50,6 +45,11 @@ public class TankBomb : Bomb {
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");
 				break;
 		}
+
+		//Stop moving the bomb
+		physics.velocity = Vector3.zero;
+
+		SoundManager.instance.Play("BombExplode");
 
 		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
 		Destroy(shockwave, 5f);

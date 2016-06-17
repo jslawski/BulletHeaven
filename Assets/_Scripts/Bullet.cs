@@ -41,6 +41,7 @@ public class Bullet : PooledObj {
 	public bool absorbedByVampire = false;
 
 	protected float transparencyAlpha = 71f/255f;
+	protected float vampShieldHealAmount = 0.1f;
 	protected ShipMovement owningPlayerMovement;
 
 	protected void Awake() {
@@ -116,7 +117,7 @@ public class Bullet : PooledObj {
 				VampireShip vampireOwningPlayer = GameManager.S.players[(int)owningPlayer] as VampireShip;
 				if (absorbedByVampire == true) {
 					absorbedByVampire = false;
-					damage *= -0.25f;
+					damage *= -vampShieldHealAmount;
 					playerHit.TakeDamage(damage);
 					ReturnToPool();
 				}

@@ -14,7 +14,7 @@ public class VampireShip : PlayerShip {
 
 		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
-		maxHealth = 85f;
+		maxHealth = 110f;
 		health = maxHealth;
 	}
 

@@ -26,7 +26,7 @@ public class Masochist : PlayerShip {
 		base.Start();
 		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
-		maxHealth = 190f;
+		maxHealth = 250f;
 		health = maxHealth;
 	}
 
