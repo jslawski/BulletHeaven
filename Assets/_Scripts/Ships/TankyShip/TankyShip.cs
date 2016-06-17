@@ -18,6 +18,8 @@ public class TankyShip : PlayerShip {
 		maxHealth = 300;
 		health = maxHealth;
 
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
+
 		playerMovement.SetBaseSpeed(0.6f);
 	}
 

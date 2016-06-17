@@ -15,5 +15,7 @@ public class Generalist : PlayerShip {
 
 		maxHealth = 200f;
 		health = maxHealth;
+
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 	}
 }

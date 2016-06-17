@@ -26,6 +26,8 @@ public class Masochist : PlayerShip {
 		base.Start();
 		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
+
 		maxHealth = 250f;
 		health = maxHealth;
 	}

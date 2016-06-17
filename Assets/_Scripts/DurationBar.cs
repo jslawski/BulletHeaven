@@ -45,8 +45,10 @@ public class DurationBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 center = Camera.main.WorldToViewportPoint(target.position);
-		thisRect.anchorMin = (Vector2)center + offset;
-		thisRect.anchorMax = (Vector2)center + size + offset;
+		if (target != null) {
+			Vector3 center = Camera.main.WorldToViewportPoint(target.position);
+			thisRect.anchorMin = (Vector2)center + offset;
+			thisRect.anchorMax = (Vector2)center + size + offset;
+		}
 	}
 }

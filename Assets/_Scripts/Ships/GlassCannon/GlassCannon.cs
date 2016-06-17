@@ -23,6 +23,9 @@ public class GlassCannon : PlayerShip {
 
 		X = (player == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
 		Y = (player == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
+
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, true, true);
+
 		maxHealth = 145f;
 		health = maxHealth;
 

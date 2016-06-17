@@ -15,6 +15,7 @@ public class ChargeShot : MonoBehaviour {
 	ParticleSystem chargeParticle;
 	ParticleSystem shotParticle;
 
+	float shotWidth = 0.3f;
 	float chargeTime = 1.5f;
 	float maxChargeAngle = 30f;
 	float minChargeAngle = 0f;
@@ -111,7 +112,7 @@ public class ChargeShot : MonoBehaviour {
 
 		Ray shot = new Ray(transform.position, transform.up);
 		//See if we would hit anything by firing a bullet in this direction
-		RaycastHit[] hitscans = Physics.SphereCastAll(shot, 0.25f, 50f);
+		RaycastHit[] hitscans = Physics.SphereCastAll(shot, shotWidth, 50f);
 		Debug.DrawRay(shot.origin, shot.direction * 50f, Color.blue, 10f);
 
 		foreach (var hitscan in hitscans) {
