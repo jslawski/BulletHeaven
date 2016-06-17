@@ -79,6 +79,7 @@ public class Bullet : PooledObj {
 	protected IEnumerator TransparencyCheck() {
 		while (true) {
 			if (!sprite.isVisible) {
+				ClearFlags();
 				ReturnToPool();
 				yield break;
 			}
@@ -97,6 +98,7 @@ public class Bullet : PooledObj {
 	protected virtual void OnTriggerEnter(Collider other) {
 		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
+			ClearFlags();
 			ReturnToPool();
 		}
 		//Deal damage to any other player hit
