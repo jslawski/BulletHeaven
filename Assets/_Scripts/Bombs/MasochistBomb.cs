@@ -21,6 +21,7 @@ public class MasochistBomb : Bomb {
 			case AttackButtons.A:
 				SineShot newShot = Instantiate(sineShotPrefab, transform.position, new Quaternion()) as SineShot;
 				newShot.owningPlayer = owningPlayer;
+				newShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
 				newShot.FireBurst();
 				break;
 			//Spread shot

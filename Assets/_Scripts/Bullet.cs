@@ -51,6 +51,7 @@ public class Bullet : PooledObj {
 			if (_partOfHomingGroup && !value) {
 				transform.parent = null;
 			}
+			_partOfHomingGroup = value;
 		}
 	}
 

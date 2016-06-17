@@ -102,6 +102,7 @@ public class MasochistShield : MonoBehaviour {
 		//Change ownership of the bullet and halt its velocity
 		thisBullet.owningPlayer = owningPlayer;
 		thisBullet.absorbedByMasochist = true;
+		thisBullet.partOfHomingGroup = false;
 		thisBullet.GetComponent<PhysicsObj>().velocity = Vector3.zero;
 
 		//Lerp to a position inside the shield

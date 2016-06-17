@@ -4,9 +4,11 @@ using PolarCoordinates;
 
 public class SineShot : MonoBehaviour {
 	public Player owningPlayer = Player.none;
+	public Masochist masochistPlayer;
 
 	public Transform target;
 	int bulletsPerBurst = 100;
+	float amplitudeScalar = 20f;
 	public SineBullet bulletPrefab;
 
 	public void FireBurst() {
@@ -44,6 +46,15 @@ public class SineShot : MonoBehaviour {
 		curBullet.owningPlayer = owningPlayer;
 		curBullet.transform.position = gameObject.transform.position;
 		curBullet.GetComponent<PhysicsObj>().velocity = 10 * direction.PolarToCartesian().normalized;
+
+		//Make amplitude wider during aura mode
+		if (masochistPlayer.damageMultiplier > 1) {
+			curBullet.amplitude = amplitudeScalar;
+		}
+		else {
+			curBullet.amplitude = 10f;
+		}
+
 		curBullet.ApplySineWave(waveDirection);
 	}
 

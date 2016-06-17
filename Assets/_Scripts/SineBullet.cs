@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SineBullet : Bullet {
 
-	float amplitude = 10f;
+	public float amplitude = 10f;
 	float period = 0.5f;
 
 	public void ApplySineWave(int waveDirection) {

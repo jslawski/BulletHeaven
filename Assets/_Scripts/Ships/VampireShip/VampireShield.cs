@@ -82,6 +82,7 @@ public class VampireShield : MonoBehaviour {
 
 		absorbedBullets.Add(thisBullet);
 		thisBullet.absorbedByVampire = true;
+		thisBullet.partOfHomingGroup = false;
 
 		//Change color of the bullet and halt its velocity
 		thisBullet.owningPlayer = thisPlayer.player;
