@@ -62,11 +62,4 @@ public class NonPooledBullet : Bullet {
 			Destroy(gameObject);
 		}
 	}
-
-	//Unparent the bullet if it is absorbed in a shield
-	void Update() {
-		if (CheckFlags()) {
-			transform.parent = null;
-		}
-	}
 }
