@@ -15,6 +15,7 @@ public class BlackHoleOuter : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
+			bullet.absorbedByBlackHole = true;
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				float t = 1-(other.transform.position - transform.position).magnitude/outerRadius;
 				bullet.physics.velocity *= blackHole.fieldSlowScalar;

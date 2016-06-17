@@ -19,7 +19,7 @@ public class TrailBullet : Bullet {
 
 	IEnumerator BeginHomingCoroutine() {
 		while (true) {
-			if (absorbedByMasochist || absorbedByVampire) {
+			if (CheckFlags()) {
 				break;
 			}
 			timeElapsed += Time.deltaTime;
