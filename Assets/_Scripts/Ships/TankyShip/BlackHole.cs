@@ -44,6 +44,13 @@ public class BlackHole : MonoBehaviour {
 		outerParticleSystem = transform.FindChild("OuterParticleSystem").GetComponent<ParticleSystem>();
 		innerParticleSystem = transform.FindChild("InnerParticleSystem").GetComponent<ParticleSystem>();
 
+		//Set particle colors
+		Color col = GameManager.S.players[(int)owningPlayer].playerColor;
+		innerParticleSystem.startColor = Color.Lerp(col, new Color(col.r, col.g, col.b, 0), 0.97f);
+		outerParticleSystem.startColor = new Color(col.r, col.g, col.b, 65f / 255f);
+		innerParticleSystem.Play();
+		outerParticleSystem.Play();
+
 		yield return new WaitForSeconds(armTime);
 		inner.GetComponent<SphereCollider>().enabled = true;
 	}

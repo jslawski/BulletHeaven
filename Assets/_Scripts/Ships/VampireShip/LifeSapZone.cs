@@ -35,6 +35,13 @@ public class LifeSapZone : MonoBehaviour {
 		particle = transform.FindChild("Particle");
 		particle.gameObject.SetActive(false);
 		zoneParticles = GetComponentInChildren<ParticleSystem>();
+
+		//Set effect colors and start the particle system
+		Color col = owner.playerColor;
+		particle.GetComponent<SpriteRenderer>().color = new Color(col.r, col.g, col.b, 157f / 255f);
+		zoneParticles.startColor = col;
+		zoneParticles.Play();
+
 		connectingLine = GetComponentInChildren<LineRenderer>();
 		startPos = transform.position;
 		linePositions = new Vector3[lineResolution];
