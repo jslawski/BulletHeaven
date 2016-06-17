@@ -16,6 +16,15 @@ public class BlackHoleOuter : MonoBehaviour {
 		if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			bullet.absorbedByBlackHole = true;
+			if (bullet.partOfHomingGroup) {
+				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
+				//if (parentPhysics != null) {
+				print("Parent Velocity: " + parentPhysics.velocity);
+					bullet.physics.velocity = parentPhysics.velocity;
+					bullet.physics.acceleration = parentPhysics.acceleration;
+				//}
+				bullet.partOfHomingGroup = false;
+			}
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				float t = 1-(other.transform.position - transform.position).magnitude/outerRadius;
 				bullet.physics.velocity *= blackHole.fieldSlowScalar;
