@@ -19,7 +19,7 @@ public class Bullet : PooledObj {
 			_owningPlayer = value;
 			if (value != Player.none) {
 				PlayerShip playerShip = GameManager.S.players[(int)value];
-                sprite.color = playerShip.playerColor;
+				sprite.color = playerShip.playerColor;
 				owningPlayerMovement = playerShip.playerMovement;
 				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
 				otherPlayer = GameManager.S.players[(int)other].playerMovement;
@@ -41,26 +41,31 @@ public class Bullet : PooledObj {
 	public bool absorbedByVampire = false;
 	public bool reflected = false;
 	public bool absorbedByBlackHole = false;
-	bool _partOfHomingGroup = false;
-	public bool partOfHomingGroup {
+	bool _parentedBullet = false;
+	public bool parentedBullet {
 		get {
-			return _partOfHomingGroup;
+			return _parentedBullet;
 		}
 		set {
 			//If this was part of a homing group and we're telling it not to be, unparent it
-			if (_partOfHomingGroup && !value) {
+			if (_parentedBullet && !value) {
 				transform.parent = null;
 			}
-			_partOfHomingGroup = value;
+			_parentedBullet = value;
 		}
 	}
 
-	protected float transparencyAlpha = 71f/255f;
-	protected float vampShieldHealAmount = 0.1f;
+	protected float transparencyAlpha = 71f / 255f;
+	protected float vampShieldHealAmount = 0.05f;
 	protected ShipMovement owningPlayerMovement;
 
 	public bool CheckFlags() {
 		return (absorbedByMasochist || absorbedByVampire || absorbedByBlackHole || reflected);
+	}
+
+	//Any of these flags flipped true represents a bullet that can't be further interacted with
+	public bool CheckFlagsInteractable() {
+		return (!absorbedByMasochist && !absorbedByVampire && !absorbedByBlackHole);
 	}
 
 	public void ClearFlags() {

@@ -15,15 +15,19 @@ public class BlackHoleOuter : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
+
+			//Don't do anything if the bullet can't be interacted with
+			if (!bullet.CheckFlagsInteractable()) {
+				return;
+			}
+
 			bullet.absorbedByBlackHole = true;
-			if (bullet.partOfHomingGroup) {
+			if (bullet.parentedBullet) {
 				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
-				//if (parentPhysics != null) {
-				print("Parent Velocity: " + parentPhysics.velocity);
-					bullet.physics.velocity = parentPhysics.velocity;
-					bullet.physics.acceleration = parentPhysics.acceleration;
-				//}
-				bullet.partOfHomingGroup = false;
+
+				bullet.physics.velocity = parentPhysics.velocity;
+				bullet.physics.acceleration = parentPhysics.acceleration;
+				bullet.parentedBullet = false;
 			}
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				float t = 1-(other.transform.position - transform.position).magnitude/outerRadius;

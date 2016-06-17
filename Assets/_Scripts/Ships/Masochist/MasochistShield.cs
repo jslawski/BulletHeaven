@@ -9,6 +9,7 @@ public class MasochistShield : MonoBehaviour {
 	Player otherPlayer;
 
 	List<PhysicsObj> absorbedBullets;
+	int maxBulletCount = 100;
 
 	float rotationSpeed_c = 100f;
 	public Masochist thisPlayer;
@@ -61,6 +62,10 @@ public class MasochistShield : MonoBehaviour {
 		Vector3 reflectionVector = GameManager.S.players[(int)otherPlayer].player == Player.player1 ? Vector3.left : Vector3.right;
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
+			if (bullet == null) {
+				continue;
+			}
+
 			Vector3 bulletPosition = bullet.gameObject.transform.position;
 			bullet.gameObject.GetComponent<Bullet>().absorbedByMasochist = false;
 
@@ -80,7 +85,12 @@ public class MasochistShield : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bullet" && other.GetComponent<Bullet>().owningPlayer != owningPlayer) {
-			StartCoroutine(OrbitBullet(other.GetComponent<Bullet>()));
+			Bullet thisBullet = other.GetComponent<Bullet>();
+			if (thisBullet.CheckFlagsInteractable()) {
+				if (absorbedBullets.Count < maxBulletCount) {
+					StartCoroutine(OrbitBullet(other.GetComponent<Bullet>()));
+				}
+			}
 		}
 	}
 
@@ -102,7 +112,7 @@ public class MasochistShield : MonoBehaviour {
 		//Change ownership of the bullet and halt its velocity
 		thisBullet.owningPlayer = owningPlayer;
 		thisBullet.absorbedByMasochist = true;
-		thisBullet.partOfHomingGroup = false;
+		thisBullet.parentedBullet = false;
 		thisBullet.GetComponent<PhysicsObj>().velocity = Vector3.zero;
 
 		//Lerp to a position inside the shield

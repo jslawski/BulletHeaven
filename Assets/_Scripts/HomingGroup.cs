@@ -64,7 +64,7 @@ public class HomingGroup : MonoBehaviour {
 			while (curAngle < 2 * Mathf.PI - 0.01f) {
 				PolarCoordinate direction = new PolarCoordinate(1, curAngle);
 				NonPooledBullet curBullet = Instantiate(bulletPrefab, transform.position, new Quaternion()) as NonPooledBullet;
-				curBullet.partOfHomingGroup = true;
+				curBullet.parentedBullet = true;
 				curBullet.damage = bulletDamage;
 				curBullet.owningPlayer = owningPlayer;
 				curBullet.transform.SetParent(transform);
@@ -83,7 +83,7 @@ public class HomingGroup : MonoBehaviour {
 
 				List<NonPooledBullet> bulletsToRemoveFromGroup = new List<NonPooledBullet>();
 				foreach (var bullet in childrenBullets) {
-					if (bullet.partOfHomingGroup) {
+					if (bullet.parentedBullet) {
 						bullet.physics.velocity = (bullet.physics.velocity.normalized) * Mathf.Lerp(bulletSpeed, 0, percent);
 					}
 					else {

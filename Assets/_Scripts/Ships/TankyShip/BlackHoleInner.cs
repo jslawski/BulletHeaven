@@ -19,8 +19,14 @@ public class BlackHoleInner : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
+
+			//Don't interact if the bullet has already interacted with something
+			if (bullet.CheckFlagsInteractable()) {
+				return;
+			}
+
 			bullet.absorbedByBlackHole = true;
-			bullet.partOfHomingGroup = false;
+			bullet.parentedBullet = false;
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				bullet.physics.velocity *= 0.2f;
 				blackHole.AddBullet(bullet);
@@ -48,6 +54,11 @@ public class BlackHoleInner : MonoBehaviour {
 		}
 		else if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
+			//Don't interact if the bullet has already interacted with something
+			if (bullet.CheckFlagsInteractable()) {
+				return;
+			}
+
 			if (bullet.gameObject.layer == LayerMask.NameToLayer("TrappedBullet")) {
 				bullet.physics.acceleration = (transform.position - other.transform.position).normalized * blackHole.gravityForce;
 			}
