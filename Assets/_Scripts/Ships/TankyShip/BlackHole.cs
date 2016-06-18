@@ -96,7 +96,7 @@ public class BlackHole : MonoBehaviour {
 		Collider[] hitTargets = Physics.OverlapSphere(transform.position, explosionRadius);
 		foreach (Collider target in hitTargets) {
 			if (target.gameObject.tag == "Player" || target.gameObject.tag == "ProtagShip") {
-				DamageableObject shipHit = target.GetComponentInParent<PlayerShip>();
+				DamageableObject shipHit = target.GetComponentInParent<DamageableObject>();
 				shipHit.TakeDamage(explosionDamage);
 			}
 		}
