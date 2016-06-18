@@ -2,12 +2,12 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class Reflector : MonoBehaviour {
+public class Reflector : MonoBehaviour, BombAttack {
 	ParticleSystem[] reflectorParticles;
 	float reflectorDuration = 4f;
 	float reflectionVelocity = 10f;
 
-	public Player _owningPlayer = Player.none;
+	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -31,6 +31,10 @@ public class Reflector : MonoBehaviour {
 		SoundManager.instance.Play("Reflector");
 		reflectorParticles = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyReflector());
+	}
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
 	}
 
 	IEnumerator DestroyReflector() {

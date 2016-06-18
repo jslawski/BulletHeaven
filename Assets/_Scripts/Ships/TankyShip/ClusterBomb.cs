@@ -1,8 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ClusterBomb : MonoBehaviour {
-	public Player owningPlayer;
+public class ClusterBomb : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	ProximityMine minePrefab;
 
 	float mainExplosionRadius = 3.9f;
@@ -16,6 +26,10 @@ public class ClusterBomb : MonoBehaviour {
 
 	void Awake() {
 		minePrefab = Resources.Load<ProximityMine>("Prefabs/ProximityMine");
+	}
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
 	}
 
 	// Use this for initialization

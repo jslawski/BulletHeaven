@@ -2,9 +2,19 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class SpiralShot : MonoBehaviour {
+public class SpiralShot : MonoBehaviour, BombAttack {
 
-	public Player owningPlayer = Player.none;
+	public Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public Bullet bulletPrefab;
 	int numBursts = 40;
 	int numDirectionFlips = 3;

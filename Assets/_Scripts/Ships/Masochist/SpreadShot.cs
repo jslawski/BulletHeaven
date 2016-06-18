@@ -2,8 +2,18 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class SpreadShot : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class SpreadShot : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public Bullet bulletPrefab;
 	int numBursts = 40;
 	float bulletDelay = 0.05f;
@@ -26,8 +36,18 @@ public class SpreadShot : MonoBehaviour {
 	IEnumerator FireBurstCoroutine() {
 		//Separation of bullets is smaller when the masochist has his aura up
 		//Normal: 5 directions, Aura: 8 directions
-		float firingSeparation = masochistPlayer.damageMultiplier == 1 ? firingSeparationNoAura : firingSeparationWithAura;
-		float startingAngle = masochistPlayer.damageMultiplier == 1 ? startingAngleNoAura : startingAngleWithAura;
+		float firingSeparation;
+		float startingAngle;
+
+		if (masochistPlayer != null) {
+			firingSeparation = masochistPlayer.damageMultiplier == 1 ? firingSeparationNoAura : firingSeparationWithAura;
+			startingAngle = masochistPlayer.damageMultiplier == 1 ? startingAngleNoAura : startingAngleWithAura;
+		}
+		else {
+			firingSeparation = firingSeparationNoAura;
+			startingAngle = startingAngleNoAura;
+		}
+
 		float bulletOffset = 3f * Mathf.Deg2Rad;
 
 

@@ -2,9 +2,19 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class AltCircleShot : MonoBehaviour {
+public class AltCircleShot : MonoBehaviour, BombAttack {
 
-	public Player owningPlayer = Player.none;
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public Bullet bulletPrefab;
 	int numBursts = 10;
 	int numBulletsPerBurst = 12;

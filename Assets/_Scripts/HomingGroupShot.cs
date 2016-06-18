@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HomingGroupShot : MonoBehaviour {
+public class HomingGroupShot : MonoBehaviour, BombAttack {
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -18,6 +18,10 @@ public class HomingGroupShot : MonoBehaviour {
 
 	int numShots = 3;
 	float timeBetweenShots = 0.5f;
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
+	}
 
 	// Use this for initialization
 	IEnumerator Start () {

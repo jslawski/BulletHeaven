@@ -2,8 +2,17 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class WeaveShot : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class WeaveShot : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
 
 	public Transform target;
 	int bulletsPerBurst = 100;

@@ -2,8 +2,18 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class SineShot : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class SineShot : MonoBehaviour, BombAttack{
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public Masochist masochistPlayer;
 
 	public Transform target;
@@ -48,7 +58,7 @@ public class SineShot : MonoBehaviour {
 		curBullet.GetComponent<PhysicsObj>().velocity = 10 * direction.PolarToCartesian().normalized;
 
 		//Make amplitude wider during aura mode
-		if (masochistPlayer.damageMultiplier > 1) {
+		if (masochistPlayer != null && masochistPlayer.damageMultiplier > 1) {
 			curBullet.amplitude = amplitudeScalar;
 		}
 		else {

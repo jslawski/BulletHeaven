@@ -2,8 +2,17 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class LeadingShot : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class LeadingShot : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
 
 	public Transform target;
 	public int bulletsPerBurst = 100;

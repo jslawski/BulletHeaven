@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Bomb : MonoBehaviour {
-	Player _owningPlayer = Player.none;       //Set this when creating a new Bomb
+	public Player _owningPlayer = Player.none;       //Set this when creating a new Bomb
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;

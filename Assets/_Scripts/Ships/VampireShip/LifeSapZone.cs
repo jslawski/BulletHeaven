@@ -1,7 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LifeSapZone : MonoBehaviour {
+public class LifeSapZone : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			owner = GameManager.S.players[(int)value];
+			_owningPlayer = value;
+		}
+	}
+
 	public PlayerShip owner;
 
 	float lifespan = 6f;
@@ -29,6 +41,10 @@ public class LifeSapZone : MonoBehaviour {
 	float damagePerTick = 3f;           //Damage ticks every particleTravelTime seconds
 	float slowFieldPercent = 0.8f;
 	float healScalar = 0.25f;
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
+	}
 
 	// Use this for initialization
 	IEnumerator Start () {

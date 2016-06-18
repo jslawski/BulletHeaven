@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Beam : MonoBehaviour {
+public class Beam : MonoBehaviour, BombAttack {
 	public GameObject explosionPrefab;
 	float vibrationIntensity = 0.15f;
 
@@ -35,6 +35,10 @@ public class Beam : MonoBehaviour {
 
 		Invoke("StartBeam", chargeDuration);
     }
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
+	}
 
 	void StartBeam() {
 		SoundManager.instance.Play("Beam");
