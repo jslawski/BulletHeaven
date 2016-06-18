@@ -6,16 +6,6 @@ public class TitleScreenBomb : Bomb {
 	public GameObject[] attackPrefabs;
 	public GameObject shockwavePrefab;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
 	public override void Detonate(AttackButtons attackToPerform) {
 		//Ignore the attackToPerform, and just pick a random attack to instantiate
 		int attackIndex = Random.Range(0, attackPrefabs.Length);
