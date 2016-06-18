@@ -45,7 +45,7 @@ public class TrailShot : MonoBehaviour {
 		shootDirection.angle += Random.Range(-coneOfFiring, coneOfFiring);
 
 		//Keep track of the previously fired bullet
-		Transform prevBulletTransform;
+		Bullet prevBullet;
 
 		//Fire the leading bullet that will home in on the target
 		TrailBullet leadingBullet = bulletPrefab.GetPooledInstance<TrailBullet>();
@@ -54,7 +54,7 @@ public class TrailShot : MonoBehaviour {
 		leadingBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDirection.PolarToCartesian().normalized;
 		leadingBullet.target = target;
 		leadingBullet.leadingBullet = null;
-		prevBulletTransform = leadingBullet.transform;
+		prevBullet = leadingBullet;
 		leadingBullet.BeginHoming();
 		yield return new WaitForSeconds(bulletDelay);
 
@@ -66,8 +66,8 @@ public class TrailShot : MonoBehaviour {
 			curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDirection.PolarToCartesian().normalized;
 
 			curBullet.target = target;
-			curBullet.leadingBullet = prevBulletTransform;
-			prevBulletTransform = curBullet.transform;
+			curBullet.leadingBullet = prevBullet;
+			prevBullet = curBullet;
 			curBullet.BeginHoming();
 
 			yield return new WaitForSeconds(bulletDelay);

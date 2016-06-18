@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum BulletState { none, parented, absorbedByMasochist, absorbedByVampire, affectedByBlackHole, absorbedByBlackHole, reflected}
+
 public class Bullet : PooledObj {
 	public GameObject explosionPrefab;
 	public float damage;
@@ -37,21 +39,18 @@ public class Bullet : PooledObj {
 		}
 	}
 
-	public bool absorbedByMasochist = false;
-	public bool absorbedByVampire = false;
-	public bool reflected = false;
-	public bool absorbedByBlackHole = false;
-	bool _parentedBullet = false;
-	public bool parentedBullet {
+	BulletState _curState = BulletState.none;
+
+	public BulletState curState {
 		get {
-			return _parentedBullet;
+			return _curState;
 		}
 		set {
-			//If this was part of a homing group and we're telling it not to be, unparent it
-			if (_parentedBullet && !value) {
+			//If this was part of a parented group and we're telling it not to be, unparent it
+			if (_curState == BulletState.parented && value != BulletState.parented) {
 				transform.parent = null;
 			}
-			_parentedBullet = value;
+			_curState = value;
 		}
 	}
 
@@ -59,20 +58,8 @@ public class Bullet : PooledObj {
 	protected float vampShieldHealAmount = 0.05f;
 	protected ShipMovement owningPlayerMovement;
 
-	public bool CheckFlags() {
-		return (absorbedByMasochist || absorbedByVampire || absorbedByBlackHole || reflected);
-	}
-
-	//Any of these flags flipped true represents a bullet that can't be further interacted with
-	public bool CheckFlagsInteractable() {
-		return (!absorbedByMasochist && !absorbedByVampire && !absorbedByBlackHole);
-	}
-
-	public void ClearFlags() {
-		absorbedByMasochist = false;
-		absorbedByVampire = false;
-		absorbedByBlackHole = false;
-		reflected = false;
+	public bool IsInteractable() {
+		return (curState != BulletState.absorbedByBlackHole && curState != BulletState.absorbedByMasochist && curState != BulletState.absorbedByVampire);
 	}
 
 	protected void Awake() {
@@ -97,12 +84,12 @@ public class Bullet : PooledObj {
 	protected IEnumerator TransparencyCheck() {
 		while (true) {
 			if (!sprite.isVisible) {
-				ClearFlags();
+				curState = BulletState.none;
 				ReturnToPool();
 				yield break;
 			}
 
-			if (!transparent && InOwnPlayersTerritory() && !absorbedByMasochist) {
+			if (!transparent && InOwnPlayersTerritory() && curState != BulletState.absorbedByMasochist) {
 				SetTransparency(true);
 			}
 			else if (transparent && !InOwnPlayersTerritory()) {
@@ -116,7 +103,7 @@ public class Bullet : PooledObj {
 	protected virtual void OnTriggerEnter(Collider other) {
 		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
-			ClearFlags();
+			curState = BulletState.none;
 			ReturnToPool();
 		}
 		//Deal damage to any other player hit
@@ -143,16 +130,16 @@ public class Bullet : PooledObj {
 
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
-				ClearFlags();
+				curState = BulletState.none;
 				ReturnToPool();
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
 			else if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is VampireShip) {
 				VampireShip vampireOwningPlayer = GameManager.S.players[(int)owningPlayer] as VampireShip;
-				if (absorbedByVampire == true) {
-					ClearFlags();
-					damage *= -vampShieldHealAmount;
-					playerHit.TakeDamage(damage);
+				if (curState == BulletState.absorbedByVampire) {
+					playerHit.TakeDamage(damage * -vampShieldHealAmount);
+					curState = BulletState.none;
+					damage = 1;
 					ReturnToPool();
 				}
 			}
@@ -170,7 +157,7 @@ public class Bullet : PooledObj {
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
-			ClearFlags();
+			curState = BulletState.none;
 			ReturnToPool();
 		}
 	}

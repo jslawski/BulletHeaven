@@ -41,17 +41,21 @@ public class Reflector : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		//Convert any bullet that enters the reflector, and shoot it back at the opponent
 		if (other.tag == "Bullet" && other.gameObject.GetComponent<Bullet>().owningPlayer != owningPlayer) {
+
 			float sprayRange = 3f;
 			
 			//Get the bullet that is getting reflected
 			Bullet otherBullet = other.gameObject.GetComponent<Bullet>();
 			Vector3 bulletPosition = otherBullet.gameObject.transform.position;
 
+			if (!otherBullet.IsInteractable()) {
+				return;
+			}
+
 			//Get the opponent player value of the bullet
 			Player otherPlayer = otherBullet.owningPlayer;
 			if (otherPlayer != Player.none) {
-				otherBullet.reflected = true;
-				otherBullet.parentedBullet = false;
+				otherBullet.curState = BulletState.reflected;
 
 				Vector3 otherPlayerPosition = GameManager.S.players[(int)otherPlayer].transform.position;
 
