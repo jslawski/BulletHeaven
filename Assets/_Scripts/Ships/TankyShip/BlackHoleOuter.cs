@@ -23,9 +23,14 @@ public class BlackHoleOuter : MonoBehaviour {
 
 			if (bullet.curState == BulletState.parented) {
 				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
-
-				bullet.physics.velocity = parentPhysics.velocity;
-				bullet.physics.acceleration = parentPhysics.acceleration;
+				if (parentPhysics != null) {
+					bullet.physics.velocity = parentPhysics.velocity;
+					bullet.physics.acceleration = parentPhysics.acceleration;
+				}
+				else {
+					bullet.physics.velocity = 10f * Random.insideUnitCircle;
+					bullet.physics.acceleration = Vector2.zero;
+				}
 				bullet.curState = BulletState.affectedByBlackHole;
 			}
 
