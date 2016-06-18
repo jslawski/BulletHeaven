@@ -5,7 +5,7 @@ public class TrailBullet : Bullet {
 	[HideInInspector]
 	public Transform target;
 	[HideInInspector]
-	public Transform leadingBullet;
+	public Bullet leadingBullet;
 	float homingForce = 30f;
 
 	float timeElapsed = 0f;
@@ -19,14 +19,16 @@ public class TrailBullet : Bullet {
 
 	IEnumerator BeginHomingCoroutine() {
 		while (true) {
-			if (CheckFlags()) {
+			if (curState != BulletState.none) {
+				physics.acceleration = Vector3.zero;
 				break;
 			}
+
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed / timeToReachFullSpeed;
 			physics.velocity = physics.velocity.normalized * Mathf.Lerp(startVelocity, endVelocity, percent);
 
-			if (leadingBullet == null) {
+			if (leadingBullet == null || leadingBullet.curState != BulletState.none) {
 				Vector3 targetVector = (target.position - transform.position).normalized;
 				physics.acceleration = targetVector * homingForce;
 			}

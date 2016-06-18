@@ -39,7 +39,7 @@ public class RotatingCircleWave : MonoBehaviour {
 				newBullet.transform.SetParent(transform);
 				newBullet.transform.position = gameObject.transform.position;
 				newBullet.physics.actOnLocalSpace = true;
-				newBullet.parentedBullet = true;
+				newBullet.curState = BulletState.parented;
 				newBullet.physics.velocity = bulletVelocity * direction.PolarToCartesian().normalized;
 
 				curAngle += radDelta;

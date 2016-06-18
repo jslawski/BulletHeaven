@@ -17,23 +17,24 @@ public class BlackHoleOuter : MonoBehaviour {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 
 			//Don't do anything if the bullet can't be interacted with
-			if (!bullet.CheckFlagsInteractable()) {
+			if (!bullet.IsInteractable()) {
 				return;
 			}
 
-			bullet.absorbedByBlackHole = true;
-			if (bullet.parentedBullet) {
+			if (bullet.owningPlayer != blackHole.owningPlayer) {
+				bullet.curState = BulletState.affectedByBlackHole;
+				float t = 1 - (other.transform.position - transform.position).magnitude / outerRadius;
+				bullet.physics.velocity *= blackHole.fieldSlowScalar;
+				bullet.physics.acceleration = (transform.position - other.transform.position).normalized * Mathf.Lerp(0, blackHole.gravityForce, t);
+			}
+
+			if (bullet.curState == BulletState.parented) {
 				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
 
 				bullet.physics.velocity = parentPhysics.velocity;
 				bullet.physics.acceleration = parentPhysics.acceleration;
-				bullet.parentedBullet = false;
-			}
-			if (bullet.owningPlayer != blackHole.owningPlayer) {
-				float t = 1-(other.transform.position - transform.position).magnitude/outerRadius;
-				bullet.physics.velocity *= blackHole.fieldSlowScalar;
-				bullet.physics.acceleration = (transform.position - other.transform.position).normalized * Mathf.Lerp(0, blackHole.gravityForce, t);
-			}
+				bullet.curState = BulletState.affectedByBlackHole;
+			}	
         }
 		else if (other.gameObject.tag == "Player") {
 			PlayerShip otherPlayer = other.gameObject.GetComponentInParent<PlayerShip>();

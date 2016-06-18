@@ -67,7 +67,7 @@ public class VampireShield : MonoBehaviour {
 		//Clean up all of the remaining bullets being absorbed, and teleport them
 		//directly to the player's hitbox
 		for (int i = 0; i < absorbedBullets.Count; i++) {
-			if (absorbedBullets[i].absorbedByVampire == true) {
+			if (absorbedBullets[i].curState == BulletState.absorbedByVampire) {
 				Vector3 endPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 				absorbedBullets[i].transform.position = endPosition;
 			}
@@ -88,7 +88,7 @@ public class VampireShield : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (shieldSprite.enabled == true && other.tag == "Bullet" && other.GetComponent<Bullet>().owningPlayer != owningPlayer) {
 			Bullet thisBullet = other.GetComponent<Bullet>();
-			if (thisBullet.CheckFlagsInteractable()) {
+			if (thisBullet.IsInteractable()) {
 				StartCoroutine(AbsorbBullet(other.GetComponent<Bullet>()));
 			}
 		}
@@ -99,8 +99,7 @@ public class VampireShield : MonoBehaviour {
 		float lerpSpeed = 0.4f;
 
 		absorbedBullets.Add(thisBullet);
-		thisBullet.absorbedByVampire = true;
-		thisBullet.parentedBullet = false;
+		thisBullet.curState = BulletState.absorbedByVampire;
 
 		//Change color of the bullet and halt its velocity
 		thisBullet.owningPlayer = thisPlayer.player;
@@ -109,7 +108,7 @@ public class VampireShield : MonoBehaviour {
 		//Lerp to a position inside the shield
 		Vector3 targetPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 
-		while (thisBullet.absorbedByVampire == true && (targetPosition - thisBullet.transform.position).magnitude >= 0.01f) {
+		while (thisBullet.curState == BulletState.absorbedByVampire && (targetPosition - thisBullet.transform.position).magnitude >= 0.01f) {
 			if (thisBullet == null) {
 				yield break;
 			}

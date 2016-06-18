@@ -69,7 +69,7 @@ public class MasochistShield : MonoBehaviour {
 		shieldSprite.enabled = false;
 		thisPlayer.shieldUp = false;
 
-		Vector3 reflectionVector = GameManager.S.players[(int)otherPlayer].player == Player.player1 ? Vector3.left : Vector3.right;
+		Vector3 reflectionVector = GameManager.S.players[(int)owningPlayer].player == Player.player1 ? Vector3.right : Vector3.left;
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
 			if (bullet == null) {
@@ -77,15 +77,14 @@ public class MasochistShield : MonoBehaviour {
 			}
 
 			Vector3 bulletPosition = bullet.gameObject.transform.position;
-			bullet.gameObject.GetComponent<Bullet>().absorbedByMasochist = false;
+			bullet.gameObject.GetComponent<Bullet>().curState = BulletState.none;
 
-			if (otherPlayer != Player.none) {
-				//Determine shooting vector
-				Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);
+			//Determine shooting vector
+			Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);
 
-				//Shoot the bullet back at the opponent
-				bullet.velocity = reflectionVector * reflectionVelocity;
-			}
+			//Shoot the bullet back at the opponent
+			bullet.velocity = reflectionVector * reflectionVelocity;
+
 			yield return new WaitForFixedUpdate();
 		}
 
@@ -96,7 +95,8 @@ public class MasochistShield : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Bullet" && other.GetComponent<Bullet>().owningPlayer != owningPlayer) {
 			Bullet thisBullet = other.GetComponent<Bullet>();
-			if (thisBullet.CheckFlagsInteractable()) {
+			//Only absorb bullets that haven't been absorbed by anything else
+			if (thisBullet.IsInteractable()) {
 				if (absorbedBullets.Count < maxBulletCount) {
 					StartCoroutine(OrbitBullet(other.GetComponent<Bullet>()));
 				}
@@ -116,27 +116,23 @@ public class MasochistShield : MonoBehaviour {
 		//Add the bullet to the list
 		absorbedBullets.Add(thisBullet.GetComponent<PhysicsObj>());
 
-		//Make note of the opposing player
-		otherPlayer = thisBullet.owningPlayer;
-
 		//Change ownership of the bullet and halt its velocity
 		thisBullet.owningPlayer = owningPlayer;
-		thisBullet.absorbedByMasochist = true;
-		thisBullet.parentedBullet = false;
+		thisBullet.curState = BulletState.absorbedByMasochist;
 		thisBullet.GetComponent<PhysicsObj>().velocity = Vector3.zero;
 
 		//Lerp to a position inside the shield
-		Vector3 targetPosition = new Vector3(transform.position.x + radius, transform.position.y + radius, 0);
+		//Vector3 targetPosition = new PolarCoordinate(radius, thisBullet.transform.position).PolarToCartesian() + transform.position;
 
-		while ((targetPosition - thisBullet.transform.position).magnitude >= 0.01f) {
-			thisBullet.transform.position = Vector3.Lerp(thisBullet.transform.position, targetPosition, lerpSpeed);
-			yield return new WaitForFixedUpdate();
-		}
+		//while ((targetPosition - thisBullet.transform.position).magnitude >= 0.01f) {
+		//	thisBullet.transform.position = Vector3.Lerp(thisBullet.transform.position, targetPosition, lerpSpeed);
+		//	yield return new WaitForFixedUpdate();
+		//}
 
 		//Orbit the bullets around the player
 		PolarCoordinate bulletPos = new PolarCoordinate(radius, thisBullet.transform.position);
 		
-		while (thisBullet.absorbedByMasochist) {
+		while (thisBullet.curState == BulletState.absorbedByMasochist) {
 			bulletPos.angle += orbitSpeed;
 			thisBullet.transform.position = transform.position + bulletPos.PolarToCartesian();
 			yield return new WaitForFixedUpdate();

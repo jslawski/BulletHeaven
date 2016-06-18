@@ -21,12 +21,12 @@ public class BlackHoleInner : MonoBehaviour {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 
 			//Don't interact if the bullet has already interacted with something
-			if (bullet.CheckFlagsInteractable()) {
+			if (!bullet.IsInteractable()) {
 				return;
 			}
 
-			bullet.absorbedByBlackHole = true;
-			bullet.parentedBullet = false;
+			bullet.curState = BulletState.absorbedByBlackHole;
+
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				bullet.physics.velocity *= 0.2f;
 				blackHole.AddBullet(bullet);
@@ -55,7 +55,7 @@ public class BlackHoleInner : MonoBehaviour {
 		else if (other.gameObject.tag == "Bullet") {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			//Don't interact if the bullet has already interacted with something
-			if (bullet.CheckFlagsInteractable()) {
+			if (bullet.curState != BulletState.absorbedByBlackHole) {
 				return;
 			}
 
