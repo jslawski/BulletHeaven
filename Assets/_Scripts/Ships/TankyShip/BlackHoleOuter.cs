@@ -21,6 +21,14 @@ public class BlackHoleOuter : MonoBehaviour {
 				return;
 			}
 
+			if (bullet.curState == BulletState.parented) {
+				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
+
+				bullet.physics.velocity = parentPhysics.velocity;
+				bullet.physics.acceleration = parentPhysics.acceleration;
+				bullet.curState = BulletState.affectedByBlackHole;
+			}
+
 			if (bullet.owningPlayer != blackHole.owningPlayer) {
 				bullet.curState = BulletState.affectedByBlackHole;
 				float t = 1 - (other.transform.position - transform.position).magnitude / outerRadius;
@@ -28,13 +36,7 @@ public class BlackHoleOuter : MonoBehaviour {
 				bullet.physics.acceleration = (transform.position - other.transform.position).normalized * Mathf.Lerp(0, blackHole.gravityForce, t);
 			}
 
-			if (bullet.curState == BulletState.parented) {
-				PhysicsObj parentPhysics = bullet.transform.parent.GetComponent<PhysicsObj>();
-
-				bullet.physics.velocity = parentPhysics.velocity;
-				bullet.physics.acceleration = parentPhysics.acceleration;
-				bullet.curState = BulletState.affectedByBlackHole;
-			}	
+				
         }
 		else if (other.gameObject.tag == "Player") {
 			PlayerShip otherPlayer = other.gameObject.GetComponentInParent<PlayerShip>();
