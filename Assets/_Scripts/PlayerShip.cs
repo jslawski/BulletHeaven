@@ -87,7 +87,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	protected void Start() {
 		health = maxHealth;
-		durationBar.SetPercent(0);
+		if (durationBar != null) {
+			durationBar.SetPercent(0);
+		}
 	}
 	
 	// Update is called once per frame
