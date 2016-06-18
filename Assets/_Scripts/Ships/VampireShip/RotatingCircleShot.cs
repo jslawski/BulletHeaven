@@ -1,12 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RotatingCircleShot : MonoBehaviour {
-	public Player owningPlayer;
+public class RotatingCircleShot : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	RotatingCircleWave rotatingCircleWavePrefab;
 
 	float timeBetweenWaves = 0.2f;
 	int numWaves = 4;
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
+	}
 
 	// Use this for initialization
 	void Awake () {

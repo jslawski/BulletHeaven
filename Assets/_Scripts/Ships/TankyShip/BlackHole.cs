@@ -2,8 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class BlackHole : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class BlackHole : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
 
 	List<Bullet> trappedBullets = new List<Bullet>();
 	int maxNumTrappedBullets = 100;
@@ -33,6 +42,10 @@ public class BlackHole : MonoBehaviour {
 
 	float rotationSpeed = -20f;
 	bool hasExploded = false;
+
+	public void FireBurst() {
+		//This does nothing to appease the interface
+	}
 
 	// Use this for initialization
 	IEnumerator Start () {
@@ -95,6 +108,7 @@ public class BlackHole : MonoBehaviour {
 		explosion.Play();
 		Collider[] hitTargets = Physics.OverlapSphere(transform.position, explosionRadius);
 		foreach (Collider target in hitTargets) {
+			//JPS: Bug, if a protag ship gets hit, it won't have a PlayerShip component
 			if (target.gameObject.tag == "Player" || target.gameObject.tag == "ProtagShip") {
 				DamageableObject shipHit = target.GetComponentInParent<DamageableObject>();
 				shipHit.TakeDamage(explosionDamage);

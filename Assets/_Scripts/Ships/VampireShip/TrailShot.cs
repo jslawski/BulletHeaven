@@ -2,8 +2,18 @@
 using System.Collections;
 using PolarCoordinates;
 
-public class TrailShot : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+public class TrailShot : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public Transform target;
 	public TrailBullet bulletPrefab;
 

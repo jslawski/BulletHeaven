@@ -1,8 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExplodeAttack : MonoBehaviour {
-	public Player owningPlayer;
+public class ExplodeAttack : MonoBehaviour, BombAttack {
+	Player _owningPlayer = Player.none;
+
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+		}
+	}
+
 	public GameObject explosionPrefab;
 	ParticleSystem explosionParticles;
 
@@ -28,13 +38,15 @@ public class ExplodeAttack : MonoBehaviour {
 		return baseDamage * damageScalar;
 	}
 
-	public void ExecuteExplosion() {
+	public void FireBurst() {
 		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
 
 		//Scale the explosion size based on the damage multiplier
 		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
-		explosionRadius = explosionRadius * masochistPlayer.damageMultiplier;
-		explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.damageMultiplier;
+		if (masochistPlayer != null) {
+			explosionRadius = explosionRadius * masochistPlayer.damageMultiplier;
+			explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.damageMultiplier;
+		}
 
 		Collider[] hitTargets = Physics.OverlapSphere(transform.position, explosionRadius);
 
@@ -62,7 +74,12 @@ public class ExplodeAttack : MonoBehaviour {
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
 			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
-			damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
+			if (masochistPlayer != null) {
+				damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
+			}
+			else {
+				damageDealt = CalculateDamageDealt(other.transform);
+			}
 			otherShip.TakeDamage(damageDealt);
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
