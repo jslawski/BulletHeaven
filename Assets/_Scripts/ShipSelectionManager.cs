@@ -121,6 +121,7 @@ public class ShipSelectionManager : MonoBehaviour {
 				StartCoroutine(RandomShip());
 			}
 			else {
+				SoundManager.instance.Play("ShipConfirm");
 				print(player + " is ready.");
 				playerReady = true;
 			}
@@ -131,6 +132,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(start) && AllPlayersReady()) {
+			SoundManager.instance.Play("StartGame");
 			Application.LoadLevel("_Scene_Main");
 		}
 
@@ -149,6 +151,7 @@ public class ShipSelectionManager : MonoBehaviour {
 					StartCoroutine(RandomShip());
 				}
 				else {
+					SoundManager.instance.Play("ShipConfirm");
 					print(player + " is ready.");
 					playerReady = true;
 				}
@@ -159,6 +162,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			}
 
 			if (device.MenuWasPressed && AllPlayersReady()) {
+				SoundManager.instance.Play("StartGame");
 				Application.LoadLevel("_Scene_Main");
 			}
 		}
@@ -171,6 +175,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			}
 			//Scroll each ship in the correct direction
 			ship.Scroll(toTheRight);
+			SoundManager.instance.Play("ShipScroll");
 		}
 		//print(selectedShip);
 	}

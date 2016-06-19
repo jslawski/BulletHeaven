@@ -41,7 +41,20 @@ public class DualLasers : MonoBehaviour {
 			transform.localPosition = Vector3.zero;
 		}
 		//Wait while charging
-		yield return new WaitForSeconds(chargeTime);
+		SoundManager.instance.Play("BeamDetonate");
+		for (float i = 0; i < chargeTime; i += Time.fixedDeltaTime) {
+			if (Input.GetKeyUp(X)) {
+				SoundManager.instance.Stop("BeamDetonate");
+				yield break;	
+			}
+			else if (thisPlayer.device != null && thisPlayer.device.Action3.WasReleased) {
+				SoundManager.instance.Stop("BeamDetonate");
+				yield break;
+			}
+
+			yield return new WaitForFixedUpdate();
+		}
+		//yield return new WaitForSeconds(chargeTime);
 		StartCoroutine(LoseEnergy());
 		thisPlayer.playerShooting.ExpendAttackSlot();
 		//Turn on the hitboxes
@@ -63,6 +76,7 @@ public class DualLasers : MonoBehaviour {
 
 	IEnumerator LoseEnergy() {
 		float timeElapsed = 0;
+		SoundManager.instance.Play("DualLasers");
 		while (!hasEnded) {
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed/maxDuration;
@@ -79,6 +93,7 @@ public class DualLasers : MonoBehaviour {
 
 			yield return null;
 		}
+		SoundManager.instance.Stop("DualLasers");
 	}
 
 	void EndLaserAttack() {

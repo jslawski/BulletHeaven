@@ -150,6 +150,12 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 	
+	public void Stop(string soundName) {
+		int channel = GetChannelIndex(soundName);
+
+		soundChannels[channel].Stop();
+	}
+
 	public AudioSource GetChannelOfSound(string soundName){
 		return soundChannels[GetChannelIndex(soundName)];
 	}
