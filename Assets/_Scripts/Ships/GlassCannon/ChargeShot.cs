@@ -53,6 +53,7 @@ public class ChargeShot : MonoBehaviour {
 		if (Input.GetKeyUp(Y) || (player != null && player.device != null && player.device.Action4.WasReleased)) {
 			//Cancel the charge if we're not ready yet
 			if (state == ChargeState.charging) {
+				SoundManager.instance.Stop("ChargeAttackCharge");
 				state = ChargeState.cancelled;
 				Destroy(chargeParticle.gameObject);
 				Destroy(gameObject, 2f);
@@ -76,6 +77,7 @@ public class ChargeShot : MonoBehaviour {
 		chargeParticle.startColor = startColor;
 
 		chargeParticle.Play();
+		SoundManager.instance.Play("ChargeAttackCharge");
 		while (timeElapsed < chargeTime && state == ChargeState.charging) {
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed/chargeTime;
@@ -114,6 +116,8 @@ public class ChargeShot : MonoBehaviour {
 		//See if we would hit anything by firing a bullet in this direction
 		RaycastHit[] hitscans = Physics.SphereCastAll(shot, shotWidth, 50f);
 		Debug.DrawRay(shot.origin, shot.direction * 50f, Color.blue, 10f);
+
+		SoundManager.instance.Play("ChargeAttackShoot");
 
 		foreach (var hitscan in hitscans) {
 			//If we hit anything with the hitscan

@@ -150,6 +150,12 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 	
+	public void SetPitch(string soundName, float newPitch) {
+		int channel = GetChannelIndex(soundName);
+
+		soundChannels[channel].pitch = newPitch;
+	}
+
 	public void Stop(string soundName) {
 		int channel = GetChannelIndex(soundName);
 
