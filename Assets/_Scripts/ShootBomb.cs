@@ -140,6 +140,7 @@ public class ShootBomb : MonoBehaviour {
 
 		//Don't fire if we are out of ammo
 		if (curAmmo == 0) {
+			SoundManager.instance.Play("OutOfAmmo", 1);
 			return;
 		}
 
@@ -169,6 +170,7 @@ public class ShootBomb : MonoBehaviour {
 	//Executing any attack results in expending an ammo slot
 	public void ExpendAttackSlot() {
 		if (curAmmo == 0) {
+			SoundManager.instance.Play("OutOfAmmo", 1);
 			return;
 		}
 		bombShootCooldownRemaining = bombShootCooldown;

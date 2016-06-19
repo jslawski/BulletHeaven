@@ -45,6 +45,7 @@ public class MasochistShield : MonoBehaviour {
 
 	// Use this for initialization
 	public void ActivateShield () {
+		SoundManager.instance.Play("ShieldUp");
 		thisPlayer.shieldUp = true;
 		GetComponentInChildren<SpriteRenderer>().color = thisPlayer.playerColor;
 		StartCoroutine(RotateShield());

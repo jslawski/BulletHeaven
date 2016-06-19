@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public struct NameClipChannel {
 	public string key;
 	public AudioClip value;
-	[Range(0,16)]
+	[Range(0,20)]
 	public int channel;
 }
 

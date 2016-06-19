@@ -48,6 +48,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	// Use this for initialization
 	IEnumerator Start () {
+		SoundManager.instance.Play("LifeSapZone");
 		particle = transform.FindChild("Particle");
 		particle.gameObject.SetActive(false);
 		zoneParticles = GetComponentInChildren<ParticleSystem>();

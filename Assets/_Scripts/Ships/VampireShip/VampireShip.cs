@@ -60,23 +60,33 @@ public class VampireShip : PlayerShip {
 
 		if (device != null) {
 			//Activate a shield if the button was pressed
-			if (device.Action4.WasPressed && playerShooting.curAmmo != 0 && !shieldUp) {
-				VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
-				newShield.transform.parent = gameObject.transform;
-				newShield.thisPlayer = GetComponent<VampireShip>();
-				newShield.owningPlayer = player;
-				newShield.ActivateShield();
-				playerShooting.ExpendAttackSlot();
+			if (device.Action4.WasPressed) {
+				if (playerShooting.curAmmo != 0 && !shieldUp) {
+					VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
+					newShield.transform.parent = gameObject.transform;
+					newShield.thisPlayer = GetComponent<VampireShip>();
+					newShield.owningPlayer = player;
+					newShield.ActivateShield();
+					playerShooting.ExpendAttackSlot();
+				}
+				else {
+					SoundManager.instance.Play("OutOfAmmo", 1);
+				}
 			}
 		}
 		else if (device == null) {
-			if (Input.GetKeyDown(Y) && playerShooting.curAmmo != 0 && !shieldUp) {
-				VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
-				newShield.transform.parent = gameObject.transform;
-				newShield.thisPlayer = GetComponent<VampireShip>();
-				newShield.owningPlayer = player;
-				newShield.ActivateShield();
-				playerShooting.ExpendAttackSlot();
+			if (Input.GetKeyDown(Y)) {
+				if (playerShooting.curAmmo != 0 && !shieldUp) {
+					VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
+					newShield.transform.parent = gameObject.transform;
+					newShield.thisPlayer = GetComponent<VampireShip>();
+					newShield.owningPlayer = player;
+					newShield.ActivateShield();
+					playerShooting.ExpendAttackSlot();
+				}
+				else {
+					SoundManager.instance.Play("OutOfAmmo", 1);
+				}
 			}
 		}
 	}
