@@ -110,6 +110,7 @@ public class ChargeShot : MonoBehaviour {
 	void Fire() {
 		state = ChargeState.fired;
 		player.playerShooting.ExpendAttackSlot();
+		shotParticle.transform.SetParent(null, true);
 		shotParticle.Play();
 
 		Ray shot = new Ray(transform.position, transform.up);
