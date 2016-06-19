@@ -48,6 +48,7 @@ public class ClusterBomb : MonoBehaviour, BombAttack {
 	}
 
 	void Explode(float explosionDamage, float explosionRadius) {
+		SoundManager.instance.Play("Explosion");
 		Collider[] allObjectsHit = Physics.OverlapSphere(transform.position, explosionRadius);
 		foreach (var obj in allObjectsHit) {
 			if (obj.gameObject.tag == "Player") {

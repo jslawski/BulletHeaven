@@ -67,6 +67,7 @@ public class ProximityMine : MonoBehaviour {
 		inExplodeCoroutine = true;
 
 		SoundManager.instance.Play("BombExplode");
+		SoundManager.instance.Play("Explosion");
 		hasExploded = true;
 		hitbox.enabled = false;
 		GetComponent<SpriteRenderer>().enabled = false;

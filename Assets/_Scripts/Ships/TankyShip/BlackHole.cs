@@ -50,6 +50,7 @@ public class BlackHole : MonoBehaviour, BombAttack {
 	// Use this for initialization
 	IEnumerator Start () {
 		Invoke("Explode", maxLifespan);
+		SoundManager.instance.Play("BlackHole");
 		inner = GetComponentInChildren<BlackHoleInner>();
 		inner.GetComponent<SphereCollider>().enabled = false;
 		outer = GetComponentInChildren<BlackHoleOuter>();
@@ -89,6 +90,7 @@ public class BlackHole : MonoBehaviour, BombAttack {
 			return;
 		}
 		hasExploded = true;
+		SoundManager.instance.Play("Explosion");
 		foreach (var bullet in trappedBullets) {
 			if (bullet != null) {
 				bullet.gameObject.layer = LayerMask.NameToLayer("Default");

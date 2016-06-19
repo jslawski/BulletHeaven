@@ -179,6 +179,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	IEnumerator DealDamageCoroutine() {
 		while (targetShip != null) {
+			SoundManager.instance.Play("DrainLife", 1);
 			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);
 			owner.TakeDamage(-damagePerTick * healScalar);
