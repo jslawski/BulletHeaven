@@ -121,7 +121,7 @@ public class ShipSelectionManager : MonoBehaviour {
 				StartCoroutine(RandomShip());
 			}
 			else {
-				SoundManager.instance.Play("ShipConfirm");
+				SoundManager.instance.Play("ShipConfirm", 1);
 				print(player + " is ready.");
 				playerReady = true;
 			}
@@ -152,7 +152,7 @@ public class ShipSelectionManager : MonoBehaviour {
 					StartCoroutine(RandomShip());
 				}
 				else {
-					SoundManager.instance.Play("ShipConfirm");
+					SoundManager.instance.Play("ShipConfirm", 1);
 					print(player + " is ready.");
 					playerReady = true;
 				}
