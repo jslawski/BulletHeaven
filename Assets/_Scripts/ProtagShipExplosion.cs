@@ -26,6 +26,7 @@ public class ProtagShipExplosion : MonoBehaviour {
 				Vector3 spawnPos = transform.position + new Vector3(randCircle.x, randCircle.y, 0);
 
 				Bullet newBullet = bulletPrefab.GetPooledInstance<Bullet>(transform.position);
+				newBullet.owningPlayer = Player.none;
 				newBullet.physics.velocity = (transform.position - spawnPos).normalized * bulletMovespeed;
 				newBullet.physics.acceleration = (transform.position - spawnPos).normalized * bulletAcceleration;
 			}
