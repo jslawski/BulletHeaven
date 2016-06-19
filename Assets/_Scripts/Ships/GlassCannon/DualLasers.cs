@@ -2,7 +2,19 @@
 using System.Collections;
 
 public class DualLasers : MonoBehaviour {
-	public Player owningPlayer;
+	Player _owningPlayer = Player.none;
+	public Player owningPlayer {
+		get {
+			return _owningPlayer;
+		}
+		set {
+			_owningPlayer = value;
+			thisPlayer = GameManager.S.players[(int)value];
+			foreach (var laser in lasers) {
+				laser.startColor = thisPlayer.playerColor;
+			}
+		}
+	}
 	PlayerShip thisPlayer;
 
 	GameObject explosionPrefab;
