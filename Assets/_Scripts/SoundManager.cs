@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public struct NameClipChannel {
 	public string key;
 	public AudioClip value;
-	[Range(0,15)]
+	[Range(0,16)]
 	public int channel;
 }
 
@@ -18,7 +18,7 @@ public struct ClipChannelPair {
 public class SoundManager : MonoBehaviour {
 	private static SoundManager m_instance;
 	private AudioSource[] soundChannels;
-	[Header("Music should go on channel 0, sound effects on channels 1-15.")]
+	[Tooltip("Music should go on channel 0, looping sound effects on channel 1, non-looping sound effects on channels 2-16.")]
 	public NameClipChannel[] sounds_;
 	private Dictionary<string, ClipChannelPair> sounds;
 	
@@ -92,6 +92,11 @@ public class SoundManager : MonoBehaviour {
 		//Set music to looping
 		soundChannels[0].loop = true;
 		soundChannels[0].volume = 0.75f;
+		
+		//Set looping sound effect channel to loop
+		if (maxChannelNum > 0) {
+			soundChannels[1].loop = true;
+		}
 
 		DontDestroyOnLoad (gameObject);
 	}
