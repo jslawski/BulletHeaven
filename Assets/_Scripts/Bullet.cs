@@ -85,6 +85,7 @@ public class Bullet : PooledObj {
 		while (true) {
 			if (!sprite.isVisible) {
 				curState = BulletState.none;
+				owningPlayer = Player.none;
 				ReturnToPool();
 				yield break;
 			}
@@ -104,6 +105,7 @@ public class Bullet : PooledObj {
 		//Destroy bullets upon hitting a killzone
 		if (other.tag == "KillZone") {
 			curState = BulletState.none;
+			owningPlayer = Player.none;
 			ReturnToPool();
 		}
 		//Deal damage to any other player hit
@@ -131,6 +133,7 @@ public class Bullet : PooledObj {
 				GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 				Destroy(explosion, 5f);
 				curState = BulletState.none;
+				owningPlayer = Player.none;
 				ReturnToPool();
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
@@ -140,6 +143,7 @@ public class Bullet : PooledObj {
 					playerHit.TakeDamage(damage * -vampShieldHealAmount);
 					curState = BulletState.none;
 					damage = 1;
+					owningPlayer = Player.none;
 					ReturnToPool();
 				}
 			}
@@ -158,6 +162,7 @@ public class Bullet : PooledObj {
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
 			curState = BulletState.none;
+			owningPlayer = Player.none;
 			ReturnToPool();
 		}
 	}
