@@ -98,6 +98,7 @@ public class ChargeShot : MonoBehaviour {
 		}
 
 		if (state != ChargeState.cancelled) {
+			SoundManager.instance.Play("FullyCharged");
 			state = ChargeState.charged;
 		}
 
@@ -119,6 +120,7 @@ public class ChargeShot : MonoBehaviour {
 		Debug.DrawRay(shot.origin, shot.direction * 50f, Color.blue, 10f);
 
 		SoundManager.instance.Play("ChargeAttackShoot");
+		SoundManager.instance.Stop("FullyCharged");
 
 		foreach (var hitscan in hitscans) {
 			//If we hit anything with the hitscan

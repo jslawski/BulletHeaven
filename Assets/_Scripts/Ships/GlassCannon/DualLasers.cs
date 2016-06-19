@@ -81,6 +81,8 @@ public class DualLasers : MonoBehaviour {
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed/maxDuration;
 
+			SoundManager.instance.SetPitch("DualLasers", 1 - percent);
+
 			foreach (var laser in lasers) {
 				laser.startSize = Mathf.Lerp(maxStartSize, minStartSize, percent);
 			}

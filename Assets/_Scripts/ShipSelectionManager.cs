@@ -127,6 +127,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			}
 		}
 		else if (Input.GetKeyDown(B) && playerReady) {
+			SoundManager.instance.Play("ShipCancel");
 			print(player + " is no longer ready.");
 			playerReady = false;
 		}
@@ -157,6 +158,7 @@ public class ShipSelectionManager : MonoBehaviour {
 				}
 			}
 			else if (device.Action2.WasPressed && playerReady) {
+				SoundManager.instance.Play("ShipCancel");
 				print(player + " is no longer ready.");
 				playerReady = false;
 			}
