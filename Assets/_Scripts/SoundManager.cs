@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour {
 			}
 			_easterEgg = value;
 			if (!value) {
-				Play("MainTheme");
+				Play("TitleTheme");
 			}
 		}
 	}
@@ -108,7 +108,7 @@ public class SoundManager : MonoBehaviour {
 	
 	public void Play(string soundName){
 		//Only play the main theme on the title screen
-		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "MainTheme") {
+		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "TitleTheme") {
 			return;
 		}
 
@@ -122,6 +122,7 @@ public class SoundManager : MonoBehaviour {
 		if (channel == 0) {
 			soundChannels[channel].clip = sounds[soundName].audio;
 			soundChannels[channel].pitch = 1;
+			soundChannels[channel].volume = 1;
 			soundChannels[channel].Play();
 		}
 		else {
@@ -133,7 +134,7 @@ public class SoundManager : MonoBehaviour {
 	
 	public void Play(string soundName, float pitch){
 		//Only play the main theme on the title screen
-		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "MainTheme") {
+		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "TitleTheme") {
 			return;
 		}
 
@@ -159,6 +160,12 @@ public class SoundManager : MonoBehaviour {
 		int channel = GetChannelIndex(soundName);
 
 		soundChannels[channel].pitch = newPitch;
+	}
+
+	public void SetVolume(string soundName, float newVolume) {
+		int channel = GetChannelIndex(soundName);
+
+		soundChannels[channel].volume = newVolume;
 	}
 
 	public void Stop(string soundName) {

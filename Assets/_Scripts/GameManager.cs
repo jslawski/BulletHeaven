@@ -41,6 +41,12 @@ public static bool CHECKING_MENU = false;
 	[SerializeField]
 	DamageValues[] damageValues;
 
+	Image fadePanel;
+	public float fadeFromTitleDuration = 0.5f;
+	public float fadeFromMainDuration = 0.5f;
+	public float fadeFromShipSelectDuration = 2f;
+	string curTheme = "TitleTheme";
+
 	void Awake() {
 		if (S != null) {
 			Destroy(this);
@@ -59,7 +65,7 @@ public static bool CHECKING_MENU = false;
 
 	// Use this for initialization
 	void Start () {
-		SoundManager.instance.Play("MainTheme");
+		SoundManager.instance.Play("TitleTheme");
 
 		if (slowMo) {
 			Time.timeScale *= 0.15f;
@@ -193,14 +199,36 @@ public static bool CHECKING_MENU = false;
 			CHECKING_MENU = true;
 			bool menuWasPressed = InputManager.ActiveDevice.MenuWasPressed;
             if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-				SceneManager.LoadScene("_Scene_Title");
+				TransitionScene(fadeFromMainDuration, "_Scene_Title");
 				gameState = GameStates.titleScreen;
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-				SceneManager.LoadScene("_Scene_Ship_Selection");
+				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection");
+
+				
 			}
 			CHECKING_MENU = false;
 		}
+	}
+
+	public void TransitionScene(float fadeDuration, string nextScene) {
+		fadePanel = GameObject.Find("FadePanel").GetComponent<Image>();
+		StartCoroutine(TransitionSceneCoroutine(fadeDuration, nextScene));
+	}
+
+	IEnumerator TransitionSceneCoroutine(float fadeDurationInSeconds, string nextScene) {
+		for (float i = 0; i <= fadeDurationInSeconds; i += Time.fixedDeltaTime) {
+			//Fade out screen
+			Color curColor = fadePanel.color;
+			curColor.a = i / fadeDurationInSeconds;
+			fadePanel.color = curColor;
+
+			//Fade out music
+			SoundManager.instance.SetVolume(curTheme, 1 - i / fadeDurationInSeconds);
+
+			yield return new WaitForFixedUpdate();
+		}
+		SceneManager.LoadScene(nextScene);
 	}
 
 	public void DisplayDamage(Player playerDamaged, float damageIn) {
@@ -249,17 +277,23 @@ public static bool CHECKING_MENU = false;
 		print("Level " + SceneManager.GetActiveScene().name + " was loaded.");
 		switch (SceneManager.GetActiveScene().name) {
 			case "_Scene_Title":
+				SoundManager.instance.Play("TitleTheme");
+				curTheme = "TitleTheme";
 				gameState = GameStates.titleScreen;
 				Reset();
 				break;
 			case "_Scene_Ship_Selection":
 				gameState = GameStates.shipSelect;
+				SoundManager.instance.Play("ShipSelectTheme");
+				curTheme = "ShipSelectTheme";
 				PassControllersToShipSelect();
 				break;
 			case "_Scene_Main":
 				Reset();
 				yield return null;
 				StartGame();
+				SoundManager.instance.Play("FightTheme");
+				curTheme = "FightTheme";
 				break;
 		}
 	}

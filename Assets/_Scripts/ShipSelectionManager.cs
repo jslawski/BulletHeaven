@@ -134,7 +134,7 @@ public class ShipSelectionManager : MonoBehaviour {
 
 		if (Input.GetKeyDown(start) && AllPlayersReady()) {
 			SoundManager.instance.Play("StartGame");
-			Application.LoadLevel("_Scene_Main");
+			GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
 		}
 
 		//Controller support
@@ -165,7 +165,7 @@ public class ShipSelectionManager : MonoBehaviour {
 
 			if (device.MenuWasPressed && AllPlayersReady()) {
 				SoundManager.instance.Play("StartGame");
-				Application.LoadLevel("_Scene_Main");
+				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
 			}
 		}
 	}
