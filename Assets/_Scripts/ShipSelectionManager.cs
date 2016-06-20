@@ -177,7 +177,12 @@ public class ShipSelectionManager : MonoBehaviour {
 			}
 			//Scroll each ship in the correct direction
 			ship.Scroll(toTheRight);
-			SoundManager.instance.Play("ShipScroll");
+			if (toTheRight) {
+				SoundManager.instance.Play("ShipScroll", 1.1f);
+			}
+			else {
+				SoundManager.instance.Play("ShipScroll", 1f);
+			}
 		}
 		//print(selectedShip);
 	}

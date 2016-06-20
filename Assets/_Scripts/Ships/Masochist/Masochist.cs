@@ -44,6 +44,7 @@ public class Masochist : PlayerShip {
 		//50% health remaining -> 50% damage increase
 		if (remainingHealthRatio <= 0.5f && damageMultiplier == 1) {
 			damageMultiplier = 1.5f;
+			SoundManager.instance.Play("ActivateAura", 1);
 			curAura = Instantiate(auraPrefab, transform.position, new Quaternion()) as MasochistAura;
 			curAura.player = this;
 		}
