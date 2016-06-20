@@ -179,7 +179,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 	}
 
 	IEnumerator DealDamageCoroutine() {
-		while (targetShip != null) {
+		while (targetShip != null && !targetShip.dead) {
 			SoundManager.instance.Play("DrainLife", 1);
 			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);

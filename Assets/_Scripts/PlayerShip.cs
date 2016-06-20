@@ -73,7 +73,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			}
 		}
 	}
-	protected bool dead = false;
+	public bool dead = false;
 	public bool invincible = false;
 
 	// Use this for initialization
