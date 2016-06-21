@@ -107,8 +107,8 @@ public class SoundManager : MonoBehaviour {
 	}
 	
 	public void Play(string soundName){
-		//Only play the main theme on the title screen
-		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "TitleTheme") {
+		//Only play the main theme and PressStart sound on the title screen
+		if (GameManager.S.gameState == GameStates.titleScreen && soundName != "TitleTheme" && soundName != "PressStart") {
 			return;
 		}
 
