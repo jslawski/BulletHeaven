@@ -8,6 +8,7 @@ public class Bullet : PooledObj {
 	public float damage;
 
 	protected float transparencyCheckCooldown = 0.4f;
+	Color unownedBulletColor = new Color(233f/255f, 154f/255f, 215f/255f);
 
 	public SpriteRenderer sprite;
 	public PhysicsObj physics;
@@ -25,6 +26,9 @@ public class Bullet : PooledObj {
 				owningPlayerMovement = playerShip.playerMovement;
 				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
 				otherPlayer = GameManager.S.players[(int)other].playerMovement;
+			}
+			else {
+				sprite.color = unownedBulletColor;
 			}
 		}
 	}
