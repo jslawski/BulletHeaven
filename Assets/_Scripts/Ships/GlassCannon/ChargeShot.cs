@@ -50,14 +50,13 @@ public class ChargeShot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (player.dead) {
+			state = ChargeState.cancelled;
+		}
 		if (Input.GetKeyUp(Y) || (player != null && player.device != null && player.device.Action4.WasReleased)) {
 			//Cancel the charge if we're not ready yet
 			if (state == ChargeState.charging) {
-				SoundManager.instance.Stop("ChargeAttackCharge");
-				state = ChargeState.cancelled;
-				Destroy(chargeParticle.gameObject);
-				Destroy(gameObject, 2f);
-				player.playerMovement.RestoreSpeed();
+				CancelCharge();
 			}
 			else if (state == ChargeState.charged) {
 				Fire();
@@ -106,6 +105,18 @@ public class ChargeShot : MonoBehaviour {
 			player.playerMovement.SlowPlayer(maxChargeSlow, 0, true);
 			yield return null;
 		}
+
+		if (state == ChargeState.cancelled) {
+			CancelCharge();
+		}
+	}
+
+	void CancelCharge() {
+		SoundManager.instance.Stop("ChargeAttackCharge");
+		state = ChargeState.cancelled;
+		Destroy(chargeParticle.gameObject);
+		Destroy(gameObject, 2f);
+		player.playerMovement.RestoreSpeed();
 	}
 
 	void Fire() {

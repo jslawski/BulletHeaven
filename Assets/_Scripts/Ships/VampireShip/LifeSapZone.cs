@@ -18,7 +18,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	float lifespan = 6f;
 	float timeToGrow = 3f;
-	float maxRadius = 9f;
+	float maxRadius = 8f;
 
 	ParticleSystem zoneParticles;
 	Transform particle;

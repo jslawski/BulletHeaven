@@ -144,6 +144,9 @@ public class DualLasers : MonoBehaviour {
 				EndLaserAttack();
 			}
 		}
+		if (thisPlayer.dead) {
+			EndLaserAttack();
+		}
 	}
 
 	void OnTriggerStay(Collider other) {

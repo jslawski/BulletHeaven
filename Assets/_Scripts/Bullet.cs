@@ -59,7 +59,7 @@ public class Bullet : PooledObj {
 	}
 
 	protected float transparencyAlpha = 71f / 255f;
-	protected float vampShieldHealAmount = 0.05f;
+	protected float vampShieldHealAmount = 0.085f;
 	protected ShipMovement owningPlayerMovement;
 
 	public bool IsInteractable() {

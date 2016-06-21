@@ -24,7 +24,7 @@ public class BlackHole : MonoBehaviour, BombAttack {
 	BlackHoleOuter outer;
 
 	float maxLifespan = 6f;
-	float armTime = 0.75f;
+	float armTime = 0f;
 	float explosionRadius = 4f;
 	float explosionDamage = 15f;
 

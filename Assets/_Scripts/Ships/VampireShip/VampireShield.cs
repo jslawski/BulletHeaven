@@ -58,11 +58,6 @@ public class VampireShield : MonoBehaviour {
 	}
 
 	void DestroyShield() {
-		StartCoroutine(DestroyShieldCoroutine());
-	}
-
-	//Shield clean-up
-	IEnumerator DestroyShieldCoroutine() {
 		//Prevent any more bullets from getting absorbed
 		shieldSprite.enabled = false;
 		thisCollider.enabled = false;
@@ -74,9 +69,9 @@ public class VampireShield : MonoBehaviour {
 				Vector3 endPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 				absorbedBullets[i].transform.position = endPosition;
 			}
-			yield return new WaitForFixedUpdate();
+			//yield return new WaitForFixedUpdate();
 		}
-		
+
 		thisPlayer.shieldUp = false;
 		Destroy(gameObject);
 	}
