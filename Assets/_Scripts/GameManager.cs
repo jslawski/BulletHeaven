@@ -203,6 +203,7 @@ public static bool CHECKING_MENU = false;
 				gameState = GameStates.titleScreen;
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+				SoundManager.instance.Play("PressStart");
 				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection");
 
 				
