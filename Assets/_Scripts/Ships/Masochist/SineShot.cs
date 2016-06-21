@@ -20,8 +20,10 @@ public class SineShot : MonoBehaviour, BombAttack{
 	int bulletsPerBurst = 100;
 	float amplitudeScalar = 20f;
 	public SineBullet bulletPrefab;
+	float baseVelocity;
 
 	public void FireBurst() {
+		baseVelocity = masochistPlayer.damageMultiplier == 1 ? 10f : 15f;
 		StartCoroutine(FireBurstCoroutine());
 	}
 
@@ -55,7 +57,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 		SineBullet curBullet = bulletPrefab.GetPooledInstance<SineBullet>();
 		curBullet.owningPlayer = owningPlayer;
 		curBullet.transform.position = gameObject.transform.position;
-		curBullet.GetComponent<PhysicsObj>().velocity = 10 * direction.PolarToCartesian().normalized;
+		curBullet.GetComponent<PhysicsObj>().velocity = baseVelocity * direction.PolarToCartesian().normalized;
 
 		//Make amplitude wider during aura mode
 		if (masochistPlayer != null && masochistPlayer.damageMultiplier > 1) {

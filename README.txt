@@ -10,7 +10,7 @@ Sound Effects:
 		Arty
 		SoundMorph
 
-	Beam:
+	Beams:
 		Digital Rain Lab
 		ShapingWaves
 	
@@ -23,6 +23,38 @@ Sound Effects:
 
 	Protagonist Ship Explosion:
 		Bottle Rocket Fx
+
+	Test Subject #P-41N Aura Activation:
+		SoundBits
+		MatiasMacSD
+
+	Reflector:
+		3Maze
+
+	Life Sap Zone:
+		Bluezone
+		SoundBits
+	
+	Red-Eye Charge Shot:
+		MatiasMacSD
+		ShapingWaves
+		Digital Rain Lab
+
+	Ship Confirm Sound:
+		3Maze
+
+	Press Start Sound:
+		3Maze
+
+	Game Start Sound:
+		Arty
+
+	Ship Cancel Sound:
+		Digital Rain Lab
+
+	Explosion:
+		SoundMorph
+		
 
 Fonts:
 	Trailer Font:
