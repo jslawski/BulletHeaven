@@ -16,7 +16,7 @@ public class RotatingCircleShot : MonoBehaviour, BombAttack {
 	RotatingCircleWave rotatingCircleWavePrefab;
 
 	float timeBetweenWaves = 0.2f;
-	int numWaves = 4;
+	int numWaves = 3;
 
 	public void FireBurst() {
 		//This does nothing to appease the interface

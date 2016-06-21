@@ -10,8 +10,8 @@ public class ProximityMine : MonoBehaviour {
 	float maxRandSpeed = 15f;
 	float decelerationRate = 0.02f;
 
-	float flatDamage = 15f;
-	float explosionRadius = 3f;
+	float flatDamage = 12.5f;
+	float explosionRadius = 2.5f;
 
 	float otherMineDetonationDelay = 0.15f;
 

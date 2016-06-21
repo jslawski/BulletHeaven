@@ -16,7 +16,8 @@ public enum GameStates {
 	countdown,
 	playing,
 	finalAttack,
-	winnerScreen
+	winnerScreen,
+	transitioning
 }
 
 public class GameManager : MonoBehaviour {
@@ -46,7 +47,6 @@ public static bool CHECKING_MENU = false;
 	public float fadeFromMainDuration = 0.5f;
 	public float fadeFromShipSelectDuration = 2f;
 	string curTheme = "TitleTheme";
-	public bool transitioning = false;
 
 	void Awake() {
 		if (S != null) {
@@ -200,17 +200,13 @@ public static bool CHECKING_MENU = false;
 			CHECKING_MENU = true;
 			bool menuWasPressed = InputManager.ActiveDevice.MenuWasPressed;
             if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-				if (!transitioning) {
+				if (gameState != GameStates.transitioning) {
 					TransitionScene(fadeFromMainDuration, "_Scene_Title");
-					gameState = GameStates.titleScreen;
 				}
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
-				if (!transitioning) {
-					SoundManager.instance.Play("PressStart");
-					gameState = GameStates.shipSelect;
-					TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection");
-				}
+				SoundManager.instance.Play("PressStart");
+				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection");
 			}
 			CHECKING_MENU = false;
 		}
@@ -218,13 +214,13 @@ public static bool CHECKING_MENU = false;
 
 	public void TransitionScene(float fadeDuration, string nextScene) {
 		//No double-starts!
-		if (transitioning) {
+		if (gameState == GameStates.transitioning) {
 			return;
 		}
+		gameState = GameStates.transitioning;
 
 		fadePanel = GameObject.Find("FadePanel").GetComponent<Image>();
 		StartCoroutine(TransitionSceneCoroutine(fadeDuration, nextScene));
-		transitioning = true;
 	}
 
 	IEnumerator TransitionSceneCoroutine(float fadeDurationInSeconds, string nextScene) {
@@ -240,7 +236,6 @@ public static bool CHECKING_MENU = false;
 			yield return new WaitForFixedUpdate();
 		}
 		SceneManager.LoadScene(nextScene);
-		transitioning = false;
 	}
 
 	public void DisplayDamage(Player playerDamaged, float damageIn) {
@@ -291,16 +286,19 @@ public static bool CHECKING_MENU = false;
 		print("Level " + SceneManager.GetActiveScene().name + " was loaded.");
 		switch (SceneManager.GetActiveScene().name) {
 			case "_Scene_Title":
+				gameState = GameStates.titleScreen;
 				SoundManager.instance.Play("TitleTheme");
 				curTheme = "TitleTheme";
 				Reset();
 				break;
 			case "_Scene_Ship_Selection":
+				gameState = GameStates.shipSelect;
 				SoundManager.instance.Play("ShipSelectTheme");
 				curTheme = "ShipSelectTheme";
 				PassControllersToShipSelect();
 				break;
 			case "_Scene_Main":
+				gameState = GameStates.countdown;
 				Reset();
 				//SoundManager.instance.Play("FightTheme");
 				//curTheme = "FightTheme";

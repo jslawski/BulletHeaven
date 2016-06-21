@@ -103,7 +103,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Don't allow input while randoming ships
-		if (inChooseRandomShipCoroutine) {
+		if (inChooseRandomShipCoroutine || GameManager.S.gameState != GameStates.shipSelect) {
 			return;
 		}
 
@@ -132,7 +132,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			playerReady = false;
 		}
 
-		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start) && AllPlayersReady() && !GameManager.S.transitioning) {
+		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start) && AllPlayersReady()) {
 			SoundManager.instance.Play("StartGame");
 			GameManager.S.gameState = GameStates.countdown;
 			GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
@@ -164,7 +164,7 @@ public class ShipSelectionManager : MonoBehaviour {
 				playerReady = false;
 			}
 
-			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed && AllPlayersReady() && !GameManager.S.transitioning) {
+			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed && AllPlayersReady()) {
 				SoundManager.instance.Play("StartGame");
 				GameManager.S.gameState = GameStates.countdown;
 				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
