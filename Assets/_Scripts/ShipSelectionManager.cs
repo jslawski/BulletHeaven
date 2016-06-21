@@ -132,8 +132,9 @@ public class ShipSelectionManager : MonoBehaviour {
 			playerReady = false;
 		}
 
-		if (Input.GetKeyDown(start) && AllPlayersReady()) {
+		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start) && AllPlayersReady() && !GameManager.S.transitioning) {
 			SoundManager.instance.Play("StartGame");
+			GameManager.S.gameState = GameStates.playing;
 			GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
 		}
 
@@ -163,8 +164,9 @@ public class ShipSelectionManager : MonoBehaviour {
 				playerReady = false;
 			}
 
-			if (device.MenuWasPressed && AllPlayersReady()) {
+			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed && AllPlayersReady() && !GameManager.S.transitioning) {
 				SoundManager.instance.Play("StartGame");
+				GameManager.S.gameState = GameStates.playing;
 				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
 			}
 		}

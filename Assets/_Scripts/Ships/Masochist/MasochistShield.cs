@@ -50,6 +50,7 @@ public class MasochistShield : MonoBehaviour {
 		Color shieldColor = thisPlayer.playerColor;
 		shieldColor.a = 180f / 255f;
 		GetComponentInChildren<SpriteRenderer>().color = shieldColor;
+		maxBulletCount = thisPlayer.damageMultiplier == 1 ? 100 : 200;
 		StartCoroutine(RotateShield());
 		
 	}
