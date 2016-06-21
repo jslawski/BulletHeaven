@@ -249,6 +249,8 @@ public static bool CHECKING_MENU = false;
 		}
 
 		gameState = GameStates.playing;
+		SoundManager.instance.Play("FightTheme");
+		curTheme = "FightTheme";
 	}
 
 	public void EndGame(Player winner) {
@@ -289,10 +291,8 @@ public static bool CHECKING_MENU = false;
 				break;
 			case "_Scene_Main":
 				Reset();
-				yield return null;
-				StartGame();
-				SoundManager.instance.Play("FightTheme");
-				curTheme = "FightTheme";
+				//SoundManager.instance.Play("FightTheme");
+				//curTheme = "FightTheme";
 				break;
 		}
 	}

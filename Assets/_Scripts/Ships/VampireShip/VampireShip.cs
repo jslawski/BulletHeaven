@@ -42,8 +42,10 @@ public class VampireShip : PlayerShip {
 	}
 
 	void FixedUpdate() {
-		if (dead) {
-			return;
+		foreach (var player in GameManager.S.players) {
+			if (player.dead) {
+				return;
+			}
 		}
 		health += lifeRegen * Time.fixedDeltaTime;
 		if (health > maxHealth) {

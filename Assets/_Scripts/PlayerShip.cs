@@ -187,6 +187,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 		int otherPlayer = (player == Player.player1) ? (int)Player.player2 : (int)Player.player1;
 		GameManager.S.players[otherPlayer].InitializeFinalAttack();
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 
 		StartCoroutine(DeathParticles());
 		StartCoroutine(PulsateRed());
@@ -196,6 +197,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		finishAttackPrompt.SetActive(true);
 		finishAttackPrompt.GetComponentInChildren<Text>().color = playerColor;
 		finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = playerColor;
+		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;

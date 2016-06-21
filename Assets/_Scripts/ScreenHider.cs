@@ -16,5 +16,6 @@ public class ScreenHider : MonoBehaviour {
 		Color curColor = fadePanel.color;
 		curColor.a = 0;
 		fadePanel.color = curColor;
+		GameManager.S.StartGame();
 	}
 }

@@ -16,12 +16,12 @@ public class AltCircleShot : MonoBehaviour, BombAttack {
 	}
 
 	public Bullet bulletPrefab;
-	int numBursts = 10;
-	int numBulletsPerBurst = 12;
+	int numBursts = 18;
+	int numBulletsPerBurst = 17;
 	float bulletDelay = 0.2f;
-	float bulletVelocity = 8;
+	float bulletVelocity = 7;
 	float bulletDamage = 1.5f;
-	float accelerationFactor = -0.6f;
+	float accelerationFactor = -0.7f;
 
 	// Use this for initialization
 	void Start() {
@@ -45,6 +45,7 @@ public class AltCircleShot : MonoBehaviour, BombAttack {
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.physics.velocity = bulletVelocity * direction.PolarToCartesian().normalized;
 				curBullet.physics.acceleration = accelerationFactor*bulletVelocity * direction.PolarToCartesian().normalized;
+				curBullet.physics.acceleration += (i%2==0 ? 1 : -1) * 0.1f*Vector3.Cross(curBullet.physics.acceleration, Vector3.forward);
 
 				curAngle += radDelta;
 			}

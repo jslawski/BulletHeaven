@@ -25,7 +25,7 @@ public class DualLasers : MonoBehaviour {
 	float maxDamage = 0.45f;
 	float minDamage = 0.1f;
 	float useSlowingFactor = 0.4f;
-	float slowingFactor = 0.35f;
+	float slowingFactor = 0.65f;
 	float chargeTime = 0.75f;
 	float maxDuration = 4f;
 
