@@ -6,6 +6,12 @@ public class TitleScreenBomb : Bomb {
 	public GameObject[] attackPrefabs;
 	public GameObject shockwavePrefab;
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(false, false, false, false);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		//Ignore the attackToPerform, and just pick a random attack to instantiate
 		int attackIndex = Random.Range(0, attackPrefabs.Length);

@@ -16,6 +16,12 @@ public class Bomb : MonoBehaviour {
 					particleSystems[i].startColor = GameManager.S.players[(int)value].playerColor;
 					particleSystems[i].Play();
 				}
+				//Move the button UI to always be behind the bomb's trajectory
+				if (value == Player.player2 && buttonUI != null) {
+					Vector3 buttonPos = buttonUI.transform.localPosition;
+					buttonPos.x *= -1;
+					buttonUI.transform.localPosition = buttonPos;
+				}
 				////Only turn on the prewarmed particle glow for this player
 				//particleSystems[3].gameObject.SetActive((value == Player.player1));
 				//particleSystems[4].gameObject.SetActive((value == Player.player2));
@@ -26,14 +32,18 @@ public class Bomb : MonoBehaviour {
 	protected PhysicsObj physics;
 	protected SpriteRenderer spriteRenderer;
 	protected ParticleSystem[] particleSystems;
+	protected ButtonHelpUI buttonUI;
 	//protected Sprite[] playerBombSprites = new Sprite[2];
 
 
 	protected float decelerationRate = 0.005f;
 
 	protected void Awake() {
-		physics = GetComponent<PhysicsObj>();
+		physics = GetComponentInParent<PhysicsObj>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
+		if (transform.parent != null) {
+			buttonUI = transform.parent.GetComponentInChildren<ButtonHelpUI>();
+		}
 		//playerBombSprites[0] = Resources.Load<Sprite>("Images/Bomb1");
 		//playerBombSprites[1] = Resources.Load<Sprite>("Images/Bomb2");
 		particleSystems = GetComponentsInChildren<ParticleSystem>();
@@ -61,6 +71,10 @@ public class Bomb : MonoBehaviour {
 		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
 		if (GameManager.S && owningPlayer != Player.none && GameManager.S.gameState != GameStates.titleScreen) {
 			GameManager.S.players[(int)owningPlayer].GetComponent<ShootBomb>().bombsInAir.Remove(this);
+		}
+
+		if (transform.parent != null) {
+			Destroy(transform.parent.gameObject);
 		}
 	}
 }

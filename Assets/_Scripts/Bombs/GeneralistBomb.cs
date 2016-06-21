@@ -17,6 +17,12 @@ public class GeneralistBomb : Bomb {
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(true, true, true, true);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
