@@ -50,7 +50,9 @@ public class VampireShield : MonoBehaviour {
 	public void ActivateShield() {
 		SoundManager.instance.Play("ShieldUp");
 		thisPlayer.shieldUp = true;
-		GetComponentInChildren<SpriteRenderer>().color = thisPlayer.playerColor;
+		Color shieldColor = thisPlayer.playerColor;
+		shieldColor.a = 180f / 255f;
+		GetComponentInChildren<SpriteRenderer>().color = shieldColor;
 		StartCoroutine(RotateShield());
 		Invoke("DestroyShield", shieldDuration);
 	}
