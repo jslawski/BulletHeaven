@@ -17,6 +17,12 @@ public class TankBomb : Bomb {
 		blackHolePrefab = Resources.Load<BlackHole>("Prefabs/BlackHole");
 	}
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(true, true, true, true);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
 			//Leading shot

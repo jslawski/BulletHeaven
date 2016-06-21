@@ -17,6 +17,12 @@ public class VampireBomb : Bomb {
 		reflectorPrefab = Resources.Load<Reflector>("Prefabs/Reflector");
 	}
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(true, true, true, false);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
 			//Trail Shot

@@ -15,6 +15,12 @@ public class MasochistBomb : Bomb {
 		explodeAttackPrefab = Resources.Load<ExplodeAttack>("Prefabs/ExplodeAttack");
 	}
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(true, true, true, false);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
 			//Sine shot

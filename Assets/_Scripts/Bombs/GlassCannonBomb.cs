@@ -13,6 +13,12 @@ public class GlassCannonBomb : Bomb {
 		homingGroupShotPrefab = Resources.Load<HomingGroupShot>("Prefabs/HomingGroupShot");
 	}
 
+	void Start() {
+		if (buttonUI != null) {
+			buttonUI.SetButtons(true, true, false, false);
+		}
+	}
+
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
 			//Homing group shot

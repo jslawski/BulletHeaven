@@ -48,7 +48,7 @@ public class ShootBomb : MonoBehaviour {
 	}
 
 	void Start() {
-		SetBombType(thisPlayer.typeOfShip);
+		//SetBombType(thisPlayer.typeOfShip);
 	}
 	
 	public void SetBombType(ShipType shipType) {
@@ -147,8 +147,8 @@ public class ShootBomb : MonoBehaviour {
 		SoundManager.instance.Play("FireBomb");
 
 		GameObject newBombGO = Instantiate(bombPrefab, transform.position, new Quaternion()) as GameObject;
-		Bomb newBomb = newBombGO.GetComponent<Bomb>();
-		PhysicsObj bombPhysics = newBomb.GetComponent<PhysicsObj>();
+		Bomb newBomb = newBombGO.GetComponentInChildren<Bomb>();
+		PhysicsObj bombPhysics = newBomb.GetComponentInParent<PhysicsObj>();
 
 		//Set the owner of the fired bomb
 		newBomb.owningPlayer = thisPlayer.player;
