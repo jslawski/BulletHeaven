@@ -11,9 +11,9 @@ public class CameraEffects : MonoBehaviour {
 
 	float startSize;                    //Initial orthographic size of the camera
 	float curSize;                      //Used for camera zoom, otherwise == startSize
-	float zoomSpeed = 0.1f;             //Percent per frame the camera's orthographic size changes to its target size
+	float zoomSpeed = 5f;             //Percent per frame the camera's orthographic size changes to its target size
 
-	float followSpeed = 0.1f;           //Percent per frame the camera moves towards its target position
+	float followSpeed = 5f;           //Percent per frame the camera moves towards its target position
 
 	bool inCameraShakeCoroutine = false;
 	float cameraShakeFrequency = 40f;   //How many times per second the random offset for camera shake changes
@@ -46,14 +46,14 @@ public class CameraEffects : MonoBehaviour {
 	//Camera movement in FixedUpdate() for smoother following of the physics calculations
 	void FixedUpdate() {
 		if (!followObj) {
-			transform.position = Vector3.Lerp(transform.position, startOffset + curOffset, followSpeed);
+			transform.position = Vector3.Lerp(transform.position, startOffset + curOffset, Time.fixedDeltaTime*followSpeed);
 		}
 		else {
-			transform.position = Vector3.Lerp(transform.position, followObj.position + startOffset + curOffset, followSpeed);
+			transform.position = Vector3.Lerp(transform.position, followObj.position + startOffset + curOffset, Time.fixedDeltaTime*followSpeed);
 		}
-		thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, curSize, zoomSpeed);
+		thisCamera.orthographicSize = Mathf.Lerp(thisCamera.orthographicSize, curSize, Time.fixedDeltaTime*zoomSpeed);
 
-		curOffset = Vector3.Lerp(curOffset, startOffset, 0.1f);
+		curOffset = Vector3.Lerp(curOffset, startOffset, Time.fixedDeltaTime*5f);
 	}
 
 	public void CameraShake(float duration, float intensity, bool overrideCurrentShake=false) {

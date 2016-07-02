@@ -32,6 +32,7 @@ public struct PositionInfo {
 
 public class ShipSelectionManager : MonoBehaviour {
 	static List<ShipSelectionManager> selectionMenus;
+	static bool reverseScrollDirection = true;
 	public Player player;
 	public InputDevice device;
 
@@ -47,6 +48,9 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 	ShipInfo _selectedShip;
 	public bool playerReady = false;
+
+	public AbilityPreviewScreen abilityPreview;
+	public bool hasFocus = true;
 
 	public PositionInfo[] positionInfos;		//Information about each selection position (off-screen left, left, selected, etc.)
 												//such as the world position, alpha value, and orderInLayer value
@@ -66,7 +70,8 @@ public class ShipSelectionManager : MonoBehaviour {
 	float minWaitTime = 0.075f;
 	float maxWaitTime = 0.075f;
 
-	KeyCode left,right,A,B,start;
+	[HideInInspector]
+	public KeyCode left,right,A,B,Y,start;
 
 	void Awake() {
 		DontDestroyOnLoad(this.gameObject);
@@ -83,6 +88,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			right = KeyCode.D;
 			A = KeyCode.Alpha1;
 			B = KeyCode.Alpha2;
+			Y = KeyCode.Alpha4;
 			start = KeyCode.Space;
 		}
 		else if	(player == Player.player2) {
@@ -90,6 +96,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			right = KeyCode.RightArrow;
 			A = KeyCode.Keypad1;
 			B = KeyCode.Keypad2;
+			Y = KeyCode.Keypad4;
 			start = KeyCode.KeypadEnter;
 		}
 
@@ -102,6 +109,10 @@ public class ShipSelectionManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//Don't allow input while it doesn't have focus
+		if (!hasFocus) {
+			return;
+		}
 		//Don't allow input while randoming ships
 		if (inChooseRandomShipCoroutine || GameManager.S.gameState != GameStates.shipSelect) {
 			return;
@@ -130,6 +141,9 @@ public class ShipSelectionManager : MonoBehaviour {
 			SoundManager.instance.Play("ShipCancel");
 			print(player + " is no longer ready.");
 			playerReady = false;
+		}
+		else if (Input.GetKeyDown(Y) && selectedShip.typeOfShip != ShipType.random) {
+			abilityPreview.SetAbilityPreview(selectedShip);
 		}
 
 		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start) && AllPlayersReady()) {
@@ -163,6 +177,9 @@ public class ShipSelectionManager : MonoBehaviour {
 				print(player + " is no longer ready.");
 				playerReady = false;
 			}
+			else if (device.Action4.WasPressed && selectedShip.typeOfShip != ShipType.random) {
+				abilityPreview.SetAbilityPreview(selectedShip);
+			}
 
 			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed && AllPlayersReady()) {
 				SoundManager.instance.Play("StartGame");
@@ -173,6 +190,9 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	public void Scroll(bool toTheRight) {
+		if (reverseScrollDirection) {
+			toTheRight = !toTheRight;
+		}
 		foreach (var ship in ships) {
 			if (ship == null) {
 				continue;
@@ -279,7 +299,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		inChooseRandomShipCoroutine = false;
 	}
 
-	bool AllPlayersReady() {
+	public static bool AllPlayersReady() {
 		foreach (var player in selectionMenus) {
 			if (!player.playerReady) {
 				return false;

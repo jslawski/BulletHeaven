@@ -23,7 +23,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 	float baseVelocity;
 
 	public void FireBurst() {
-		baseVelocity = masochistPlayer.damageMultiplier == 1 ? 10f : 15f;
+		baseVelocity = (masochistPlayer == null || masochistPlayer.damageMultiplier == 1) ? 10f : 15f;
 		StartCoroutine(FireBurstCoroutine());
 	}
 
@@ -46,7 +46,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 			GenerateBullet(direction, -1);
 			GenerateBullet(direction, 1);
 			
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForSeconds(0.02f);
 		}
 
 		//Destroy this gameObject after the burst has been fired

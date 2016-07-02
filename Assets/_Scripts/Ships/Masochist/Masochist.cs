@@ -29,6 +29,7 @@ public class Masochist : PlayerShip {
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
 		maxHealth = 250f;
+		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 	}
 

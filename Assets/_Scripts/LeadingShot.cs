@@ -83,7 +83,7 @@ public class LeadingShot : MonoBehaviour, BombAttack {
 			curBullet.GetComponent<PhysicsObj>().velocity = 10*(curDirection.PolarToCartesian().normalized + targetPlayerVelocity + sprayVector).normalized;
 			curDirection.angle += degreeIncrement * degreeScalar;
 
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForSeconds(0.02f);
 		}
 
 		inCoroutine = false;

@@ -20,7 +20,7 @@ public class TrailShot : MonoBehaviour, BombAttack {
 	int numTrails = 5;
 	int bulletsPerTrail = 20;
 	float coneOfFiring = 15f * Mathf.Deg2Rad;
-	float bulletDelay = 0;
+	float bulletDelay = 0.02f;
 	float bulletVelocity = 5f;
 
 	public void FireBurst() {

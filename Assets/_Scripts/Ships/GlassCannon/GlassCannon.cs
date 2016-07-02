@@ -27,6 +27,8 @@ public class GlassCannon : PlayerShip {
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, true, true);
 
 		maxHealth = 145f;
+
+		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 
 		playerMovement.SetBaseSpeed(1.3f);

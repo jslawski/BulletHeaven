@@ -17,6 +17,7 @@ public class VampireShip : PlayerShip {
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
 		maxHealth = 110f;
+		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 	}
 

@@ -16,6 +16,7 @@ public class TankyShip : PlayerShip {
 	new void Start () {
 		base.Start();
 		maxHealth = 300;
+		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);

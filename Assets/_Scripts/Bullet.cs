@@ -11,6 +11,7 @@ public class Bullet : PooledObj {
 	Color unownedBulletColor = new Color(233f/255f, 154f/255f, 215f/255f);
 
 	public SpriteRenderer sprite;
+	ParticleSystem trail;
 	public PhysicsObj physics;
 	public SphereCollider hitbox;
 	protected Player _owningPlayer = Player.none;
@@ -23,12 +24,18 @@ public class Bullet : PooledObj {
 			if (value != Player.none) {
 				PlayerShip playerShip = GameManager.S.players[(int)value];
 				sprite.color = playerShip.playerColor;
+				if (trail != null) {
+					trail.startColor = playerShip.playerColor;
+				}
 				owningPlayerMovement = playerShip.playerMovement;
 				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
 				otherPlayer = GameManager.S.players[(int)other].playerMovement;
 			}
 			else {
 				sprite.color = unownedBulletColor;
+				if (trail != null) {
+					trail.startColor = unownedBulletColor;
+				}
 			}
 		}
 	}
@@ -67,6 +74,7 @@ public class Bullet : PooledObj {
 	}
 
 	protected void Awake() {
+		trail = GetComponentInChildren<ParticleSystem>();
 		physics = GetComponent<PhysicsObj>();
 		sprite = GetComponent<SpriteRenderer>();
 		hitbox = GetComponent<SphereCollider>();
@@ -186,7 +194,7 @@ public class Bullet : PooledObj {
 	protected bool InOwnPlayersTerritory() {
 
 		//Don't do this check on the title screen
-		if (GameManager.S.gameState == GameStates.titleScreen) {
+		if (GameManager.S.gameState != GameStates.playing) {
 			return false;
 		}
 

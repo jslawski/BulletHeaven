@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public struct AbilityInfo {
+	public int slot;
+	public string abilityName;
+	public string abilityDescription;
+}
+
 public class ShipInfo : MonoBehaviour {
 	ShipSelectionManager selectionMenu;
 	
@@ -37,6 +44,9 @@ public class ShipInfo : MonoBehaviour {
 	public string miscLabel;
 	[Range(0,10)]
 	public int miscStat;
+
+	[Header("Ship Abilities")]
+	public AbilityInfo[] abilities;
 
 	// Use this for initialization
 	void Awake () {

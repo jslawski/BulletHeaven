@@ -7,6 +7,11 @@ public class PhysicsObj : MonoBehaviour {
 	public bool affectedByGravity = true;
 	public Vector3 acceleration, velocity, posNow, posNext;
 
+	void Awake() {
+		acceleration = velocity = Vector3.zero;
+		posNext = posNow = transform.position;
+	}
+
 	// Use this for initialization
 	void Start () {
 		PhysicsEngine.physicsObjects.Add(this);

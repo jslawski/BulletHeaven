@@ -36,7 +36,7 @@ public class Bomb : MonoBehaviour {
 	//protected Sprite[] playerBombSprites = new Sprite[2];
 
 
-	protected float decelerationRate = 0.005f;
+	protected float decelerationRate = 0.25f;
 
 	protected void Awake() {
 		physics = GetComponentInParent<PhysicsObj>();
@@ -51,7 +51,7 @@ public class Bomb : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		physics.velocity = Vector3.Lerp(physics.velocity, Vector3.zero, decelerationRate);
+		physics.velocity = Vector3.Lerp(physics.velocity, Vector3.zero, Time.fixedDeltaTime*decelerationRate);
 	}
 
 	void Update() {

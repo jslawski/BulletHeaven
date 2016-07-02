@@ -112,7 +112,7 @@ public class VampireShield : MonoBehaviour {
 			}
 			targetPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 			thisBullet.transform.position = Vector3.Lerp(thisBullet.transform.position, targetPosition, lerpSpeed);
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForSeconds(0.02f);
 		}
 	}
 }

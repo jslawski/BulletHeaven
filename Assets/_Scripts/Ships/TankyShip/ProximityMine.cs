@@ -8,7 +8,7 @@ public class ProximityMine : MonoBehaviour {
 
 	float minRandSpeed = 9f;
 	float maxRandSpeed = 15f;
-	float decelerationRate = 0.02f;
+	float decelerationRate = 1f;
 
 	float flatDamage = 12.5f;
 	float explosionRadius = 2.5f;
@@ -127,6 +127,6 @@ public class ProximityMine : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		//Decelerate the mine until it comes to a stop
-		physics.velocity = Vector3.Lerp(physics.velocity, Vector3.zero, decelerationRate);
+		physics.velocity = Vector3.Lerp(physics.velocity, Vector3.zero, Time.fixedDeltaTime*decelerationRate);
 	}
 }

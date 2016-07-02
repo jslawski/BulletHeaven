@@ -21,7 +21,6 @@ public enum GameStates {
 }
 
 public class GameManager : MonoBehaviour {
-public static bool CHECKING_MENU = false;
 	public static GameManager S;
 	public GameStates gameState;
 	public static bool emergencyBumperControls = false;
@@ -196,9 +195,7 @@ public static bool CHECKING_MENU = false;
 				SoundManager.instance.muted = !SoundManager.instance.muted;
 				print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
 			}
-
-			CHECKING_MENU = true;
-			bool menuWasPressed = InputManager.ActiveDevice.MenuWasPressed;
+			
             if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				if (gameState != GameStates.transitioning) {
 					TransitionScene(fadeFromMainDuration, "_Scene_Title");
@@ -206,9 +203,8 @@ public static bool CHECKING_MENU = false;
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SoundManager.instance.Play("PressStart");
-				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection");
+				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection_JDS");
 			}
-			CHECKING_MENU = false;
 		}
 	}
 
@@ -291,7 +287,7 @@ public static bool CHECKING_MENU = false;
 				curTheme = "TitleTheme";
 				Reset();
 				break;
-			case "_Scene_Ship_Selection":
+			case "_Scene_Ship_Selection_JDS":
 				gameState = GameStates.shipSelect;
 				SoundManager.instance.Play("ShipSelectTheme");
 				curTheme = "ShipSelectTheme";

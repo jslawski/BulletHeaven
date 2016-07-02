@@ -89,7 +89,7 @@ public class MasochistShield : MonoBehaviour {
 			//Shoot the bullet back at the opponent
 			bullet.velocity = reflectionVector * reflectionVelocity;
 
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForSeconds(0.02f);
 		}
 
 		//Destroy the shield after it finishes shooting all of the bullets
@@ -139,7 +139,7 @@ public class MasochistShield : MonoBehaviour {
 		while (thisBullet.curState == BulletState.absorbedByMasochist) {
 			bulletPos.angle += orbitSpeed;
 			thisBullet.transform.position = transform.position + bulletPos.PolarToCartesian();
-			yield return new WaitForFixedUpdate();
+			yield return new WaitForSeconds(0.02f);
 		}
 	}
 }

@@ -21,7 +21,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Color playerColor;
 	public DurationBar durationBar;
 	public HealthBar healthBar;
-	ParticleSystem healthPickupParticles;
+	protected ParticleSystem healthPickupParticles;
 	public InputDevice device;
 	public PressStartPrompt controllerPrompt;
 	protected float hitVibrateIntensity = 1f;
@@ -77,7 +77,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public bool invincible = false;
 
 	// Use this for initialization
-	protected void Awake () {
+	virtual protected void Awake () {
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
@@ -86,6 +86,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	protected void Start() {
+		if (healthBar != null) {
+			healthBar.maxHealth = maxHealth;
+		}
 		health = maxHealth;
 		if (durationBar != null) {
 			durationBar.SetPercent(0);
@@ -141,7 +144,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		inHeartbeatCoroutine = false;
 	}
 
-	IEnumerator FlashOnDamage(float damage) {
+	protected IEnumerator FlashOnDamage(float damage) {
 		inDamageFlashCoroutine = true;
 
 		Color targetColor = (damage > 0) ? damageColor : Color.green;

@@ -24,7 +24,7 @@ public class TrailBullet : Bullet {
 				break;
 			}
 
-			timeElapsed += Time.deltaTime;
+			timeElapsed += Time.fixedDeltaTime;
 			float percent = timeElapsed / timeToReachFullSpeed;
 			physics.velocity = physics.velocity.normalized * Mathf.Lerp(startVelocity, endVelocity, percent);
 
@@ -34,7 +34,7 @@ public class TrailBullet : Bullet {
 			}
 			else {
 				//Vector3 targetVector = (leadingBullet.position - transform.position).normalized;
-				physics.velocity = Vector3.Lerp(physics.velocity, leadingBullet.gameObject.GetComponent<PhysicsObj>().velocity, 0.25f);
+				physics.velocity = Vector3.Lerp(physics.velocity, leadingBullet.physics.velocity, Time.fixedDeltaTime*12.5f);
 			}
 			yield return new WaitForFixedUpdate();
 		}

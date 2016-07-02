@@ -7,7 +7,7 @@ public class AutoMoveShip : MonoBehaviour {
 	Transform thisTransform;
 
 	Vector3 curDirection;
-	float speed = 0.2f;
+	float speed = 10f;
 
 	// Use this for initialization
 	void Start () {
@@ -26,6 +26,6 @@ public class AutoMoveShip : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		thisTransform.Translate(curDirection * speed, Space.World);
+		thisTransform.Translate(curDirection * speed * Time.fixedDeltaTime, Space.World);
 	}
 }
