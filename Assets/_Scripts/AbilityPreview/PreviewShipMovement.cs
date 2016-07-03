@@ -30,8 +30,8 @@ public class PreviewShipMovement : ShipMovement {
 
 		startPos = transform.position;
 
-		vertMovespeedDefault *= 0.6f;
-		horizMovespeedDefault *= 0.6f;
+		vertMovespeedDefault *= 0.4f;
+		horizMovespeedDefault *= 0.4f;
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
