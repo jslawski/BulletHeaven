@@ -15,7 +15,7 @@ public class DualLasers : MonoBehaviour {
 			}
 		}
 	}
-	PlayerShip thisPlayer;
+	public PlayerShip thisPlayer;
 
 	GameObject explosionPrefab;
 	public ParticleSystem[] lasers;
@@ -52,15 +52,20 @@ public class DualLasers : MonoBehaviour {
 			transform.localPosition = Vector3.zero;
 		}
 		//Wait while charging
-		SoundManager.instance.Play("BeamDetonate");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BeamDetonate");
+		}
 		for (float i = 0; i < chargeTime; i += Time.fixedDeltaTime) {
-			if (Input.GetKeyUp(X)) {
-				SoundManager.instance.Stop("BeamDetonate");
-				yield break;	
-			}
-			else if (thisPlayer.device != null && thisPlayer.device.Action3.WasReleased) {
-				SoundManager.instance.Stop("BeamDetonate");
-				yield break;
+			//Only check the end conditions when we're in game (preview should fire without button press)
+			if (GameManager.S.inGame) {
+				if (Input.GetKeyUp(X)) {
+					SoundManager.instance.Stop("BeamDetonate");
+					yield break;
+				}
+				else if (thisPlayer.device != null && thisPlayer.device.Action3.WasReleased) {
+					SoundManager.instance.Stop("BeamDetonate");
+					yield break;
+				}
 			}
 
 			yield return new WaitForFixedUpdate();
@@ -78,7 +83,9 @@ public class DualLasers : MonoBehaviour {
 			timeFired += Time.deltaTime;
 
 			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor, 0.2f, true);
-			thisPlayer.durationBar.SetPercent(1 - timeFired / maxDuration);
+			if (thisPlayer.durationBar != null) {
+				thisPlayer.durationBar.SetPercent(1 - timeFired / maxDuration);
+			}
 
 			yield return null;
 		}
@@ -87,12 +94,16 @@ public class DualLasers : MonoBehaviour {
 
 	IEnumerator LoseEnergy() {
 		float timeElapsed = 0;
-		SoundManager.instance.Play("DualLasers");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("DualLasers");
+		}
 		while (!hasEnded) {
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed/maxDuration;
 
-			SoundManager.instance.SetPitch("DualLasers", 1 - percent);
+			if (GameManager.S.inGame) {
+				SoundManager.instance.SetPitch("DualLasers", 1 - percent);
+			}
 
 			foreach (var laser in lasers) {
 				laser.startSize = Mathf.Lerp(maxStartSize, minStartSize, percent);
@@ -106,7 +117,9 @@ public class DualLasers : MonoBehaviour {
 
 			yield return null;
 		}
-		SoundManager.instance.Stop("DualLasers");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Stop("DualLasers");
+		}
 	}
 
 	void EndLaserAttack() {
@@ -127,7 +140,9 @@ public class DualLasers : MonoBehaviour {
 		//Restore the player's speed
 		if (owningPlayer != Player.none) {
 			thisPlayer.playerMovement.RestoreSpeed();
-			thisPlayer.durationBar.SetPercent(0);
+			if (thisPlayer.durationBar != null) {
+				thisPlayer.durationBar.SetPercent(0);
+			}
 		}
 
 		Destroy(gameObject, 2f);
@@ -135,6 +150,10 @@ public class DualLasers : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (!GameManager.S.inGame) {
+			return;
+		}
+
 		if (Input.GetKeyUp(X)) {
 			EndLaserAttack();
 		}

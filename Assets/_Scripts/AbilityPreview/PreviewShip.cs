@@ -2,9 +2,15 @@
 using System.Collections;
 
 public class PreviewShip : PlayerShip {
+	bool inFireChargeShotCoroutine = false;
+	DualLasers dualLaserPrefab;
+	ChargeShot chargeShotPrefab;
 
 	// Use this for initialization
 	protected override void Awake () {
+		dualLaserPrefab = Resources.Load<DualLasers>("Prefabs/DualLasers");
+		chargeShotPrefab = Resources.Load<ChargeShot>("Prefabs/ChargeShot");
+
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
@@ -72,5 +78,30 @@ public class PreviewShip : PlayerShip {
 				Debug.LogError("ShipType " + typeOfShip + " not handled in SetSprite()");
 				return;
 		}
+	}
+
+	public void FireDualLasers() {
+		DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
+		dualLaser.owningPlayer = player;
+		dualLaser.SetColor(playerColor);
+		dualLaser.thisPlayer = this;
+	}
+
+	public void FireChargeShot() {
+		if (!inFireChargeShotCoroutine) {
+			StartCoroutine(FireChargeShotCoroutine());
+		}
+	}
+	IEnumerator FireChargeShotCoroutine() {
+		inFireChargeShotCoroutine = true;
+		ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
+		chargeShot.owningPlayer = player;
+		chargeShot.player = this;
+
+		yield return new WaitForSeconds(3f);
+
+		chargeShot.Fire();
+
+		inFireChargeShotCoroutine = false;
 	}
 }

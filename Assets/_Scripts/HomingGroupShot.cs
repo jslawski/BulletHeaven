@@ -16,6 +16,7 @@ public class HomingGroupShot : MonoBehaviour, BombAttack {
 	}
 	Player _owningPlayer = Player.none;
 	HomingGroup homingGroupPrefab;
+	public PlayerShip thisPlayer;
 	public Transform target;
 
 	int numShots = 3;
@@ -33,6 +34,10 @@ public class HomingGroupShot : MonoBehaviour, BombAttack {
 			HomingGroup newGroup = Instantiate(homingGroupPrefab, transform.position, new Quaternion()) as HomingGroup;
 			newGroup.owningPlayer = owningPlayer;
 			newGroup.target = target;
+			if (!GameManager.S.inGame) {
+				newGroup.thisPlayer = thisPlayer;
+			}
+
 			yield return new WaitForSeconds(timeBetweenShots);
 		}
 	}

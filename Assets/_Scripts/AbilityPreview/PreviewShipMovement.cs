@@ -2,14 +2,33 @@
 using System.Collections;
 
 public class PreviewShipMovement : ShipMovement {
-	public bool autoMove = false;
+	[SerializeField]
+	bool _autoMove = false;
+	public bool autoMove {
+		get {
+			return _autoMove;
+		}
+		set {
+			_autoMove = value;
+			if (!value) {
+				desiredPosition = startPos;
+			}
+			else {
+				timeSinceDirectionChange = reverseDirectionTime / 2f;
+			}
+		}
+	}
 	int curDirection = 1;
 	float reverseDirectionTime = 1;
 	float timeSinceDirectionChange = .5f;
 
+	Vector3 startPos;
+
 	// Use this for initialization
 	protected override void Awake() {
 		thisPlayer = GetComponent<PlayerShip>();
+
+		startPos = transform.position;
 
 		vertMovespeedDefault *= 0.6f;
 		horizMovespeedDefault *= 0.6f;

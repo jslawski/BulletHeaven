@@ -15,6 +15,7 @@ public class ChargeShot : MonoBehaviour {
 	ParticleSystem chargeParticle;
 	ParticleSystem shotParticle;
 
+	float shotSpeed = 500f;
 	float shotWidth = 0.3f;
 	float chargeTime = 1.5f;
 	float maxChargeAngle = 30f;
@@ -50,9 +51,15 @@ public class ChargeShot : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		if (player.dead) {
 			state = ChargeState.cancelled;
 		}
+
+		if (!GameManager.S.inGame) {
+			return;
+		}
+
 		if (Input.GetKeyUp(Y) || (player != null && player.device != null && player.device.Action4.WasReleased)) {
 			//Cancel the charge if we're not ready yet
 			if (state == ChargeState.charging) {
@@ -76,7 +83,9 @@ public class ChargeShot : MonoBehaviour {
 		chargeParticle.startColor = startColor;
 
 		chargeParticle.Play();
-		SoundManager.instance.Play("ChargeAttackCharge");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("ChargeAttackCharge");
+		}
 		while (timeElapsed < chargeTime && state == ChargeState.charging) {
 			timeElapsed += Time.deltaTime;
 			float percent = timeElapsed/chargeTime;
@@ -97,7 +106,9 @@ public class ChargeShot : MonoBehaviour {
 		}
 
 		if (state != ChargeState.cancelled) {
-			SoundManager.instance.Play("FullyCharged");
+			if (GameManager.S.inGame) {
+				SoundManager.instance.Play("FullyCharged");
+			}
 			state = ChargeState.charged;
 		}
 
@@ -112,14 +123,16 @@ public class ChargeShot : MonoBehaviour {
 	}
 
 	void CancelCharge() {
-		SoundManager.instance.Stop("ChargeAttackCharge");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Stop("ChargeAttackCharge");
+		}
 		state = ChargeState.cancelled;
 		Destroy(chargeParticle.gameObject);
 		Destroy(gameObject, 2f);
 		player.playerMovement.RestoreSpeed();
 	}
 
-	void Fire() {
+	public void Fire() {
 		state = ChargeState.fired;
 		player.playerShooting.ExpendAttackSlot();
 		shotParticle.transform.SetParent(null, true);
@@ -130,8 +143,10 @@ public class ChargeShot : MonoBehaviour {
 		RaycastHit[] hitscans = Physics.SphereCastAll(shot, shotWidth, 50f);
 		Debug.DrawRay(shot.origin, shot.direction * 50f, Color.blue, 10f);
 
-		SoundManager.instance.Play("ChargeAttackShoot");
-		SoundManager.instance.Stop("FullyCharged");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("ChargeAttackShoot");
+			SoundManager.instance.Stop("FullyCharged");
+		}
 
 		foreach (var hitscan in hitscans) {
 			//If we hit anything with the hitscan
@@ -140,13 +155,13 @@ public class ChargeShot : MonoBehaviour {
 				if (hitscan.collider.gameObject.tag == "Player") {
 					PlayerShip hitPlayer = hitscan.collider.gameObject.GetComponentInParent<PlayerShip>();
 					if (hitPlayer.player != owningPlayer) {
-						hitPlayer.TakeDamage(damage);
+						StartCoroutine(DealDamageCoroutine(hitPlayer));
 					}
 				}
 				//Connect with protag ships
 				else if (hitscan.collider.gameObject.tag == "ProtagShip") {
 					ProtagShip hitShip = hitscan.collider.gameObject.GetComponentInParent<ProtagShip>();
-					hitShip.TakeDamage(damage);
+					StartCoroutine(DealDamageCoroutine(hitShip));
 				}
 			}
 		}
@@ -154,5 +169,18 @@ public class ChargeShot : MonoBehaviour {
 		Destroy(chargeParticle.gameObject);
 		Destroy(gameObject, 2f);
 		player.playerMovement.RestoreSpeed();
+	}
+
+	IEnumerator DealDamageCoroutine(PlayerShip hitShip) {
+		float distance = (hitShip.transform.position - transform.position).magnitude;
+		yield return new WaitForSeconds(distance / shotSpeed);
+
+		hitShip.TakeDamage(damage);
+	}
+	IEnumerator DealDamageCoroutine(ProtagShip hitShip) {
+		float distance = (hitShip.transform.position - transform.position).magnitude;
+		yield return new WaitForSeconds(distance / shotSpeed);
+
+		hitShip.TakeDamage(damage);
 	}
 }

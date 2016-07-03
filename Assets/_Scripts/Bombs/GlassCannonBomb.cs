@@ -25,11 +25,18 @@ public class GlassCannonBomb : Bomb {
 			case AttackButtons.A:
 				HomingGroupShot homingGroupShot = Instantiate(homingGroupShotPrefab, transform.position, new Quaternion()) as HomingGroupShot;
 				homingGroupShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					homingGroupShot.target = thisPlayer.otherPlayer.transform;
+					homingGroupShot.thisPlayer = thisPlayer;
+				}
 				break;
 			//AltCircleShot Shot
 			case AttackButtons.B:
 				AltCircleShot altCircleShot = Instantiate(altCircleShotPrefab, transform.position, new Quaternion()) as AltCircleShot;
 				altCircleShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					altCircleShot.thisPlayer = thisPlayer;
+				}
 				altCircleShot.FireBurst();
 				break;
 			//Dual lasers
@@ -46,7 +53,9 @@ public class GlassCannonBomb : Bomb {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
-		SoundManager.instance.Play("BombExplode");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BombExplode");
+		}
 
 		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
 		Destroy(shockwave, 5f);

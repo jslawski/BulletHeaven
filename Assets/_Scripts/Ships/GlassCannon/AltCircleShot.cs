@@ -5,7 +5,7 @@ using PolarCoordinates;
 public class AltCircleShot : MonoBehaviour, BombAttack {
 
 	Player _owningPlayer = Player.none;
-
+	public PlayerShip thisPlayer;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -42,6 +42,10 @@ public class AltCircleShot : MonoBehaviour, BombAttack {
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 				curBullet.damage = bulletDamage;
 				curBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(thisPlayer.playerColor);
+					curBullet.thisPlayer = thisPlayer;
+				}
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.physics.velocity = bulletVelocity * direction.PolarToCartesian().normalized;
 				curBullet.physics.acceleration = accelerationFactor*bulletVelocity * direction.PolarToCartesian().normalized;

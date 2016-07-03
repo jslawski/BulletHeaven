@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PolarCoordinates;
 
 public class HomingGroup : MonoBehaviour {
+	public PlayerShip thisPlayer;
 	public Player owningPlayer;
 	public Transform target;
 	NonPooledBullet bulletPrefab;
@@ -67,6 +68,10 @@ public class HomingGroup : MonoBehaviour {
 				curBullet.curState = BulletState.parented;
 				curBullet.damage = bulletDamage;
 				curBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(thisPlayer.playerColor);
+					curBullet.thisPlayer = thisPlayer;
+				}
 				curBullet.transform.SetParent(transform);
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.physics.velocity = bulletSpeed * direction.PolarToCartesian().normalized;
