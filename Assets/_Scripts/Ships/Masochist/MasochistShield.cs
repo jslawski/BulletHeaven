@@ -73,7 +73,7 @@ public class MasochistShield : MonoBehaviour {
 		shieldSprite.enabled = false;
 		thisPlayer.shieldUp = false;
 
-		Vector3 reflectionVector = GameManager.S.players[(int)owningPlayer].player == Player.player1 ? Vector3.right : Vector3.left;
+		Vector3 reflectionVector = owningPlayer == Player.player1 ? Vector3.right : Vector3.left;
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
 			if (bullet == null) {

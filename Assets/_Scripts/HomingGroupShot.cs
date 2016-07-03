@@ -9,12 +9,14 @@ public class HomingGroupShot : MonoBehaviour, BombAttack {
 		set {
 			_owningPlayer = value;
 			Player otherPlayer = (value == Player.player1) ? Player.player2 : Player.player1;
-			target = GameManager.S.players[(int)otherPlayer].transform;
+			if (GameManager.S.inGame) {
+				target = GameManager.S.players[(int)otherPlayer].transform;
+			}
 		}
 	}
 	Player _owningPlayer = Player.none;
 	HomingGroup homingGroupPrefab;
-	Transform target;
+	public Transform target;
 
 	int numShots = 3;
 	float timeBetweenShots = 0.5f;

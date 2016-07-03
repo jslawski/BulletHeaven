@@ -64,8 +64,12 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			//Do damage to the player hit
+			float multiplier = 1f;
 			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
-			damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
+			if (masochistPlayer != null) {
+				multiplier = masochistPlayer.damageMultiplier;
+			}
+			damageDealt = CalculateDamageDealt(other.transform) * multiplier;
 			player.TakeDamage(damageDealt);
 			print("Damage Dealt: " + damageDealt);
 

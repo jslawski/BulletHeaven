@@ -9,7 +9,9 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 			return _owningPlayer;
 		}
 		set {
-			owner = GameManager.S.players[(int)value];
+			if (GameManager.S.inGame) {
+				owner = GameManager.S.players[(int)value];
+			}
 			_owningPlayer = value;
 		}
 	}

@@ -13,8 +13,8 @@ public class Beam : MonoBehaviour, BombAttack {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				foreach (var beam in beams) {
-					beam.startColor = GameManager.S.players[(int)value].playerColor;
+				if (GameManager.S.inGame) {
+					SetColor(GameManager.S.players[(int)value].playerColor);
 				}
 			}
 		}
@@ -29,7 +29,9 @@ public class Beam : MonoBehaviour, BombAttack {
 
 	// Use this for initialization
 	void Awake() {
-		SoundManager.instance.Play("BeamDetonate");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BeamDetonate");
+		}
 		beams = GetComponentsInChildren<ParticleSystem>();
 		hitboxes = GetComponentsInChildren<BoxCollider>();
 
@@ -41,9 +43,11 @@ public class Beam : MonoBehaviour, BombAttack {
 	}
 
 	void StartBeam() {
-		SoundManager.instance.Play("Beam");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("Beam");
+		}
 
-		if (GameManager.S.gameState != GameStates.titleScreen) {
+		if (GameManager.S.gameState == GameStates.playing) {
 			VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
 			VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
 			CameraEffects.S.CameraShake(1.5f, 0.75f, true);
@@ -102,6 +106,12 @@ public class Beam : MonoBehaviour, BombAttack {
 				//Slow the player while in the beam
 				playerMovement.RestoreSpeed();
 			}
+		}
+	}
+
+	public void SetColor(Color newColor) {
+		foreach (var beam in beams) {
+			beam.startColor = newColor;
 		}
 	}
 }

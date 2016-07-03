@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class AbilityPreviewScreen : MonoBehaviour {
+	public PreviewGameManager previewGameManager;
 	[SerializeField]
 	ShipSelectionManager shipSelection;
 	[SerializeField]
@@ -30,8 +31,7 @@ public class AbilityPreviewScreen : MonoBehaviour {
 	}
 
 	// Use this for initialization
-	void Start () {
-
+	void Awake () {
 	}
 	
 	// Update is called once per frame
@@ -94,6 +94,14 @@ public class AbilityPreviewScreen : MonoBehaviour {
 		gameObject.SetActive(true);
 		shipSelection.hasFocus = false;
 		previewCamera.gameObject.SetActive(true);
+		//Tell the ability preview ship to initialize itself with this info
+		previewGameManager.players[(int)shipSelection.player].InitializeShip(shipInfo);
+
+		ShipInfo targetShipInfo = new ShipInfo();
+		targetShipInfo.selectingPlayer = (previewGameManager.sceneOwner == Player.player1) ? Player.player2 : Player.player1;
+		targetShipInfo.shipColor = new Color(0, 1, 15f / 255f);
+		targetShipInfo.typeOfShip = ShipType.tank;
+		previewGameManager.players[(int)previewGameManager.target.player].InitializeShip(targetShipInfo);
 
 		//Don't waste time setting information if it's not new
 		if (shipInfo == selectedShip) {
@@ -118,5 +126,6 @@ public class AbilityPreviewScreen : MonoBehaviour {
 	public void SetSelectedAbility(AbilityInfo abilityInfo) {
 		abilityNamePreviewField.text = abilityInfo.abilityName + " Preview";
 		descriptionField.text = abilityInfo.abilityDescription.Replace("\\n", "\n");
+		previewGameManager.PlayAbilityPreview(abilityInfo.slot);
 	}
 }

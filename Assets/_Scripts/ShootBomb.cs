@@ -132,7 +132,7 @@ public class ShootBomb : MonoBehaviour {
 		}
 	}
 
-	void Shoot() {
+	public void Shoot() {
 		//Don't fire if we already have the max number of bombs in the air
 		//if (bombsInAir.Count >= maxNumBombsInAir) {
 		//	return;
@@ -144,10 +144,13 @@ public class ShootBomb : MonoBehaviour {
 			return;
 		}
 
-		SoundManager.instance.Play("FireBomb");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("FireBomb");
+		}
 
 		GameObject newBombGO = Instantiate(bombPrefab, transform.position, new Quaternion()) as GameObject;
 		Bomb newBomb = newBombGO.GetComponentInChildren<Bomb>();
+		newBomb.thisPlayer = thisPlayer;
 		PhysicsObj bombPhysics = newBomb.GetComponentInParent<PhysicsObj>();
 
 		//Set the owner of the fired bomb
@@ -163,6 +166,7 @@ public class ShootBomb : MonoBehaviour {
 
 		//Add this bomb to the end of the queue
 		bombsInAir.Add(newBomb);
+		
 		ExpendAttackSlot();
 
 	}
@@ -175,14 +179,17 @@ public class ShootBomb : MonoBehaviour {
 		}
 		bombShootCooldownRemaining = bombShootCooldown;
 
-		curAmmo--;
-		StartCoroutine(ReloadBomb());
-		//Disable the correct ammo image
-		if (ammoImages[0].reloading == false) {
-			StartCoroutine(ammoImages[0].DisplayReloadCoroutine(reloadDuration));
-		}
-		else if (ammoImages[1].reloading == false) {
-			StartCoroutine(ammoImages[1].DisplayReloadCoroutine(reloadDuration));
+
+		if (GameManager.S.inGame) {
+			curAmmo--;
+			StartCoroutine(ReloadBomb());
+			//Disable the correct ammo image
+			if (ammoImages[0].reloading == false) {
+				StartCoroutine(ammoImages[0].DisplayReloadCoroutine(reloadDuration));
+			}
+			else if (ammoImages[1].reloading == false) {
+				StartCoroutine(ammoImages[1].DisplayReloadCoroutine(reloadDuration));
+			}
 		}
 	}
 
@@ -201,5 +208,12 @@ public class ShootBomb : MonoBehaviour {
 	public static Vector3 ApplySpread(Vector3 aim, float spread) {
 		aim.y += Random.Range(-spread, spread);
 		return aim;
+	}
+
+	public void DestroyAllBombs() {
+		foreach (var bomb in bombsInAir) {
+			Destroy(bomb);
+		}
+		bombsInAir.Clear();
 	}
 }

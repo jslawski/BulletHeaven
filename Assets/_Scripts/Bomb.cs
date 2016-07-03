@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Bomb : MonoBehaviour {
+	public PlayerShip thisPlayer;
 	public Player _owningPlayer = Player.none;       //Set this when creating a new Bomb
 	public Player owningPlayer {
 		get {
@@ -10,22 +11,22 @@ public class Bomb : MonoBehaviour {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				//spriteRenderer.sprite = playerBombSprites[(int)value];
-				//Set the color of each of the wing's particle systems
-				for (int i = 0; i < particleSystems.Length; i++) {
-					particleSystems[i].startColor = GameManager.S.players[(int)value].playerColor;
-					particleSystems[i].Play();
+				if (GameManager.S.inGame) {
+					thisPlayer = GameManager.S.players[(int)value];
+					SetColor(thisPlayer.playerColor);
 				}
+
 				//Move the button UI to always be behind the bomb's trajectory
 				if (value == Player.player2 && buttonUI != null) {
 					Vector3 buttonPos = buttonUI.transform.localPosition;
 					buttonPos.x *= -1;
 					buttonUI.transform.localPosition = buttonPos;
 				}
+
 				////Only turn on the prewarmed particle glow for this player
 				//particleSystems[3].gameObject.SetActive((value == Player.player1));
 				//particleSystems[4].gameObject.SetActive((value == Player.player2));
-            }
+			}
 		}
 	}
 
@@ -70,11 +71,20 @@ public class Bomb : MonoBehaviour {
 		//print("Destroyed bomb");
 		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
 		if (GameManager.S && owningPlayer != Player.none && GameManager.S.gameState != GameStates.titleScreen) {
-			GameManager.S.players[(int)owningPlayer].GetComponent<ShootBomb>().bombsInAir.Remove(this);
+			thisPlayer.playerShooting.bombsInAir.Remove(this);
 		}
 
 		if (transform.parent != null) {
 			Destroy(transform.parent.gameObject);
 		}
+	}
+
+	public void SetColor(Color newColor) {
+		//Set the color of each of the wing's particle systems
+		for (int i = 0; i < particleSystems.Length; i++) {
+			particleSystems[i].startColor = newColor;
+			particleSystems[i].Play();
+		}
+
 	}
 }

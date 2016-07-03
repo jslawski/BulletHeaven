@@ -22,24 +22,20 @@ public class Bullet : PooledObj {
 		set {
 			_owningPlayer = value;
 			if (value != Player.none) {
-				PlayerShip playerShip = GameManager.S.players[(int)value];
-				sprite.color = playerShip.playerColor;
-				if (trail != null) {
-					trail.startColor = playerShip.playerColor;
+				if (GameManager.S.inGame) {
+					thisPlayer = GameManager.S.players[(int)value];
+					SetColor(thisPlayer.playerColor);
+					Player other = (value == Player.player1) ? Player.player2 : Player.player1;
+					otherPlayer = GameManager.S.players[(int)other].playerMovement;
 				}
-				owningPlayerMovement = playerShip.playerMovement;
-				Player other = (value == Player.player1) ? Player.player2 : Player.player1;
-				otherPlayer = GameManager.S.players[(int)other].playerMovement;
 			}
 			else {
-				sprite.color = unownedBulletColor;
-				if (trail != null) {
-					trail.startColor = unownedBulletColor;
-				}
+				SetColor(unownedBulletColor);
 			}
 		}
 	}
-	protected ShipMovement otherPlayer;
+	public PlayerShip thisPlayer;
+	public ShipMovement otherPlayer;
 	protected bool _transparent = false;
 	protected bool transparent {
 		get {
@@ -67,7 +63,6 @@ public class Bullet : PooledObj {
 
 	protected float transparencyAlpha = 71f / 255f;
 	protected float vampShieldHealAmount = 0.085f;
-	protected ShipMovement owningPlayerMovement;
 
 	public bool IsInteractable() {
 		return (curState != BulletState.absorbedByBlackHole && curState != BulletState.absorbedByMasochist && curState != BulletState.absorbedByVampire);
@@ -132,7 +127,7 @@ public class Bullet : PooledObj {
 				}
 
 				//Do damage to the player hit
-				if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {  //kinky...
+				if (GameManager.S.inGame && owningPlayer != Player.none && thisPlayer is Masochist) {  //kinky...
 					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
 					playerHit.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 				}
@@ -146,8 +141,7 @@ public class Bullet : PooledObj {
 				ReturnToPool();
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
-			else if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is VampireShip) {
-				VampireShip vampireOwningPlayer = GameManager.S.players[(int)owningPlayer] as VampireShip;
+			else if (owningPlayer != Player.none && thisPlayer.typeOfShip == ShipType.vampire) {
 				if (curState == BulletState.absorbedByVampire) {
 					playerHit.TakeDamage(damage * -vampShieldHealAmount);
 					curState = BulletState.none;
@@ -159,7 +153,7 @@ public class Bullet : PooledObj {
 		//Deal damage to any ProtagShip hit
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			if (owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {
+			if (GameManager.S.inGame && owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {
 				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
 				otherShip.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 			}
@@ -211,5 +205,12 @@ public class Bullet : PooledObj {
 			}
 		}
 		return false;
+	}
+
+	public void SetColor(Color newColor) {
+		sprite.color = newColor;
+		if (trail != null) {
+			trail.startColor = newColor;
+		}
 	}
 }

@@ -9,9 +9,9 @@ public class DualLasers : MonoBehaviour {
 		}
 		set {
 			_owningPlayer = value;
-			thisPlayer = GameManager.S.players[(int)value];
-			foreach (var laser in lasers) {
-				laser.startColor = thisPlayer.playerColor;
+			if (GameManager.S.inGame) {
+				thisPlayer = GameManager.S.players[(int)value];
+				SetColor(thisPlayer.playerColor);
 			}
 		}
 	}
@@ -47,8 +47,7 @@ public class DualLasers : MonoBehaviour {
 		damage = maxDamage;
 
 		//Set this as a child of the player
-		if (owningPlayer != Player.none) {
-			thisPlayer = GameManager.S.players[(int)owningPlayer];
+		if (thisPlayer != null) {
 			transform.SetParent(thisPlayer.transform, false);
 			transform.localPosition = Vector3.zero;
 		}
@@ -181,6 +180,12 @@ public class DualLasers : MonoBehaviour {
 				//Restore the player's speed after leaving the beam
 				playerMovement.RestoreSpeed();
 			}
+		}
+	}
+
+	public void SetColor(Color newColor) {
+		foreach (var laser in lasers) {
+			laser.startColor = newColor;
 		}
 	}
 }

@@ -11,9 +11,15 @@ public class ConeShot : MonoBehaviour, BombAttack {
 		}
 		set {
 			_owningPlayer = value;
+			if (GameManager.S.inGame) {
+				Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
+				target = GameManager.S.players[(int)targetPlayer].transform;
+				playerColor = GameManager.S.players[(int)value].playerColor;
+			}
 		}
 	}
 
+	public Color playerColor;
 	public Transform target;
 	int bulletsPerBurst = 15;
 	int numLines = 5;
@@ -33,10 +39,6 @@ public class ConeShot : MonoBehaviour, BombAttack {
 			yield break;
 		}
 
-		//Get target
-		Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
-		target = GameManager.S.players[(int)targetPlayer].transform;
-
 		//Set direction and separation between bullets
 		PolarCoordinate direction = new PolarCoordinate(1, target.position - gameObject.transform.position);
 		float bulletSeparation = coneSpread / numLines;
@@ -49,6 +51,9 @@ public class ConeShot : MonoBehaviour, BombAttack {
 			for (int j = 0; j < numLines; j++) {
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 				curBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(playerColor);
+				}
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * newDirection.PolarToCartesian().normalized;
 				newDirection.angle += bulletSeparation;

@@ -27,30 +27,47 @@ public class GeneralistBomb : Bomb {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
-		SoundManager.instance.Play("BombExplode");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BombExplode");
+		}
 
 		switch (attackToPerform) {
 			//Leading shot
 			case AttackButtons.A:
 				LeadingShot newShot = Instantiate(leadingShotPrefab, transform.position, new Quaternion()) as LeadingShot;
 				newShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					newShot.thisPlayer = thisPlayer;
+					newShot.targetPlayer = thisPlayer.otherPlayer;
+                }
 				newShot.FireBurst();
 				break;
 			//Spiral shot
 			case AttackButtons.B:
 				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
 				spiralShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					spiralShot.thisPlayer = thisPlayer;
+				}
 				spiralShot.FireBurst();
 				break;
 			//Beam attack
 			case AttackButtons.X:
 				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
 				beamShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					beamShot.SetColor(thisPlayer.playerColor);
+				}
 				break;
 			//Reflektor
 			case AttackButtons.Y:
 				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
 				reflectorShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					reflectorShot.thisPlayer = thisPlayer;
+					reflectorShot.SetColor(thisPlayer.playerColor);
+					reflectorShot.otherPlayer = thisPlayer.otherPlayer;
+				}
 				break;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");

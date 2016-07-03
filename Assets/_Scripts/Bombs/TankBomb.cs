@@ -25,13 +25,17 @@ public class TankBomb : Bomb {
 
 	public override void Detonate(AttackButtons attackToPerform) {
 		switch (attackToPerform) {
-			//Leading shot
+			//Cone shot
 			case AttackButtons.A:
 				ConeShot coneShot = Instantiate(coneShotPrefab, transform.position, new Quaternion()) as ConeShot;
 				coneShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					coneShot.target = thisPlayer.otherPlayer.transform;
+					coneShot.playerColor = thisPlayer.playerColor;
+				}
 				coneShot.FireBurst();
 				break;
-			//Spiral shot
+			//Weave shot
 			case AttackButtons.B:
 				WeaveShot weaveShot = Instantiate(weaveShotPrefab, transform.position, new Quaternion()) as WeaveShot;
 				weaveShot.owningPlayer = owningPlayer;
@@ -55,7 +59,9 @@ public class TankBomb : Bomb {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
-		SoundManager.instance.Play("BombExplode");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BombExplode");
+		}
 
 		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
 		Destroy(shockwave, 5f);

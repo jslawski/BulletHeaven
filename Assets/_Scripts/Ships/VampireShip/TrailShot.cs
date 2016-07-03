@@ -11,6 +11,10 @@ public class TrailShot : MonoBehaviour, BombAttack {
 		}
 		set {
 			_owningPlayer = value;
+			if (GameManager.S.inGame) {
+				Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
+				target = GameManager.S.players[(int)targetPlayer].transform;
+			}
 		}
 	}
 
@@ -32,9 +36,6 @@ public class TrailShot : MonoBehaviour, BombAttack {
 			Debug.LogError("Trail shot does not have owning player set");
 			yield break;
 		}
-
-		Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
-		target = GameManager.S.players[(int)targetPlayer].transform;
 
 		PolarCoordinate direction = new PolarCoordinate(1, target.position - gameObject.transform.position);
 

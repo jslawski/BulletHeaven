@@ -39,7 +39,9 @@ public class VampireBomb : Bomb {
 			//LifeSapZone attack
 			case AttackButtons.X:
 				LifeSapZone lifeSapZone = Instantiate(lifeSapZonePrefab, transform.position, new Quaternion()) as LifeSapZone;
-				lifeSapZone.owner = GameManager.S.players[(int)owningPlayer];
+				if (GameManager.S.inGame) {
+					lifeSapZone.owner = GameManager.S.players[(int)owningPlayer];
+				}
 				break;
 			//Vampire Shield
 			case AttackButtons.Y:

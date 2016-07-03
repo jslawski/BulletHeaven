@@ -7,6 +7,7 @@ public class Reflector : MonoBehaviour, BombAttack {
 	float reflectorDuration = 4f;
 	float reflectionVelocity = 10f;
 
+	public PlayerShip thisPlayer;
 	Player _owningPlayer = Player.none;
 	public Player owningPlayer {
 		get {
@@ -21,14 +22,20 @@ public class Reflector : MonoBehaviour, BombAttack {
 				//else {
 				//	reflectorParticles[1].Play();
 				//}
-				reflectorParticles[0].startColor = GameManager.S.players[(int)value].playerColor;
-				reflectorParticles[0].Play();
+				if (GameManager.S.inGame) {
+					Player other = (value == Player.player1) ? Player.player2 : Player.player1;
+					otherPlayer = GameManager.S.players[(int)other];
+					SetColor(GameManager.S.players[(int)value].playerColor);
+				}
 			}
 		}
 	}
+	public PlayerShip otherPlayer;
 
 	void Awake() {
-		SoundManager.instance.Play("Reflector");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("Reflector");
+		}
 		reflectorParticles = GetComponentsInChildren<ParticleSystem>();
 		StartCoroutine(DestroyReflector());
 	}
@@ -57,11 +64,10 @@ public class Reflector : MonoBehaviour, BombAttack {
 			}
 
 			//Get the opponent player value of the bullet
-			Player otherPlayer = otherBullet.owningPlayer;
-			if (otherPlayer != Player.none) {
+			if (otherPlayer != null) {
 				otherBullet.curState = BulletState.reflected;
 
-				Vector3 otherPlayerPosition = GameManager.S.players[(int)otherPlayer].transform.position;
+				Vector3 otherPlayerPosition = otherPlayer.transform.position;
 
 				//Determine reflection vector
 				Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);
@@ -69,8 +75,16 @@ public class Reflector : MonoBehaviour, BombAttack {
 
 				//Reflect the bullet back at the opponent
 				otherBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					otherBullet.SetColor(thisPlayer.playerColor);
+				}
 				otherBullet.gameObject.GetComponent<PhysicsObj>().velocity = reflectionVector * reflectionVelocity;
 			}
 		}
+	}
+
+	public void SetColor(Color newColor) {
+		reflectorParticles[0].startColor = newColor;
+		reflectorParticles[0].Play();
 	}
 }

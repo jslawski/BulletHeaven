@@ -25,6 +25,8 @@ public class AbilityPreview : MonoBehaviour {
 	AbilityInfo abilityInfo;
 	Text abilityNameField;
 
+	public PreviewShip[] players;
+
 	// Use this for initialization
 	void Awake () {
 		selectedBorder = GetComponent<Image>();
@@ -46,29 +48,7 @@ public class AbilityPreview : MonoBehaviour {
 	public void SetAbilityInfo(AbilityInfo _abilityInfo) {
 		abilityInfo = _abilityInfo;
 		abilityNameField.text = abilityInfo.abilityName;
-		PlayAbilityPreview(abilityInfo.slot);
 	}
 
-	void PlayAbilityPreview(int slot) {
-		switch (previewScreen.selectedShip.typeOfShip) {
-			//Generalist ship
-			case ShipType.generalist:
-				switch (slot) {
-					case 0:
-						StartCoroutine(Generalist0Preview());
-						break;
-					case 1:
-						break;
-					case 2:
-						break;
-					case 3:
-						break;
-				}
-				break;
-		}
-	}
 
-	IEnumerator Generalist0Preview() {
-		yield return null;
-	}
 }

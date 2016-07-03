@@ -56,6 +56,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	[HideInInspector]
 	public ShootBomb playerShooting;
 
+	public PlayerShip otherPlayer;
+
 	protected float maxHealth = 150f;
 	protected float _health;
 	protected float health {

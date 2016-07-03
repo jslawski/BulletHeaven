@@ -5,7 +5,7 @@ using PolarCoordinates;
 public class SpiralShot : MonoBehaviour, BombAttack {
 
 	public Player _owningPlayer = Player.none;
-
+	public PlayerShip thisPlayer;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -41,6 +41,10 @@ public class SpiralShot : MonoBehaviour, BombAttack {
 			for (float curAngle = startingAngle; curAngle < startingAngle + (2 * Mathf.PI); curAngle += firingSeparation) {
 				PolarCoordinate direction = new PolarCoordinate(1, curAngle);
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(thisPlayer.playerColor);
+					curBullet.thisPlayer = thisPlayer;
+				}
 				curBullet.damage = 1.5f;
 				curBullet.owningPlayer = owningPlayer;
 				curBullet.transform.position = gameObject.transform.position;

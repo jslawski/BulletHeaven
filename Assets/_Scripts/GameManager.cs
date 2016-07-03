@@ -47,6 +47,12 @@ public class GameManager : MonoBehaviour {
 	public float fadeFromShipSelectDuration = 2f;
 	string curTheme = "TitleTheme";
 
+	public bool inGame {
+		get {
+			return gameState == GameStates.playing || gameState == GameStates.titleScreen;
+        }
+	}
+
 	void Awake() {
 		if (S != null) {
 			Destroy(this);

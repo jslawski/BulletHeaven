@@ -3,9 +3,10 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
 	public PlayerShip thisPlayer;
+	public Camera renderCamera;
 	float shipLerpSpeed = 13.75f;               //Percent ship lerps towards desired position each FixedUpdate()
-	float vertMovespeedDefault = 16f;
-	float horizMovespeedDefault = 12.5f;
+	protected float vertMovespeedDefault = 16f;
+	protected float horizMovespeedDefault = 12.5f;
 	protected float verticalMovespeed;                  //Speed at which the player can move up and down
 	protected float horizontalMovespeed;					//Speed at which the player can move right to left
 
@@ -29,23 +30,24 @@ public class ShipMovement : MonoBehaviour {
 	protected Vector3 desiredPosition;                  //The position that the transform lerps towards each FixedUpdate()
 	protected Quaternion startRotation;                 //The beginning rotation of the ship
 	protected Quaternion desiredRotation;					//The rotation that the transform lerps towards each FixedUpdate()
-	Vector3 dotVector;                          //Used to determine which way the ship should turn when moving up and down
+	protected Vector3 dotVector;                          //Used to determine which way the ship should turn when moving up and down
 
 	public bool movementDisabled = false;
 
 	public KeyCode left, right, up, down;
 
 	// Use this for initialization
-	void Awake() {
+	protected virtual void Awake() {
+		renderCamera = Camera.main;
 		thisPlayer = GetComponent<PlayerShip>();
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
 
-		Vector3 worldSpaceMin = Camera.main.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
+		Vector3 worldSpaceMin = renderCamera.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
 		worldSpaceMinX = worldSpaceMin.x;
 		worldSpaceMinY = worldSpaceMin.y;
-		Vector3 worldSpacemax = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
+		Vector3 worldSpacemax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
 		worldSpaceMaxX = worldSpacemax.x;
 		worldSpaceMaxY = worldSpacemax.y;
 
@@ -102,21 +104,21 @@ public class ShipMovement : MonoBehaviour {
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.fixedDeltaTime*shipTurnLerpSpeed);
 	}
 	void ClampDesiredPosition() {
-		Vector3 desiredViewportPos = Camera.main.WorldToViewportPoint(desiredPosition);
+		Vector3 desiredViewportPos = renderCamera.WorldToViewportPoint(desiredPosition);
 
 		//Clamp x-direction
 		if (desiredViewportPos.x < viewportMinX) {
-			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportMinX, desiredViewportPos.y, desiredViewportPos.z)).x;
+			desiredPosition.x = renderCamera.ViewportToWorldPoint(new Vector3(viewportMinX, desiredViewportPos.y, desiredViewportPos.z)).x;
 		}
 		else if (desiredViewportPos.x > viewportMaxX) {
-			desiredPosition.x = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, desiredViewportPos.y, desiredViewportPos.z)).x;
+			desiredPosition.x = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, desiredViewportPos.y, desiredViewportPos.z)).x;
 		}
 		//Clamp y-direction
 		if (desiredViewportPos.y < viewportMinY) {
-			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMinY, desiredViewportPos.z)).y;
+			desiredPosition.y = renderCamera.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMinY, desiredViewportPos.z)).y;
 		}
 		else if (desiredViewportPos.y > viewportMaxY) {
-			desiredPosition.y = Camera.main.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
+			desiredPosition.y = renderCamera.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
 		}
 	}
 	protected void Move(Vector2 stickPosition) {
