@@ -3,6 +3,7 @@ using System.Collections;
 using PolarCoordinates;
 
 public class SineShot : MonoBehaviour, BombAttack{
+	public PlayerShip thisPlayer;
 	Player _owningPlayer = Player.none;
 
 	public Player owningPlayer {
@@ -58,6 +59,10 @@ public class SineShot : MonoBehaviour, BombAttack{
 	void GenerateBullet(PolarCoordinate direction, int waveDirection) {
 		SineBullet curBullet = bulletPrefab.GetPooledInstance<SineBullet>();
 		curBullet.owningPlayer = owningPlayer;
+		if (!GameManager.S.inGame) {
+			curBullet.SetColor(thisPlayer.playerColor);
+			curBullet.thisPlayer = thisPlayer;
+		}
 		curBullet.transform.position = gameObject.transform.position;
 		curBullet.GetComponent<PhysicsObj>().velocity = baseVelocity * direction.PolarToCartesian().normalized;
 

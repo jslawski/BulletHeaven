@@ -30,6 +30,10 @@ public class MasochistBomb : Bomb {
 				if (GameManager.S.inGame) {
 					newShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
 				}
+				else {
+					newShot.target = thisPlayer.otherPlayer.transform;
+					newShot.thisPlayer = thisPlayer;
+				}
 				newShot.FireBurst();
 				break;
 			//Spread shot
@@ -38,6 +42,9 @@ public class MasochistBomb : Bomb {
 				spreadShot.owningPlayer = owningPlayer;
 				if (GameManager.S.inGame) {
 					spreadShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+				}
+				else {
+					spreadShot.thisPlayer = thisPlayer;
 				}
 				spreadShot.FireBurst();
 				break;
@@ -58,7 +65,9 @@ public class MasochistBomb : Bomb {
 		//Stop moving the bomb
 		physics.velocity = Vector3.zero;
 
-		SoundManager.instance.Play("BombExplode");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BombExplode");
+		}
 		GameObject shockwave = Instantiate(shockwavePrefab, transform.position, new Quaternion()) as GameObject;
 		Destroy(shockwave, 5f);
 		Destroy(gameObject);

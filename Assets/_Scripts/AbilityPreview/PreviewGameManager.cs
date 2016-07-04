@@ -56,6 +56,23 @@ public class PreviewGameManager : MonoBehaviour {
 						break;
 				}
 				break;
+
+			//Masochist ship
+			case ShipType.masochist:
+				switch (slot) {
+					case 0:
+						StartCoroutine(Masochist0Preview());
+						break;
+					case 1:
+						StartCoroutine(Masochist1Preview());
+						break;
+					case 2:
+						StartCoroutine(Masochist2Preview());
+						break;
+					case 3:
+						break;
+				}
+				break;
 		}
 	}
 
@@ -67,6 +84,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("Generalist0Preview");
 		PlayerShip player = players[(int)sceneOwner];
@@ -88,6 +107,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("Generalist1Preview");
 		PlayerShip player = players[(int)sceneOwner];
@@ -109,6 +130,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("Generalist2Preview");
 		PlayerShip player = players[(int)sceneOwner];
@@ -129,6 +152,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("Generalist3Preview");
 		PlayerShip player = players[(int)sceneOwner];
@@ -155,6 +180,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("GlassCannon0Preview");
 		PlayerShip player = players[(int)sceneOwner];
@@ -180,6 +207,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		print("GlassCannon1Preview");
 		PlayerShip player = players[(int)sceneOwner];
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		yield return new WaitForSeconds(startDelay);
 		while (true) {
@@ -198,7 +227,9 @@ public class PreviewGameManager : MonoBehaviour {
 		float repeatTime = 1f;
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
-		targetMove.autoMove = true;
+		targetMove.autoMove = false;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = true;
 
 		print("GlassCannon2Preview");
 		PreviewShip player = players[(int)sceneOwner];
@@ -217,6 +248,8 @@ public class PreviewGameManager : MonoBehaviour {
 
 		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
 		targetMove.autoMove = false;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
 
 		print("GlassCannon3Preview");
 		PreviewShip player = players[(int)sceneOwner];
@@ -226,6 +259,80 @@ public class PreviewGameManager : MonoBehaviour {
 			player.FireChargeShot();
 
 			yield return new WaitForSeconds(chargeTime + repeatTime);
+		}
+	}
+
+	//Masochist Ability Previews
+	IEnumerator Masochist0Preview() {
+		float startDelay = 0.25f;
+		float detonateDelay = 1.4f;
+		float repeatTime = 4f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		print("Masochist0Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.A);
+
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+	IEnumerator Masochist1Preview() {
+		float startDelay = 0.25f;
+		float detonateDelay = 2.5f;
+		float repeatTime = 5f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		print("Masochist1Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.B);
+
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+	IEnumerator Masochist2Preview() {
+		float startDelay = 0.25f;
+		float detonateDelay = 3f;
+		float repeatTime = 2f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = false;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		print("Masochist2Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.X);
+
+			yield return new WaitForSeconds(repeatTime);
 		}
 	}
 }

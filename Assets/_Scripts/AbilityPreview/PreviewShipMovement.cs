@@ -10,10 +10,8 @@ public class PreviewShipMovement : ShipMovement {
 		}
 		set {
 			_autoMove = value;
-			if (!value) {
-				desiredPosition = startPos;
-			}
-			else {
+			desiredPosition = startPos;
+			if (value) {
 				timeSinceDirectionChange = reverseDirectionTime / 2f;
 			}
 		}
@@ -21,6 +19,7 @@ public class PreviewShipMovement : ShipMovement {
 	int curDirection = 1;
 	float reverseDirectionTime = 1;
 	float timeSinceDirectionChange = .5f;
+	public float speedMultiplier = 1f;
 
 	Vector3 startPos;
 
@@ -30,8 +29,8 @@ public class PreviewShipMovement : ShipMovement {
 
 		startPos = transform.position;
 
-		vertMovespeedDefault *= 0.4f;
-		horizMovespeedDefault *= 0.4f;
+		vertMovespeedDefault *= speedMultiplier;
+		horizMovespeedDefault *= speedMultiplier;
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;

@@ -39,7 +39,9 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 	}
 
 	public void FireBurst() {
-		SoundManager.instance.Play("Explosion");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("Explosion");
+		}
 		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
 
 		//Scale the explosion size based on the damage multiplier

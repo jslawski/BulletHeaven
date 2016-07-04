@@ -3,6 +3,7 @@ using System.Collections;
 using PolarCoordinates;
 
 public class SpreadShot : MonoBehaviour, BombAttack {
+	public PlayerShip thisPlayer;
 	Player _owningPlayer = Player.none;
 
 	public Player owningPlayer {
@@ -64,6 +65,10 @@ public class SpreadShot : MonoBehaviour, BombAttack {
 				offsetDirection = new PolarCoordinate(1, curAngle + bulletOffset);
 				Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 				curBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(thisPlayer.playerColor);
+					curBullet.thisPlayer = thisPlayer;
+				}
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * (offsetDirection.PolarToCartesian()).normalized;
 
@@ -71,6 +76,10 @@ public class SpreadShot : MonoBehaviour, BombAttack {
 				offsetDirection = new PolarCoordinate(1, curAngle - bulletOffset);
 				curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 				curBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					curBullet.SetColor(thisPlayer.playerColor);
+					curBullet.thisPlayer = thisPlayer;
+				}
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * (offsetDirection.PolarToCartesian()).normalized;
 			}
