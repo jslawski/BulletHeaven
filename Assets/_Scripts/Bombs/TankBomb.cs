@@ -30,6 +30,7 @@ public class TankBomb : Bomb {
 				ConeShot coneShot = Instantiate(coneShotPrefab, transform.position, new Quaternion()) as ConeShot;
 				coneShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
+					coneShot.thisPlayer = thisPlayer;
 					coneShot.target = thisPlayer.otherPlayer.transform;
 					coneShot.playerColor = thisPlayer.playerColor;
 				}
@@ -39,6 +40,10 @@ public class TankBomb : Bomb {
 			case AttackButtons.B:
 				WeaveShot weaveShot = Instantiate(weaveShotPrefab, transform.position, new Quaternion()) as WeaveShot;
 				weaveShot.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					weaveShot.thisPlayer = thisPlayer;
+					weaveShot.target = thisPlayer.otherPlayer.transform;
+				}
 				weaveShot.FireBurst();
 				break;
 			//ClusterBomb attack
@@ -50,6 +55,10 @@ public class TankBomb : Bomb {
 			case AttackButtons.Y:
 				BlackHole blackHole = Instantiate(blackHolePrefab, transform.position, new Quaternion()) as BlackHole;
 				blackHole.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					blackHole.thisPlayer = thisPlayer;
+					blackHole.SetColor(thisPlayer.playerColor);
+				}
 				break;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");

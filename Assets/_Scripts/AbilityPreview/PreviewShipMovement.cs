@@ -11,6 +11,7 @@ public class PreviewShipMovement : ShipMovement {
 		set {
 			_autoMove = value;
 			desiredPosition = startPos;
+			desiredRotation = startRotation;
 			if (value) {
 				timeSinceDirectionChange = reverseDirectionTime / 2f;
 			}

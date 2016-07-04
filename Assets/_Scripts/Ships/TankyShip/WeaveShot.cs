@@ -5,6 +5,7 @@ using PolarCoordinates;
 public class WeaveShot : MonoBehaviour, BombAttack {
 	Player _owningPlayer = Player.none;
 
+	public PlayerShip thisPlayer;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -48,12 +49,20 @@ public class WeaveShot : MonoBehaviour, BombAttack {
 			//Fire bullet from first weave
 			Bullet curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 			curBullet.owningPlayer = owningPlayer;
+			if (!GameManager.S.inGame) {
+				curBullet.SetColor(thisPlayer.playerColor);
+				curBullet.thisPlayer = thisPlayer;
+			}
 			curBullet.transform.position = gameObject.transform.position;
 			curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDir1.PolarToCartesian().normalized;
 
 			//Fire bullet from second weave
 			curBullet = bulletPrefab.GetPooledInstance<Bullet>();
 			curBullet.owningPlayer = owningPlayer;
+			if (!GameManager.S.inGame) {
+				curBullet.SetColor(thisPlayer.playerColor);
+				curBullet.thisPlayer = thisPlayer;
+			}
 			curBullet.transform.position = gameObject.transform.position;
 			curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDir2.PolarToCartesian().normalized;
 

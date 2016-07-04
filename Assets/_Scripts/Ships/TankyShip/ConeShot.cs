@@ -19,6 +19,7 @@ public class ConeShot : MonoBehaviour, BombAttack {
 		}
 	}
 
+	public PlayerShip thisPlayer;
 	public Color playerColor;
 	public Transform target;
 	int bulletsPerBurst = 15;
@@ -53,6 +54,7 @@ public class ConeShot : MonoBehaviour, BombAttack {
 				curBullet.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					curBullet.SetColor(playerColor);
+					curBullet.thisPlayer = thisPlayer;
 				}
 				curBullet.transform.position = gameObject.transform.position;
 				curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * newDirection.PolarToCartesian().normalized;

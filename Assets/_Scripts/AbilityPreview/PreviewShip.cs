@@ -5,11 +5,13 @@ public class PreviewShip : PlayerShip {
 	bool inFireChargeShotCoroutine = false;
 	DualLasers dualLaserPrefab;
 	ChargeShot chargeShotPrefab;
+	MasochistShield masochistShieldPrefab;
 
 	// Use this for initialization
 	protected override void Awake () {
 		dualLaserPrefab = Resources.Load<DualLasers>("Prefabs/DualLasers");
 		chargeShotPrefab = Resources.Load<ChargeShot>("Prefabs/ChargeShot");
+		masochistShieldPrefab = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
 
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
@@ -103,5 +105,13 @@ public class PreviewShip : PlayerShip {
 		chargeShot.Fire();
 
 		inFireChargeShotCoroutine = false;
+	}
+
+	public void UseMasochistShield() {
+		MasochistShield newShield = Instantiate(masochistShieldPrefab, transform.position, new Quaternion()) as MasochistShield;
+		newShield.transform.parent = gameObject.transform;
+		newShield.thisPlayer = this;
+		newShield.owningPlayer = player;
+		newShield.ActivateShield();
 	}
 }

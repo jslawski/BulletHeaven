@@ -121,7 +121,7 @@ public class Bullet : PooledObj {
 				//Masochists with the shield up are immune to incoming bullets
 				if (playerHit.typeOfShip == ShipType.masochist) {
 					Masochist masochistHit = playerHit as Masochist;
-					if (masochistHit.shieldUp) {
+					if (masochistHit != null && masochistHit.shieldUp) {
 						return;
 					}
 				}

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BlackHole : MonoBehaviour, BombAttack {
+	public PlayerShip thisPlayer;
 	Player _owningPlayer = Player.none;
 
 	public Player owningPlayer {
@@ -47,16 +48,21 @@ public class BlackHole : MonoBehaviour, BombAttack {
 		//This does nothing to appease the interface
 	}
 
-	// Use this for initialization
-	IEnumerator Start () {
-		Invoke("Explode", maxLifespan);
-		SoundManager.instance.Play("BlackHole");
+	void Awake() {
 		inner = GetComponentInChildren<BlackHoleInner>();
 		inner.GetComponent<SphereCollider>().enabled = false;
 		outer = GetComponentInChildren<BlackHoleOuter>();
 		explosion = transform.FindChild("Explosion").GetComponent<ParticleSystem>();
 		outerParticleSystem = transform.FindChild("OuterParticleSystem").GetComponent<ParticleSystem>();
 		innerParticleSystem = transform.FindChild("InnerParticleSystem").GetComponent<ParticleSystem>();
+	}
+
+	// Use this for initialization
+	IEnumerator Start() {
+		Invoke("Explode", maxLifespan);
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("BlackHole");
+		}
 
 		//Set particle colors
 		if (GameManager.S.inGame) {
@@ -76,6 +82,10 @@ public class BlackHole : MonoBehaviour, BombAttack {
 	public void AddBullet(Bullet newBullet) {
 		if (trappedBullets.Count < maxNumTrappedBullets) {
 			newBullet.owningPlayer = owningPlayer;
+			if (!GameManager.S.inGame) {
+				newBullet.thisPlayer = thisPlayer;
+				newBullet.SetColor(thisPlayer.playerColor);
+			}
 			newBullet.gameObject.layer = LayerMask.NameToLayer("TrappedBullet");
 			trappedBullets.Add(newBullet);
 		}
@@ -89,7 +99,9 @@ public class BlackHole : MonoBehaviour, BombAttack {
 			return;
 		}
 		hasExploded = true;
-		SoundManager.instance.Play("Explosion");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("Explosion");
+		}
 		foreach (var bullet in trappedBullets) {
 			if (bullet != null) {
 				bullet.gameObject.layer = LayerMask.NameToLayer("Default");
