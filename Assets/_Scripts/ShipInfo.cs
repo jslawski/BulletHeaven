@@ -52,6 +52,8 @@ public class ShipInfo : MonoBehaviour {
 	void Awake () {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		selectionMenu = GetComponentInParent<ShipSelectionManager>();
+
+		GetShipInfoStrings();
 	}
 
 	void Start() {
@@ -121,6 +123,80 @@ public class ShipInfo : MonoBehaviour {
 		if (position == SelectionPosition.selected) {
 			//print(gameObject.name + " is now selected.");
 			selectionMenu.selectedShip = this;
+		}
+	}
+
+	//Get the correct strings depeinding on the type of the ship
+	void GetShipInfoStrings() {
+		switch (typeOfShip) {
+			case ShipType.generalist:
+				shipName = TextLiterals.SHIP_NAME_LANCELOT;
+				description = TextLiterals.SHIP_DESC_LANCELOT;
+				miscLabel = TextLiterals.MISC_STAT_LANCELOT;
+				abilities[0].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_0;
+				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_0;
+				abilities[1].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_1;
+				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_1;
+				abilities[2].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_2;
+				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_2;
+				abilities[3].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_3;
+				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_3;
+				break;
+			case ShipType.vampire:
+				shipName = TextLiterals.SHIP_NAME_NOSEFERATU;
+				description = TextLiterals.SHIP_DESC_NOSEFERATU;
+				miscLabel = TextLiterals.MISC_STAT_NOSEFERATU;
+				abilities[0].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_0;
+				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_0;
+				abilities[1].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_1;
+				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_1;
+				abilities[2].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_2;
+				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_2;
+				abilities[3].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_3;
+				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_3;
+				break;
+			case ShipType.masochist:
+				shipName = TextLiterals.SHIP_NAME_TEST_SUBJECT_P41N;
+				description = TextLiterals.SHIP_DESC_TEST_SUBJECT_P41N;
+				miscLabel = TextLiterals.MISC_STAT_TEST_SUBJECT_P41N;
+				abilities[0].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_0;
+				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_0;
+				abilities[1].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_1;
+				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_1;
+				abilities[2].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_2;
+				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_2;
+				abilities[3].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_3;
+				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_3;
+				break;
+			case ShipType.tank:
+				shipName = TextLiterals.SHIP_NAME_JUNK_DRIVER;
+				description = TextLiterals.SHIP_DESC_JUNK_DRIVER;
+				miscLabel = TextLiterals.MISC_STAT_JUNK_DRIVER;
+				abilities[0].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_0;
+				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_0;
+				abilities[1].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_1;
+				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_1;
+				abilities[2].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_2;
+				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_2;
+				abilities[3].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_3;
+				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_3;
+				break;
+			case ShipType.glassCannon:
+				shipName = TextLiterals.SHIP_NAME_REDEYE;
+				description = TextLiterals.SHIP_DESC_REDEYE;
+				miscLabel = TextLiterals.MISC_STAT_REDEYE;
+				abilities[0].abilityName = TextLiterals.ABILITY_NAME_REDEYE_0;
+				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_0;
+				abilities[1].abilityName = TextLiterals.ABILITY_NAME_REDEYE_1;
+				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_1;
+				abilities[2].abilityName = TextLiterals.ABILITY_NAME_REDEYE_2;
+				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_2;
+				abilities[3].abilityName = TextLiterals.ABILITY_NAME_REDEYE_3;
+				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_3;
+				break;
+			default:
+				print("<color = 'red'>ERROR: Ship type not found! </color>");
+				break;
 		}
 	}
 }
