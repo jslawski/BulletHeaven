@@ -195,7 +195,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_3;
 				break;
 			default:
-				print("<color = 'red'>ERROR: Ship type not found! </color>");
+				Debug.LogWarning("<color='red'>ERROR: Ship type " + typeOfShip + " not found!</color>");
 				break;
 		}
 	}

@@ -4,6 +4,7 @@ using System.Collections;
 public class RotatingCircleShot : MonoBehaviour, BombAttack {
 	Player _owningPlayer = Player.none;
 
+	public PlayerShip thisPlayer;
 	public Player owningPlayer {
 		get {
 			return _owningPlayer;
@@ -28,7 +29,7 @@ public class RotatingCircleShot : MonoBehaviour, BombAttack {
 	}
 
 	void Start() {
-		StartCoroutine(FireWave());
+		StartCoroutine(FireWaves());
 	}
 	
 	// Update is called once per frame
@@ -36,10 +37,13 @@ public class RotatingCircleShot : MonoBehaviour, BombAttack {
 	
 	}
 
-	IEnumerator FireWave() {
+	IEnumerator FireWaves() {
 		for (int i = 0; i < numWaves; i++) {
 			RotatingCircleWave rotatingCircleWave = Instantiate(rotatingCircleWavePrefab, transform.position, new Quaternion()) as RotatingCircleWave;
 			rotatingCircleWave.owningPlayer = owningPlayer;
+			if (!GameManager.S.inGame) {
+				rotatingCircleWave.thisPlayer = thisPlayer;
+			}
 			rotatingCircleWave.direction = (i % 2 == 0) ? 1 : -1;
 
 			float waitTime = timeBetweenWaves + rotatingCircleWave.timeBetweenBursts*rotatingCircleWave.numBurstsPerWave;

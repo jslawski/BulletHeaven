@@ -18,6 +18,7 @@ public class TrailShot : MonoBehaviour, BombAttack {
 		}
 	}
 
+	public PlayerShip thisPlayer;
 	public Transform target;
 	public TrailBullet bulletPrefab;
 
@@ -61,6 +62,10 @@ public class TrailShot : MonoBehaviour, BombAttack {
 		//Fire the leading bullet that will home in on the target
 		TrailBullet leadingBullet = bulletPrefab.GetPooledInstance<TrailBullet>();
 		leadingBullet.owningPlayer = owningPlayer;
+		if (!GameManager.S.inGame) {
+			leadingBullet.thisPlayer = thisPlayer;
+			leadingBullet.SetColor(thisPlayer.playerColor);
+		}
 		leadingBullet.transform.position = gameObject.transform.position;
 		leadingBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDirection.PolarToCartesian().normalized;
 		leadingBullet.target = target;
@@ -73,6 +78,10 @@ public class TrailShot : MonoBehaviour, BombAttack {
 		for (int i = 1; i < bulletsPerTrail; i++) {
 			TrailBullet curBullet = bulletPrefab.GetPooledInstance<TrailBullet>();
 			curBullet.owningPlayer = owningPlayer;
+			if (!GameManager.S.inGame) {
+				curBullet.thisPlayer = thisPlayer;
+				curBullet.SetColor(thisPlayer.playerColor);
+			}
 			curBullet.transform.position = gameObject.transform.position;
 			curBullet.GetComponent<PhysicsObj>().velocity = bulletVelocity * shootDirection.PolarToCartesian().normalized;
 

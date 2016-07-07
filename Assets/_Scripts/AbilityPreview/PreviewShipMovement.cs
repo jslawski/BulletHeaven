@@ -39,9 +39,10 @@ public class PreviewShipMovement : ShipMovement {
 		Vector3 worldSpaceMin = renderCamera.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
 		worldSpaceMinX = worldSpaceMin.x;
 		worldSpaceMinY = worldSpaceMin.y;
-		Vector3 worldSpacemax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
-		worldSpaceMaxX = worldSpacemax.x;
-		worldSpaceMaxY = worldSpacemax.y;
+		Vector3 worldSpaceMax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
+		worldSpaceMaxX = worldSpaceMax.x;
+		worldSpaceMaxY = worldSpaceMax.y;
+		//print("Bottom left: " + worldSpaceMin + "\nTop right: " + worldSpaceMax);
 
 		desiredPosition = transform.position;
 		startRotation = transform.rotation;

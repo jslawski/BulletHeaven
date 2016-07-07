@@ -6,12 +6,14 @@ public class PreviewShip : PlayerShip {
 	DualLasers dualLaserPrefab;
 	ChargeShot chargeShotPrefab;
 	MasochistShield masochistShieldPrefab;
+	VampireShield vampireShieldPrefab;
 
 	// Use this for initialization
 	protected override void Awake () {
 		dualLaserPrefab = Resources.Load<DualLasers>("Prefabs/DualLasers");
 		chargeShotPrefab = Resources.Load<ChargeShot>("Prefabs/ChargeShot");
 		masochistShieldPrefab = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
+		vampireShieldPrefab = Resources.Load<VampireShield>("Prefabs/VampireShield");
 
 		playerMovement = GetComponent<ShipMovement>();
 		playerShooting = GetComponent<ShootBomb>();
@@ -111,6 +113,15 @@ public class PreviewShip : PlayerShip {
 		MasochistShield newShield = Instantiate(masochistShieldPrefab, transform.position, new Quaternion()) as MasochistShield;
 		newShield.transform.parent = gameObject.transform;
 		newShield.thisPlayer = this;
+		newShield.owningPlayer = player;
+		newShield.ActivateShield();
+	}
+	
+	public void UseVampireShield() {
+		VampireShield newShield = Instantiate(vampireShieldPrefab, transform.position, new Quaternion()) as VampireShield;
+		newShield.transform.parent = gameObject.transform;
+		newShield.thisPlayer = this;
+		newShield.hitboxOffset = transform.FindChild("Hitbox").localPosition.y;
 		newShield.owningPlayer = player;
 		newShield.ActivateShield();
 	}

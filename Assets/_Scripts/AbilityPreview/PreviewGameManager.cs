@@ -92,6 +92,24 @@ public class PreviewGameManager : MonoBehaviour {
 						break;
 				}
 				break;
+
+			//Vampire ship
+			case ShipType.vampire:
+				switch (slot) {
+					case 0:
+						StartCoroutine(Vampire0Preview());
+						break;
+					case 1:
+						StartCoroutine(Vampire1Preview());
+						break;
+					case 2:
+						StartCoroutine(Vampire2Preview());
+						break;
+					case 3:
+						StartCoroutine(Vampire3Preview());
+						break;
+				}
+				break;
 		}
 	}
 
@@ -473,6 +491,102 @@ public class PreviewGameManager : MonoBehaviour {
 			yield return new WaitForSeconds(1f);
 			player.playerShooting.DetonateBomb(AttackButtons.Y);
 
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+
+	//Vampire Ability Previews
+	IEnumerator Vampire0Preview() {
+		float startDelay = 0.25f;
+		float detonateDelay = 1.5f;
+		float repeatTime = 5f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		//print("GlassCannon0Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.A);
+
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+	IEnumerator Vampire1Preview() {
+		float startDelay = 0.25f;
+		float repeatTime = 5f;
+		float detonateDelay = 1.5f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		//print("Generalist1Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.B);
+
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+	IEnumerator Vampire2Preview() {
+		float startDelay = 0.25f;
+		float detonateDelay = 2.75f;
+		float repeatTime = 6f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		//print("Masochist2Preview");
+		PlayerShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			player.playerShooting.Shoot();
+
+			yield return new WaitForSeconds(detonateDelay);
+
+			player.playerShooting.DetonateBomb(AttackButtons.X);
+
+			yield return new WaitForSeconds(repeatTime);
+		}
+	}
+	IEnumerator Vampire3Preview() {
+		float startDelay = 0.25f;
+		float repeatTime = 5f;
+
+		PreviewShipMovement targetMove = target.playerMovement as PreviewShipMovement;
+		targetMove.autoMove = true;
+		PreviewShipMovement playerMove = players[(int)sceneOwner].playerMovement as PreviewShipMovement;
+		playerMove.autoMove = false;
+
+		//print("Masochist3Preview");
+		PreviewShip player = players[(int)sceneOwner];
+
+		yield return new WaitForSeconds(startDelay);
+		while (true) {
+			playerMove.autoMove = false;
+			target.playerShooting.Shoot();
+			yield return new WaitForSeconds(1.4f);
+			target.playerShooting.DetonateBomb(AttackButtons.A);
+			yield return new WaitForSeconds(1.65f);
+			player.UseVampireShield();
 			yield return new WaitForSeconds(repeatTime);
 		}
 	}

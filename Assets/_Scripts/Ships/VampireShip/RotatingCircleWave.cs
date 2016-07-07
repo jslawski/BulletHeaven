@@ -4,6 +4,7 @@ using PolarCoordinates;
 
 public class RotatingCircleWave : MonoBehaviour {
 	public int direction = 1;
+	public PlayerShip thisPlayer;
 	public Player owningPlayer;
 	NonPooledBullet bulletPrefab;
 	int numBulletsPerBurst = 13;
@@ -36,6 +37,10 @@ public class RotatingCircleWave : MonoBehaviour {
 				NonPooledBullet newBullet = Instantiate(bulletPrefab, transform.position, new Quaternion()) as NonPooledBullet;
 				newBullet.damage = bulletDamage;
 				newBullet.owningPlayer = owningPlayer;
+				if (!GameManager.S.inGame) {
+					newBullet.thisPlayer = thisPlayer;
+					newBullet.SetColor(thisPlayer.playerColor);
+				}
 				newBullet.transform.SetParent(transform);
 				newBullet.transform.position = gameObject.transform.position;
 				newBullet.physics.actOnLocalSpace = true;
