@@ -50,7 +50,9 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	// Use this for initialization
 	IEnumerator Start () {
-		SoundManager.instance.Play("LifeSapZone");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("LifeSapZone");
+		}
 		particle = transform.FindChild("Particle");
 		particle.gameObject.SetActive(false);
 		zoneParticles = GetComponentInChildren<ParticleSystem>();
@@ -182,7 +184,9 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	IEnumerator DealDamageCoroutine() {
 		while (targetShip != null && !targetShip.dead) {
-			SoundManager.instance.Play("DrainLife", 1);
+			if (GameManager.S.inGame) {
+				SoundManager.instance.Play("DrainLife", 1);
+			}
 			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);
 			owner.TakeDamage(-damagePerTick * healScalar);

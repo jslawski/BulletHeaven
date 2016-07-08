@@ -56,7 +56,9 @@ public class VampireShield : MonoBehaviour {
 
 	// Use this for initialization
 	public void ActivateShield() {
-		SoundManager.instance.Play("ShieldUp");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("ShieldUp");
+		}
 		if (thisPlayer is VampireShip) {
 			(thisPlayer as VampireShip).shieldUp = true;
 		}

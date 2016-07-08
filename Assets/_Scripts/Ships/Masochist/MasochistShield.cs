@@ -53,7 +53,9 @@ public class MasochistShield : MonoBehaviour {
 
 	// Use this for initialization
 	public void ActivateShield () {
-		SoundManager.instance.Play("ShieldUp");
+		if (GameManager.S.inGame) {
+			SoundManager.instance.Play("ShieldUp");
+		}
 		Color shieldColor = thisPlayer.playerColor;
 		shieldColor.a = 180f / 255f;
 		GetComponentInChildren<SpriteRenderer>().color = shieldColor;
