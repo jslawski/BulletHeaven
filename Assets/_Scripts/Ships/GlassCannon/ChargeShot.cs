@@ -125,6 +125,7 @@ public class ChargeShot : MonoBehaviour {
 	void CancelCharge() {
 		if (GameManager.S.inGame) {
 			SoundManager.instance.Stop("ChargeAttackCharge");
+			SoundManager.instance.Stop("FullyCharged");
 		}
 		state = ChargeState.cancelled;
 		Destroy(chargeParticle.gameObject);
