@@ -19,9 +19,9 @@ public class OptionsMenu : MonoBehaviour {
 	}
 
 	//All values used in accelerating option selection while a direction is held
-	float minChangeTime = 0.05f;
+	float minChangeTime = 0.1f;
 	float maxChangeTime = 0.2f;
-	int numActionsTillMinTime = 10;
+	int numActionsTillMinTime = 5;
 	int numActionsSinceLastChange = 0;
 	float curChangeTime;
 	float timeUntilNextChange = 0f;
