@@ -86,5 +86,5 @@ public static class TextLiterals {
 	public const string ABILITY_DESC_REDEYE_0 = "Creates 3 groups of bullets that home in on the enemy's position. Can be difficult to dodge.";
 	public const string ABILITY_DESC_REDEYE_1 = "Fires off several bullets that blossom into a deadly flower-shape.";
 	public const string ABILITY_DESC_REDEYE_2 = "While held down, fires two small beams from each of the ship's wings. Enemies caught in the beams are damaged over time and slowed. This powerful attack taxes the ship engines, slowing Red-Eye. The beams lose their staying power the longer they persist.";
-	public const string ABILITY_DESC_REDEYE_3 = "While held down, power is drawn from the engines and is routed to Red-Eye's railgun, slowing overall ship movement. Releasing when fully charged will fire an incredibly quick, precise, and powerful shot that inflicts massive damage. \n Releasing before the charge is finished will cancel the attack.";
+	public const string ABILITY_DESC_REDEYE_3 = "While held down, power is drawn from the engines and is routed to Red-Eye's railgun, slowing overall ship movement. Releasing when fully charged will fire an incredibly quick, precise, and powerful shot that inflicts massive damage. \n\n Releasing before the charge is finished will cancel the attack.";
 }

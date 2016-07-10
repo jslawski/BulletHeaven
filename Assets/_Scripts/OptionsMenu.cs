@@ -100,6 +100,7 @@ public class OptionsMenu : MonoBehaviour {
 
 		//Change option value up
 		if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && timeUntilNextChange <= 0) {
+			SoundManager.instance.Play("OptionsSelect", 1.1f);
 			timeUntilNextChange = curChangeTime;
 			numActionsSinceLastChange++;
 			curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
@@ -107,6 +108,7 @@ public class OptionsMenu : MonoBehaviour {
 		}
 		//Change option value down
 		else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && timeUntilNextChange <= 0) {
+			SoundManager.instance.Play("OptionsSelect", 0.9f);
 			timeUntilNextChange = curChangeTime;
 			numActionsSinceLastChange++;
 			curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
