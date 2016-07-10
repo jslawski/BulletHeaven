@@ -99,9 +99,6 @@ public class ShipMovement : MonoBehaviour {
 		if (!movementDisabled) {
 			ClampDesiredPosition();
 		}
-		if (transform.position.y < -50) {
-			print(desiredPosition);
-		}
 		
 		transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.fixedDeltaTime*shipLerpSpeed);
 

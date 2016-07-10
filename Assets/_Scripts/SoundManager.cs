@@ -91,7 +91,6 @@ public class SoundManager : MonoBehaviour {
 
 		//Set music to looping
 		soundChannels[0].loop = true;
-		soundChannels[0].volume = 0.75f;
 		
 		//Set looping sound effect channel to loop
 		if (maxChannelNum > 0) {
@@ -104,6 +103,10 @@ public class SoundManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+	}
+
+	void Update() {
+		soundChannels[0].volume = Options.masterVolume * Options.musicVolume;
 	}
 	
 	public void Play(string soundName){
@@ -122,12 +125,13 @@ public class SoundManager : MonoBehaviour {
 		if (channel == 0) {
 			soundChannels[channel].clip = sounds[soundName].audio;
 			soundChannels[channel].pitch = 1;
-			soundChannels[channel].volume = 1;
+			soundChannels[channel].volume = Options.masterVolume * Options.musicVolume;
 			soundChannels[channel].Play();
 		}
 		else {
 			soundChannels[channel].clip = sounds[soundName].audio;
             soundChannels[channel].pitch = randPitch;
+			soundChannels[channel].volume = Options.masterVolume * Options.sfVolume;
 			soundChannels[channel].Play();
 		}
 	}
@@ -147,11 +151,13 @@ public class SoundManager : MonoBehaviour {
 		if (channel == 0) {
 			soundChannels[channel].clip = sounds[soundName].audio;
 			soundChannels[channel].pitch = 1;
+			soundChannels[channel].volume = Options.masterVolume * Options.musicVolume;
 			soundChannels[channel].Play();
 		}
 		else {
 			soundChannels[channel].clip = sounds[soundName].audio;
 			soundChannels[channel].pitch = pitch;
+			soundChannels[channel].volume = Options.masterVolume * Options.sfVolume;
 			soundChannels[channel].Play();
 		}
 	}
@@ -164,8 +170,9 @@ public class SoundManager : MonoBehaviour {
 
 	public void SetVolume(string soundName, float newVolume) {
 		int channel = GetChannelIndex(soundName);
+		float volumeScalarFromOptions = Options.masterVolume * ((channel == 0) ? Options.musicVolume : Options.sfVolume);
 
-		soundChannels[channel].volume = newVolume;
+		soundChannels[channel].volume = newVolume * volumeScalarFromOptions;
 	}
 
 	public void Stop(string soundName) {

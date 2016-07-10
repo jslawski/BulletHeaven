@@ -52,9 +52,10 @@ public class ShipSelectionManager : MonoBehaviour {
 	public AbilityPreviewScreen abilityPreview;
 	public bool hasFocus = true;
 
-	public PositionInfo[] positionInfos;		//Information about each selection position (off-screen left, left, selected, etc.)
+	public PositionInfo[] positionInfos;        //Information about each selection position (off-screen left, left, selected, etc.)
 												//such as the world position, alpha value, and orderInLayer value
 
+	public OptionsMenu optionsMenu;
 	public Text selectedShipNameField;
 	public Text selectedShipDescriptionField;
 	[Header("Stat Bar References")]
@@ -146,10 +147,15 @@ public class ShipSelectionManager : MonoBehaviour {
 			abilityPreview.SetAbilityPreview(selectedShip);
 		}
 
-		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start) && AllPlayersReady()) {
-			SoundManager.instance.Play("StartGame");
-			GameManager.S.gameState = GameStates.countdown;
-			GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(start)) {
+			if (AllPlayersReady()) {
+				SoundManager.instance.Play("StartGame");
+				GameManager.S.gameState = GameStates.countdown;
+				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+			}
+			else {
+				optionsMenu.OpenOptionsMenu(device);
+			}
 		}
 
 		//Controller support
@@ -181,10 +187,15 @@ public class ShipSelectionManager : MonoBehaviour {
 				abilityPreview.SetAbilityPreview(selectedShip);
 			}
 
-			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed && AllPlayersReady()) {
-				SoundManager.instance.Play("StartGame");
-				GameManager.S.gameState = GameStates.countdown;
-				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+			if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed) {
+				if (AllPlayersReady()) {
+					SoundManager.instance.Play("StartGame");
+					GameManager.S.gameState = GameStates.countdown;
+					GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+				}
+				else {
+					optionsMenu.OpenOptionsMenu(device);
+				}
 			}
 		}
 	}

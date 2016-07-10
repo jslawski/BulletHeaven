@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour {
 	
 	[HideInInspector]
 	public float maxDamageAmplification = 3f;
+	[HideInInspector]
+	public float minDamageAmplification = 1f;
 	float damageAmplificationTime = 120f;       //Time it takes to reach maximum damage amplification
 	public float curDamageAmplification = 1f;
 
@@ -61,8 +63,14 @@ public class GameManager : MonoBehaviour {
 		S = this;
 
 		DontDestroyOnLoad(this);
+		
+		Options.LoadOptionsFromPlayerPrefs();
+		maxDamageAmplification = Options.maxDamageAmp;
+		minDamageAmplification = Options.minDamageAmp;
+		damageAmplificationTime = Options.damageAmpTime;
 
-		maxDamageAmplification = 3;
+		curDamageAmplification = minDamageAmplification;
+
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
@@ -78,7 +86,7 @@ public class GameManager : MonoBehaviour {
 			Time.fixedDeltaTime *= 0.15f;
 		}
 
-		if (!PressStartPrompt.promptsEnabled && gameState != GameStates.titleScreen) {
+		if (!PressStartPrompt.promptsEnabled && gameState != GameStates.titleScreen && gameState != GameStates.shipSelect) {
 			StartGame();
 		}
 		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
@@ -179,12 +187,12 @@ public class GameManager : MonoBehaviour {
 			Application.Quit();
 		}
 
-		if (gameState == GameStates.playing && curDamageAmplification < maxDamageAmplification) {
-			curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
-			if (curDamageAmplification > maxDamageAmplification) {
-				curDamageAmplification = maxDamageAmplification;
-			}
-		}
+		//if (gameState == GameStates.playing && curDamageAmplification < maxDamageAmplification) {
+		//	curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
+		//	if (curDamageAmplification > maxDamageAmplification) {
+		//		curDamageAmplification = maxDamageAmplification;
+		//	}
+		//}
 
 		//print((timeInScene < minTimeInSceneForInput) + "\n" + (gameState != GameStates.winnerScreen) + "\n" + (gameState == GameStates.titleScreen) + "\n" +
 		//	  (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space")));
@@ -258,9 +266,24 @@ public class GameManager : MonoBehaviour {
 			//yield return new WaitForSeconds(1);
 		}
 		gameState = GameStates.playing;
+		StartCoroutine(AmplifyDamage());
 
 		SoundManager.instance.Play("FightTheme");
 		curTheme = "FightTheme";
+	}
+
+	IEnumerator AmplifyDamage() {
+		float timeElapsed = 0;
+		while (gameState == GameStates.playing && timeElapsed < damageAmplificationTime) {
+			timeElapsed += Time.deltaTime;
+
+			curDamageAmplification = Mathf.Lerp(minDamageAmplification, maxDamageAmplification, timeElapsed / damageAmplificationTime);
+
+			yield return null;
+		}
+		if (timeElapsed > damageAmplificationTime) {
+			curDamageAmplification = maxDamageAmplification;
+		}
 	}
 
 	public void EndGame(Player winner) {
@@ -269,7 +292,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Reset() {
-		maxDamageAmplification = 3;
+		maxDamageAmplification = Options.maxDamageAmp;
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
@@ -278,7 +301,10 @@ public class GameManager : MonoBehaviour {
 			damageValues[0] = GameObject.Find("Player1DamageValues").GetComponent<DamageValues>();
 			damageValues[1] = GameObject.Find("Player2DamageValues").GetComponent<DamageValues>();
 		}
-		curDamageAmplification = 1f;
+		minDamageAmplification = Options.minDamageAmp;
+		damageAmplificationTime = Options.damageAmpTime;
+		curDamageAmplification = minDamageAmplification;
+
 		timeInScene = 0;
 		slowMo = false;
 	}
