@@ -16,7 +16,13 @@ public class HealthBar : MonoBehaviour {
 		healthBar.localScale = curScale;
 
 		float curHealth = percent*maxHealth;
-		healthText.text = Mathf.RoundToInt((curHealth * 10f)).ToString() + "/" + (maxHealth * 10f);
+		int curHealthDisplay = Mathf.RoundToInt(curHealth * 10f);
+
+		//Don't round down to zero for the display unless the player is dead
+		if (curHealth*10f < 1 && curHealth*10 > 0) {
+			curHealthDisplay = 1;
+		}
+		healthText.text = curHealthDisplay.ToString() + "/" + (maxHealth * 10f);
 	}
 
 	public void SetColor(Color playerColor) {
