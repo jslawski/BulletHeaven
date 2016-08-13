@@ -48,7 +48,7 @@ public class TimerAndDamageAmpDisplay : MonoBehaviour {
 		while (GameManager.S.gameState != GameStates.playing) {
 			yield return null;
 		}
-		while (GameManager.S.gameState == GameStates.playing && GameManager.S.curDamageAmplification < GameManager.S.maxDamageAmplification) {
+		while (GameManager.S.gameState == GameStates.playing && GameManager.S.curDamageAmplification <= GameManager.S.maxDamageAmplification) {
 			float percent = (GameManager.S.curDamageAmplification-1) / (GameManager.S.maxDamageAmplification-1);
 
 			damageAmpStretch.amplitude = Mathf.Lerp(minAmplitude, maxAmplitude, percent);

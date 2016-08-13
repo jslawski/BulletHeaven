@@ -194,6 +194,8 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_REDEYE_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_3;
 				break;
+			case ShipType.random:
+				break;
 			default:
 				Debug.LogWarning("<color='red'>ERROR: Ship type " + typeOfShip + " not found!</color>");
 				break;
