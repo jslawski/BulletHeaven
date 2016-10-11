@@ -9,6 +9,7 @@ public class ScreenHider : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		fadePanel = GameObject.Find("FadePanel").GetComponent<Image>();
+		fadePanel.enabled = true;
 		Invoke("RevealScreen", 1f);
 	}
 	
@@ -16,6 +17,6 @@ public class ScreenHider : MonoBehaviour {
 		Color curColor = fadePanel.color;
 		curColor.a = 0;
 		fadePanel.color = curColor;
-		GameManager.S.StartGame();
+		Countdown.S.BeginCountdown();
 	}
 }

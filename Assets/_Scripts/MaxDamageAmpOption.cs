@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class MaxDamageAmpOption : OptionMenuItem {
-	float minValue = 0.5f;
-	float maxValue = 5f;
+	public static float minValue = 0.5f;
+	public static float maxValue = 5f;
 	float valueDelta = 0.1f;
 	Image leftArrow, rightArrow;
 	Text maxDamageAmpTextField;

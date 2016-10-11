@@ -301,6 +301,6 @@ public class FinishAttack : MonoBehaviour {
 		yield return new WaitForSeconds(2.5f);
 		explosion.Stop();
 		CameraEffects.S.followObj = null;
-		GameManager.S.EndGame(owningPlayer);
+		GameManager.S.EndRound(owningPlayer);
 	}
 }

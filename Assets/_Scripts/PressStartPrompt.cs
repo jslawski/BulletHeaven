@@ -43,7 +43,7 @@ public class PressStartPrompt : MonoBehaviour {
 		//Remember that this player is ready to play
 		playersReady[(int)thisPlayer] = true;
 		if (AllPlayersReady()) {
-			GameManager.S.StartGame();
+			Countdown.S.BeginCountdown();
 		}
 	}
 

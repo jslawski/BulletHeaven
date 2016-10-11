@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour {
 	public float fadeFromShipSelectDuration = 2f;
 	string curTheme = "TitleTheme";
 
+	public static int[] roundsWon;
+
 	public bool inGame {
 		get {
 			return gameState == GameStates.playing || gameState == GameStates.titleScreen;
@@ -74,6 +76,10 @@ public class GameManager : MonoBehaviour {
 		players = new PlayerShip[2];
 		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
 		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+
+		roundsWon = new int[2];
+		roundsWon[0] = roundsWon[1] = 0;
+
 		controllers = new InputDevice[2];
 	}
 
@@ -87,9 +93,8 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if (!PressStartPrompt.promptsEnabled && gameState != GameStates.titleScreen && gameState != GameStates.shipSelect) {
-			StartGame();
+			Countdown.S.BeginCountdown();
 		}
-		//InitializePlayerShip(Player.player1, ShipType.generalist, Color.yellow);
 	}
 
 	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
@@ -213,6 +218,7 @@ public class GameManager : MonoBehaviour {
             if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				if (gameState != GameStates.transitioning) {
 					TransitionScene(fadeFromMainDuration, "_Scene_Title");
+					roundsWon[0] = roundsWon[1] = 0;
 				}
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
@@ -255,16 +261,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void StartGame() {
-		StartCoroutine(StartGameCoroutine());
-	}
-
-	IEnumerator StartGameCoroutine() {
-		gameState = GameStates.countdown;
-		for	(int i = 3; i >= 0; i--) {
-			print(i);
-			yield return null;
-			//yield return new WaitForSeconds(1);
-		}
 		gameState = GameStates.playing;
 		StartCoroutine(AmplifyDamage());
 
@@ -283,6 +279,16 @@ public class GameManager : MonoBehaviour {
 		}
 		if (timeElapsed > damageAmplificationTime) {
 			curDamageAmplification = maxDamageAmplification;
+		}
+	}
+
+	public void EndRound(Player winner) {
+		roundsWon[(int)winner]++;
+		if (roundsWon[(int)winner] > Options.numRounds/2) {
+			EndGame(winner);
+		}
+		else {
+			SceneManager.LoadScene("_Scene_Main");
 		}
 	}
 

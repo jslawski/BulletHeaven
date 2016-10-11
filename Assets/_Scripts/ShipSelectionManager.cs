@@ -31,6 +31,8 @@ public struct PositionInfo {
 }
 
 public class ShipSelectionManager : MonoBehaviour {
+	public PersistentShipInfo persistentInfoPrefab;
+
 	static List<ShipSelectionManager> selectionMenus;
 	static bool reverseScrollDirection = true;
 	public Player player;
@@ -75,6 +77,8 @@ public class ShipSelectionManager : MonoBehaviour {
 	public KeyCode left,right,A,B,Y,start;
 
 	void Awake() {
+		persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
+
 		DontDestroyOnLoad(this.gameObject);
 		if (selectionMenus == null) {
 			selectionMenus = new List<ShipSelectionManager>();
@@ -111,7 +115,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Don't allow input while it doesn't have focus
-		if (!hasFocus) {
+		if (!hasFocus || OptionsMenu.hasFocus) {
 			return;
 		}
 		//Don't allow input while randoming ships
@@ -281,8 +285,10 @@ public class ShipSelectionManager : MonoBehaviour {
 			yield return null;
 		}
 
-		//Initialize this player's information
-		GameManager.S.InitializePlayerShip(selectedShip, device);
+		//Create the object that will pass the information to GameManager
+		PersistentShipInfo persistentShipInfo = Instantiate(persistentInfoPrefab);
+		persistentShipInfo.gameObject.name = "P" + ((int)selectedShip.selectingPlayer + 1) + "ShipInfo";
+		persistentShipInfo.Initialize(selectedShip, device);
 
 		Destroy(gameObject);
 	}

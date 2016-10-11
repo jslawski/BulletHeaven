@@ -27,7 +27,7 @@ public class OptionsMenu : MonoBehaviour {
 	float timeUntilNextChange = 0f;
 
 	public GameObject shipSelectionCoverup;
-	bool hasFocus = false;
+	public static bool hasFocus = false;
 	RectTransform rectTransform;
 	Vector2 onscreenAnchorMin = new Vector2(0.2f, 0);
 	Vector2 onscreenAnchorMax = new Vector2(0.8f, 1);
@@ -40,6 +40,8 @@ public class OptionsMenu : MonoBehaviour {
 			return options[curOptionIndex];
 		}
 	}
+
+	ShipSelectionManager[] shipSelections;
 
 	// Use this for initialization
 	void Awake() {

@@ -117,7 +117,7 @@ public class Bullet : PooledObj {
 		else if (other.tag == "Player") {
 			PlayerShip playerHit = other.gameObject.GetComponentInParent<PlayerShip>();
 
-			print("Player hit: " + playerHit.name + "\nOwning Player: " + owningPlayer + "\nThisPlayer.TypeOfShip: " + thisPlayer.typeOfShip);
+			//print("Player hit: " + playerHit.name + "\nOwning Player: " + owningPlayer + "\nThisPlayer.TypeOfShip: " + thisPlayer.typeOfShip);
 			if (playerHit.player != owningPlayer) {
 				//Masochists with the shield up are immune to incoming bullets
 				if (playerHit.typeOfShip == ShipType.masochist) {
