@@ -161,7 +161,13 @@ public class SoundManager : MonoBehaviour {
 			soundChannels[channel].Play();
 		}
 	}
-	
+
+	public bool IsPlaying(string soundName) {
+		int channel = GetChannelIndex(soundName);
+
+		return soundChannels[channel].isPlaying;
+	}
+
 	public void SetPitch(string soundName, float newPitch) {
 		int channel = GetChannelIndex(soundName);
 

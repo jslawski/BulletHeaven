@@ -35,6 +35,11 @@ public class Countdown : MonoBehaviour {
 	}
 
 	public void BeginCountdown() {
+		//Pause...for dramatic effect...
+		if (GameManager.S.curTheme == "ShipSelectTheme") {
+			SoundManager.instance.Stop("ShipSelectTheme");
+		}
+
 		if (inCountdownCoroutine) {
 			return;
 		}
@@ -48,10 +53,17 @@ public class Countdown : MonoBehaviour {
 		float maxCountdown = 3f;
 		Color startColor = Color.white;
 
+		int prevCount = 0;
+
 		for (float i = maxCountdown; i > 0; i-=Time.deltaTime) {
 			float percent = 1-(i%1)/1f;
 			int curCount = Mathf.FloorToInt(i+1);
             countdown.text = curCount.ToString();
+
+			if (prevCount != curCount) {
+				prevCount = curCount;
+				SoundManager.instance.Play("Countdown", 0.75f);
+			}
 
 			switch (curCount) {
 				case 3:
@@ -84,5 +96,7 @@ public class Countdown : MonoBehaviour {
 		GameManager.S.StartGame();
 
 		inCountdownCoroutine = false;
+
+		SoundManager.instance.Play("Countdown", 1.2f);
 	}
 }

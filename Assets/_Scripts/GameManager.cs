@@ -16,6 +16,7 @@ public enum GameStates {
 	countdown,
 	playing,
 	finalAttack,
+	midRoundVictory,
 	winnerScreen,
 	transitioning
 }
@@ -47,9 +48,12 @@ public class GameManager : MonoBehaviour {
 	public float fadeFromTitleDuration = 0.5f;
 	public float fadeFromMainDuration = 0.5f;
 	public float fadeFromShipSelectDuration = 2f;
-	string curTheme = "TitleTheme";
+	public string curTheme = "TitleTheme";
 
 	public static int[] roundsWon;
+
+	[SerializeField]
+	public Text winPromptText;
 
 	public bool inGame {
 		get {
@@ -214,11 +218,16 @@ public class GameManager : MonoBehaviour {
 				SoundManager.instance.muted = !SoundManager.instance.muted;
 				print("Sound is now " + ((SoundManager.instance.muted) ? "muted." : "unmuted."));
 			}
-			
-            if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+
+			if (gameState == GameStates.winnerScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				if (gameState != GameStates.transitioning) {
 					TransitionScene(fadeFromMainDuration, "_Scene_Title");
 					roundsWon[0] = roundsWon[1] = 0;
+				}
+			}
+			else if (gameState == GameStates.midRoundVictory && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
+				if (gameState != GameStates.transitioning) {
+					TransitionScene(fadeFromMainDuration, "_Scene_Main");
 				}
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
@@ -261,10 +270,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void StartGame() {
+		winPromptText = GameObject.Find("PressStartText").GetComponent<Text>();
 		gameState = GameStates.playing;
 		StartCoroutine(AmplifyDamage());
 
-		SoundManager.instance.Play("FightTheme");
+		if (curTheme != "FightTheme") {
+			SoundManager.instance.Play("FightTheme");
+		}
+
 		curTheme = "FightTheme";
 	}
 
@@ -284,11 +297,15 @@ public class GameManager : MonoBehaviour {
 
 	public void EndRound(Player winner) {
 		roundsWon[(int)winner]++;
+
 		if (roundsWon[(int)winner] > Options.numRounds/2) {
+			winPromptText.text = TextLiterals.FINAL_VICTORY_SCREEN;
 			EndGame(winner);
 		}
 		else {
-			SceneManager.LoadScene("_Scene_Main");
+			winPromptText.text = TextLiterals.MID_ROUND_VICTORY_SCREEN;
+            WinnerPanel.S.DisplayWinner(winner);
+			gameState = GameStates.midRoundVictory;
 		}
 	}
 

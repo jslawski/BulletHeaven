@@ -39,10 +39,10 @@ public class WinnerPanel : MonoBehaviour {
 			winningPlayerText.text = "Player 2 is the";
 		}
 
-		StartCoroutine(FadeInWinner(winnerColor));
+		StartCoroutine(FadeInWinner(winnerColor, winner));
 	}
 
-	IEnumerator FadeInWinner(Color winnerColor) {
+	IEnumerator FadeInWinner(Color winnerColor, Player winner) {
 		Color startColor = winnerColor;
 		startColor.a = 0;
 
@@ -58,6 +58,11 @@ public class WinnerPanel : MonoBehaviour {
 			yield return 0;
 		}
 
-		GameManager.S.gameState = GameStates.winnerScreen;
+		if (GameManager.roundsWon[(int)winner] > Options.numRounds / 2) {
+			GameManager.S.gameState = GameStates.winnerScreen;
+		}
+		else {
+			GameManager.S.gameState = GameStates.midRoundVictory;
+		}
 	}
 }

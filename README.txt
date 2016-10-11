@@ -54,7 +54,9 @@ Sound Effects:
 
 	Explosion:
 		SoundMorph
-		
+	
+	Countdown Tone
+		KevanGC	
 
 Fonts:
 	Trailer Font:
