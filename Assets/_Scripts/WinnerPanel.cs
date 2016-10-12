@@ -13,8 +13,8 @@ public class WinnerPanel : MonoBehaviour {
 
 	float fadeInDuration = 1f;
 
-	private List<string> closeWinVerbs = new List<string> { "Sneaks in", "Barely takes", "Steals", "Underdogs", "Turns around" };
-	private List<string> bigWinVerbs = new List<string> { "Crushes", "Obliterates", "Decimates", "Annihilates", "Absolutely kills" };
+	private List<string> closeWinVerbs = new List<string> { "Sneaks in", "Barely takes", "Steals", "Underdogs", "Turns around", "Squeaks out" };
+	private List<string> bigWinVerbs = new List<string> { "Crushes", "Obliterates", "Decimates", "Annihilates", "Absolutely kills", "Demolishes" };
 	private float winThreshold;
 	private float closenessFactor = 0.20f;
 
