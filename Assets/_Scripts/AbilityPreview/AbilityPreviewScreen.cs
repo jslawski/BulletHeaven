@@ -66,7 +66,7 @@ public class AbilityPreviewScreen : MonoBehaviour {
 		//Controller input
 		if (shipSelection.device != null) {
 			//Close the ability preview screen
-			if (shipSelection.device.Action4.WasPressed) {
+			if (shipSelection.device.Action4.WasPressed || shipSelection.device.Action2.WasPressed) {
 				HideAbilityPreviewPanel();
 			}
 

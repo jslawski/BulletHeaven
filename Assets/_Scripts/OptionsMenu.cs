@@ -35,6 +35,8 @@ public class OptionsMenu : MonoBehaviour {
 	Vector2 offscreenAnchorMax = new Vector2(0.8f, 2);
 	float panelLerpSpeed = 0.2f;
 
+	float controllerDeadZone = 0.5f;
+
 	OptionMenuItem selectedOption {
 		get {
 			return options[curOptionIndex];
@@ -134,14 +136,14 @@ public class OptionsMenu : MonoBehaviour {
 		//Controller input
 		if (controllingDevice != null) {
 			//Scroll down
-			if ((controllingDevice.LeftStick.Down.IsPressed || controllingDevice.DPadDown.IsPressed) && timeUntilNextChange <= 0) {
+			if ((controllingDevice.LeftStick.Y < -controllerDeadZone || controllingDevice.DPadDown.IsPressed) && timeUntilNextChange <= 0) {
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
 				ScrollDown();
 			}
 			//Scroll up
-			else if ((controllingDevice.LeftStick.Up.IsPressed || controllingDevice.DPadUp.IsPressed) && timeUntilNextChange <= 0) {
+			else if ((controllingDevice.LeftStick.Y > controllerDeadZone || controllingDevice.DPadUp.IsPressed) && timeUntilNextChange <= 0) {
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
@@ -149,14 +151,14 @@ public class OptionsMenu : MonoBehaviour {
 			}
 
 			//Change option value up
-			if ((controllingDevice.LeftStick.Right.IsPressed || controllingDevice.DPadRight.IsPressed) && timeUntilNextChange <= 0) {
+			if ((controllingDevice.LeftStick.X > controllerDeadZone || controllingDevice.DPadRight.IsPressed) && timeUntilNextChange <= 0) {
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
 				selectedOption.IncreaseOptionValue();
 			}
 			//Change option value down
-			else if ((controllingDevice.LeftStick.Left.IsPressed || controllingDevice.DPadLeft.IsPressed) && timeUntilNextChange <= 0) {
+			else if ((controllingDevice.LeftStick.X < -controllerDeadZone || controllingDevice.DPadLeft.IsPressed) && timeUntilNextChange <= 0) {
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
@@ -168,9 +170,14 @@ public class OptionsMenu : MonoBehaviour {
 				controllingDevice.LeftStick.Up.WasReleased || controllingDevice.DPadUp.WasReleased ||
 				controllingDevice.LeftStick.Right.WasReleased || controllingDevice.DPadRight.WasReleased ||
 				controllingDevice.LeftStick.Left.WasReleased || controllingDevice.DPadLeft.WasReleased) {
-				timeUntilNextChange = 0;
+				timeUntilNextChange = minChangeTime;
 				numActionsSinceLastChange = 0;
 				curChangeTime = maxChangeTime;
+			}
+
+			//Close the options menu
+			if (controllingDevice.MenuWasPressed || controllingDevice.Action2.WasPressed) {
+				CloseOptionsMenu();
 			}
 		}
 	}
