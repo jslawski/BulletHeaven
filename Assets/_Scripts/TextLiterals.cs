@@ -89,6 +89,8 @@ public static class TextLiterals {
 	public const string ABILITY_DESC_REDEYE_3 = "While held down, power is drawn from the engines and is routed to Red-Eye's railgun, slowing overall ship movement. Releasing when fully charged will fire an incredibly quick, precise, and powerful shot that inflicts massive damage. \n\n Releasing before the charge is finished will cancel the attack.";
 
 	/*****MISC TITLES*****/
-	public const string MID_ROUND_VICTORY_SCREEN = "(Press start to begin the next round)";
-	public const string FINAL_VICTORY_SCREEN = "(Press start to return to the title screen)";
+	public const string MID_ROUND_VICTORY_MESSAGE = "";
+	public const string MID_ROUND_VICTORY_PROMPT = "(Press start to begin the next round)";
+	public const string FINAL_VICTORY_MESSAGE = "";
+	public const string FINAL_VICTORY_PROMPT = "(Press start to return to the title screen)";
 }

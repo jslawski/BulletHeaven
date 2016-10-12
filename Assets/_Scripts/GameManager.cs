@@ -299,19 +299,20 @@ public class GameManager : MonoBehaviour {
 		roundsWon[(int)winner]++;
 
 		if (roundsWon[(int)winner] > Options.numRounds/2) {
-			winPromptText.text = TextLiterals.FINAL_VICTORY_SCREEN;
+			winPromptText.text = TextLiterals.FINAL_VICTORY_PROMPT;
 			EndGame(winner);
 		}
 		else {
-			winPromptText.text = TextLiterals.MID_ROUND_VICTORY_SCREEN;
-            WinnerPanel.S.DisplayWinner(winner);
+			winPromptText.text = TextLiterals.MID_ROUND_VICTORY_PROMPT;
 			gameState = GameStates.midRoundVictory;
+			WinnerPanel.S.DisplayWinner(winner);
+			
 		}
 	}
 
 	public void EndGame(Player winner) {
-		WinnerPanel.S.DisplayWinner(winner);
 		gameState = GameStates.winnerScreen;
+		WinnerPanel.S.DisplayWinner(winner);
 	}
 
 	void Reset() {

@@ -60,8 +60,7 @@ public class Countdown : MonoBehaviour {
 			int curCount = Mathf.FloorToInt(i+1);
             countdown.text = curCount.ToString();
 
-			if (prevCount != curCount) {
-				prevCount = curCount;
+			if (prevCount != curCount && prevCount != 0) {
 				SoundManager.instance.Play("Countdown", 0.75f);
 			}
 
@@ -86,6 +85,7 @@ public class Countdown : MonoBehaviour {
 			countdownBackground.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, percent);
 			countdownBackground.color = countdown.color;
 
+			prevCount = curCount;
 
 			yield return null;
 		}

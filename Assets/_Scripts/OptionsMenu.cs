@@ -152,6 +152,7 @@ public class OptionsMenu : MonoBehaviour {
 
 			//Change option value up
 			if ((controllingDevice.LeftStick.X > controllerDeadZone || controllingDevice.DPadRight.IsPressed) && timeUntilNextChange <= 0) {
+				SoundManager.instance.Play("OptionsSelect", 1.1f);
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);
@@ -159,6 +160,7 @@ public class OptionsMenu : MonoBehaviour {
 			}
 			//Change option value down
 			else if ((controllingDevice.LeftStick.X < -controllerDeadZone || controllingDevice.DPadLeft.IsPressed) && timeUntilNextChange <= 0) {
+				SoundManager.instance.Play("OptionsSelect", 0.9f);
 				timeUntilNextChange = curChangeTime;
 				numActionsSinceLastChange++;
 				curChangeTime = Mathf.Lerp(maxChangeTime, minChangeTime, (float)numActionsSinceLastChange / numActionsTillMinTime);

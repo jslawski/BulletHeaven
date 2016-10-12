@@ -60,7 +60,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	protected float maxHealth = 150f;
 	protected float _health;
-	protected float health {
+	public float health {
 		get {
 			return _health;
 		}
