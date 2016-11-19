@@ -53,7 +53,7 @@ public class WinnerPanel : MonoBehaviour {
 
 			//Personalized semi-random message depending on how close the match was
 			//If the total remaining health from the winning player is less than <closenessFactor>% at the end of the round, it is considered a "close win"
-			winThreshold = (GameManager.S.players[(int)Player.player1].healthBar.maxHealth + GameManager.S.players[(int)Player.player2].healthBar.maxHealth) * closenessFactor;
+			winThreshold = (GameManager.S.players[(int)Player.player1].maxHealth + GameManager.S.players[(int)Player.player2].maxHealth) * closenessFactor;
 			int winMessageIndex = Random.Range(0, closeWinVerbs.Count);
 			if (Mathf.Abs(GameManager.S.players[(int)Player.player1].health - GameManager.S.players[(int)Player.player2].health) > winThreshold) {
 				roundWonText.text += "\n" + bigWinVerbs[winMessageIndex];

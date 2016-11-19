@@ -16,14 +16,15 @@ public class VampireShip : PlayerShip {
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
-		maxHealth = 110f;
-		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 	}
 
 	// Use this for initialization
 	new void Awake () {
 		base.Awake();
+
+		maxHealth = 110f;
+
 		typeOfShip = ShipType.vampire;
 		shield = Resources.Load<VampireShield>("Prefabs/VampireShield");
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/VampireShip/VampireShip6");

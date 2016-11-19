@@ -14,6 +14,9 @@ public class Masochist : PlayerShip {
 
 	new void Awake() {
 		base.Awake();
+
+		maxHealth = 250f;
+
 		typeOfShip = ShipType.masochist;
 		shield = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
 		auraPrefab = Resources.Load<MasochistAura>("Prefabs/MasochistAura");
@@ -28,8 +31,6 @@ public class Masochist : PlayerShip {
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
-		maxHealth = 250f;
-		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 	}
 

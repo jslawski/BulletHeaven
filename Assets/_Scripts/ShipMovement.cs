@@ -4,14 +4,14 @@ using System.Collections;
 public class ShipMovement : MonoBehaviour {
 	public PlayerShip thisPlayer;
 	public Camera renderCamera;
-	float shipLerpSpeed = 13.75f;               //Percent ship lerps towards desired position each FixedUpdate()
+	float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
 	protected float vertMovespeedDefault = 16f;
 	protected float horizMovespeedDefault = 12.5f;
 	protected float verticalMovespeed;                  //Speed at which the player can move up and down
-	protected float horizontalMovespeed;					//Speed at which the player can move right to left
+	protected float horizontalMovespeed;				//Speed at which the player can move right to left
 
-	float shipTurnLerpSpeed = 5f;             //Percent ship lerps towards the desired rotation each FixedUpdate()
-	float maxTurnAngle = 15f;                   //Maximum amount a ship can toward in a certain direction
+	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
+	float maxTurnAngle = 15f;							//Maximum amount a ship can toward in a certain direction
 
 	public float viewportMinX;
 	public float viewportMaxX;
@@ -29,8 +29,8 @@ public class ShipMovement : MonoBehaviour {
 
 	protected Vector3 desiredPosition;                  //The position that the transform lerps towards each FixedUpdate()
 	protected Quaternion startRotation;                 //The beginning rotation of the ship
-	protected Quaternion desiredRotation;					//The rotation that the transform lerps towards each FixedUpdate()
-	protected Vector3 dotVector;                          //Used to determine which way the ship should turn when moving up and down
+	protected Quaternion desiredRotation;				//The rotation that the transform lerps towards each FixedUpdate()
+	protected Vector3 dotVector;                        //Used to determine which way the ship should turn when moving up and down
 
 	public bool movementDisabled = false;
 
@@ -50,7 +50,6 @@ public class ShipMovement : MonoBehaviour {
 		Vector3 worldSpaceMax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
 		worldSpaceMaxX = worldSpaceMax.x;
 		worldSpaceMaxY = worldSpaceMax.y;
-		//print("Bottom left: " + worldSpaceMin + "\nTop right: " + worldSpaceMax);
 
 		desiredPosition = transform.position;
 		startRotation = transform.rotation;
@@ -122,8 +121,8 @@ public class ShipMovement : MonoBehaviour {
 			desiredPosition.y = renderCamera.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
 		}
 	}
-	protected void Move(Vector2 stickPosition) {
-		Vector3 moveVector = new Vector3(stickPosition.x, stickPosition.y, 0);
+	protected void Move(Vector2 moveDirection) {
+		Vector3 moveVector = new Vector3(moveDirection.x, moveDirection.y, 0);
 		moveVector.x *= horizontalMovespeed * Time.deltaTime;
 		moveVector.y *= verticalMovespeed * Time.deltaTime;
 		Move(moveVector);

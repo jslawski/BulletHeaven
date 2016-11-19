@@ -6,6 +6,9 @@ public class TankyShip : PlayerShip {
 
 	new void Awake() {
 		base.Awake();
+
+		maxHealth = 300;
+
 		typeOfShip = ShipType.tank;
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/TankyShip/TShip6");
 		GetComponentInChildren<Animator>().runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(
@@ -15,8 +18,6 @@ public class TankyShip : PlayerShip {
 	// Use this for initialization
 	new void Start () {
 		base.Start();
-		maxHealth = 300;
-		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);

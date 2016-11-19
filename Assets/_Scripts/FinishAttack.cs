@@ -15,7 +15,6 @@ public class FinishAttack : MonoBehaviour {
 				target = GameManager.S.players[otherPlayer].transform;
 				thisPlayer = GameManager.S.players[(int)value];
 				startingGradientValue = FindClosestGradientValue(thisPlayer.playerColor);
-				//print("Color chosen: " + beamPulse.Evaluate(startingGradientValue) + "\nColor target: " + thisPlayer.playerColor);
 			}
 		}
 	}

@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	public Text winPromptText;
 
+	public bool singlePlayer = true;
+
 	public bool inGame {
 		get {
 			return gameState == GameStates.playing || gameState == GameStates.titleScreen;
@@ -149,7 +151,6 @@ public class GameManager : MonoBehaviour {
 		//Grab some values from the old script to apply them to the new one
 		newPlayerShip.player = player;
 		newPlayerShip.typeOfShip = typeOfShip;
-		newPlayerShip.healthBar = oldPlayerShip.healthBar;
 		newPlayerShip.durationBar = oldPlayerShip.durationBar;
 		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
 		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
@@ -177,7 +178,6 @@ public class GameManager : MonoBehaviour {
 		foreach (var ammo in newPlayerShip.playerShooting.ammoImages) {
 			ammo.GetComponent<Image>().color = playerColor;
 		}
-		newPlayerShip.healthBar.SetColor(playerColor);
 		newPlayerShip.durationBar.SetColor(playerColor);
 
 		//Set the type of bomb and fix old references
@@ -196,15 +196,6 @@ public class GameManager : MonoBehaviour {
 			Application.Quit();
 		}
 
-		//if (gameState == GameStates.playing && curDamageAmplification < maxDamageAmplification) {
-		//	curDamageAmplification += Time.deltaTime * (maxDamageAmplification-1) / damageAmplificationTime;
-		//	if (curDamageAmplification > maxDamageAmplification) {
-		//		curDamageAmplification = maxDamageAmplification;
-		//	}
-		//}
-
-		//print((timeInScene < minTimeInSceneForInput) + "\n" + (gameState != GameStates.winnerScreen) + "\n" + (gameState == GameStates.titleScreen) + "\n" +
-		//	  (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space")));
 		if (timeInScene < minTimeInSceneForInput) {
 			timeInScene += Time.deltaTime;
 		}

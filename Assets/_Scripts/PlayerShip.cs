@@ -20,7 +20,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	public Player player;
 	public Color playerColor;
 	public DurationBar durationBar;
-	public HealthBar healthBar;
 	protected ParticleSystem healthPickupParticles;
 	public InputDevice device;
 	public PressStartPrompt controllerPrompt;
@@ -58,7 +57,10 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	public PlayerShip otherPlayer;
 
-	protected float maxHealth = 150f;
+	public delegate void OnHealthChangedEventHandler(float damageDealt);
+	public event OnHealthChangedEventHandler onDamaged; 
+
+	public float maxHealth = 150f;
 	protected float _health;
 	public float health {
 		get {
@@ -70,8 +72,11 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 				_health = 0;
 			}
 
-			if (healthBar != null) {
-				healthBar.SetHealth(_health / maxHealth);
+			if (onDamaged != null) {
+				onDamaged(_health);
+			}
+			else {
+				print("I'm null!");
 			}
 		}
 	}
@@ -88,9 +93,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	}
 
 	protected void Start() {
-		if (healthBar != null) {
-			healthBar.maxHealth = maxHealth;
-		}
 		health = maxHealth;
 		if (durationBar != null) {
 			durationBar.SetPercent(0);

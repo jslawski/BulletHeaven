@@ -10,6 +10,8 @@ public class GlassCannon : PlayerShip {
 	new void Awake() {
 		base.Awake();
 
+		maxHealth = 145f;
+
 		dualLaserPrefab = Resources.Load<DualLasers>("Prefabs/DualLasers");
 		chargeShotPrefab = Resources.Load<ChargeShot>("Prefabs/ChargeShot");
 		GetComponentInChildren<SpriteRenderer>().sprite = Resources.Load<Sprite>("Images/GlassCannonShip/GCShip6");
@@ -26,9 +28,6 @@ public class GlassCannon : PlayerShip {
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, true, true);
 
-		maxHealth = 145f;
-
-		healthBar.maxHealth = maxHealth;
 		health = maxHealth;
 
 		playerMovement.SetBaseSpeed(1.3f);
