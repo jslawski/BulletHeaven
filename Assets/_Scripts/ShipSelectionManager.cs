@@ -5,14 +5,9 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-public enum SelectionPosition {
-	offscreenLeft,
-	left,
-	selected,
-	right,
-	offscreenRight,
-	invisibleCenter,
-	numPositions
+public enum ScrollDirection {
+	left, 
+	right
 }
 
 [System.Serializable]
@@ -34,7 +29,6 @@ public class ShipSelectionManager : MonoBehaviour {
 	public PersistentShipInfo persistentInfoPrefab;
 
 	static List<ShipSelectionManager> selectionMenus;
-	static bool reverseScrollDirection = true;
 	public Player player;
 	public InputDevice device;
 
@@ -70,8 +64,6 @@ public class ShipSelectionManager : MonoBehaviour {
 	public StatBar miscStat;
 
 	bool inChooseRandomShipCoroutine = false;
-	float minWaitTime = 0.075f;
-	float maxWaitTime = 0.075f;
 
 	[HideInInspector]
 	public KeyCode left,right,A,B,Y,start;
@@ -109,7 +101,6 @@ public class ShipSelectionManager : MonoBehaviour {
 		foreach (var ship in ships) {
 			ship.selectingPlayer = player;
 		}
-		//ships = new ShipInfo[(int)SelectionPosition.numPositions];
 	}
 	
 	// Update is called once per frame
@@ -123,12 +114,13 @@ public class ShipSelectionManager : MonoBehaviour {
 			return;
 		}
 
+		#region Keyboard Support
 		//Keyboard support
 		if (Input.GetKeyDown(right) && !playerReady) {
-			Scroll(true);
+			Scroll(ScrollDirection.left);
 		}
 		else if (Input.GetKeyDown(left) && !playerReady) {
-			Scroll(false);
+			Scroll(ScrollDirection.right);
 		}
 
 		//Ready up
@@ -161,14 +153,16 @@ public class ShipSelectionManager : MonoBehaviour {
 				optionsMenu.OpenOptionsMenu(device);
 			}
 		}
+		#endregion
 
+		#region Controller Support
 		//Controller support
 		if (device != null) {
 			if ((device.LeftStick.Right.WasPressed || device.DPadRight.WasPressed) && !playerReady) {
-				Scroll(true);
+				Scroll(ScrollDirection.left);
 			}
 			else if ((device.LeftStick.Left.WasPressed || device.DPadLeft.WasPressed) && !playerReady) {
-				Scroll(false);
+				Scroll(ScrollDirection.right);
 			}
 
 			//Ready up
@@ -202,33 +196,30 @@ public class ShipSelectionManager : MonoBehaviour {
 				}
 			}
 		}
+		#endregion
 	}
 
-	public void Scroll(bool toTheRight) {
-		if (reverseScrollDirection) {
-			toTheRight = !toTheRight;
-		}
-		foreach (var ship in ships) {
+	public void Scroll(ScrollDirection scrollDirection) {
+		foreach (ShipInfo ship in ships) {
 			if (ship == null) {
 				continue;
 			}
 			//Scroll each ship in the correct direction
-			ship.Scroll(toTheRight);
-			if (toTheRight) {
+			ship.Scroll(scrollDirection);
+			if (scrollDirection == ScrollDirection.right) {
 				SoundManager.instance.Play("ShipScroll", 1.1f);
 			}
 			else {
 				SoundManager.instance.Play("ShipScroll", 1f);
 			}
 		}
-		//print(selectedShip);
 	}
 
 	void SetStatsForShip(ShipInfo shipInfo) {
 		//Gracefully handle the case of no ship selected
 		if (shipInfo == null) {
-			selectedShipNameField.text = "";
-			selectedShipDescriptionField.text = "";
+			selectedShipNameField.text = string.Empty;
+			selectedShipDescriptionField.text = string.Empty;
 
 			offenseStat.SetStatValue(0, Color.white);
 			defenseStat.SetStatValue(0, Color.white);
@@ -294,9 +285,14 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	IEnumerator RandomShip() {
-		inChooseRandomShipCoroutine = true;
 		int numPositions = positionInfos.Length;
 		int randNumScrolls;
+
+		float minWaitTime = 0.075f;
+		float maxWaitTime = 0.075f;
+
+		this.inChooseRandomShipCoroutine = true;
+
 		//Choose a random number of times to scroll until we have something that won't end back on random
 		do {
 			randNumScrolls = Random.Range(numPositions, 2 * numPositions);
@@ -304,12 +300,12 @@ public class ShipSelectionManager : MonoBehaviour {
 		while (randNumScrolls % numPositions == 0);
 
 		//Randomly choose to scroll left or right
-		bool toTheRight = (Random.Range(0, 2) == 0);
+		ScrollDirection direction = (ScrollDirection)Random.Range(0, 2);
 
 		//Scroll to the randomly selected ship
 		float waitTime = minWaitTime;
 		for (int i = 0; i < randNumScrolls; i++) {
-			Scroll(toTheRight);
+			Scroll(direction);
 			yield return new WaitForSeconds(waitTime);
 			waitTime = Mathf.Lerp(minWaitTime, maxWaitTime, (float)i / randNumScrolls);
 		}
@@ -317,7 +313,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	public static bool AllPlayersReady() {
-		foreach (var player in selectionMenus) {
+		foreach (ShipSelectionManager player in selectionMenus) {
 			if (!player.playerReady) {
 				return false;
 			}

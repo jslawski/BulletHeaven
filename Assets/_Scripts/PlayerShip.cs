@@ -57,7 +57,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	public PlayerShip otherPlayer;
 
-	public delegate void OnHealthChangedEventHandler(float damageDealt);
+	public delegate void OnHealthChangedEventHandler(float remainingHealth);
 	public event OnHealthChangedEventHandler onDamaged; 
 
 	public float maxHealth = 150f;
@@ -74,9 +74,6 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 			if (onDamaged != null) {
 				onDamaged(_health);
-			}
-			else {
-				print("I'm null!");
 			}
 		}
 	}

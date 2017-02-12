@@ -48,19 +48,19 @@ public class ControllerSetup : MonoBehaviour {
 	public void AddCurrentPlayer(InputDevice curDevice) {
 		//In-game controller addition -- debuggin purposes only, no longer used in game loop
 		if (GameManager.S != null) {
-			PlayerShip player = GameManager.S.players[(int)curPlayer];
+			PlayerShip player = GameManager.S.players[(int)this.curPlayer];
 			player.device = curDevice;
 			if (player.controllerPrompt != null) {
 				player.controllerPrompt.HidePressStartPrompt();
 			}
 		}
 		//Ship selection menu
-		if (shipSelectionMenus.Length > 0 && shipSelectionMenus[(int)curPlayer] != null) {
-			shipSelectionMenus[(int)curPlayer].device = curDevice;
+		if (shipSelectionMenus.Length > 0 && shipSelectionMenus[(int)this.curPlayer] != null) {
+			shipSelectionMenus[(int)this.curPlayer].device = curDevice;
 		}
 		controllersInUse.Add(curDevice);
 		print("Player " + controllersInUse.Count + " added.");
 
-		curPlayer = (Player)(((int)curPlayer + 1) % ((int)Player.none));
+		this.curPlayer = (Player)(((int)this.curPlayer + 1) % ((int)Player.none));
 	}
 }

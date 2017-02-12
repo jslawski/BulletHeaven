@@ -8,6 +8,16 @@ public struct AbilityInfo {
 	public string abilityDescription;
 }
 
+public enum SelectionPosition {
+	offscreenLeft,
+	left,
+	selected,
+	right,
+	offscreenRight,
+	invisibleCenter,
+	numPositions
+}
+
 public class ShipInfo : MonoBehaviour {
 	ShipSelectionManager selectionMenu;
 	
@@ -99,29 +109,27 @@ public class ShipInfo : MonoBehaviour {
 		spriteRenderer.sortingOrder = (int)Mathf.Lerp(spriteRenderer.sortingOrder, posInfo.orderInLayer, scrollSpeed);
 	}
 
-	public void Scroll(bool toTheRight) {
+	public void Scroll(ScrollDirection scrollDirection) {
 		//Deselect this ship if we're moving off of it
 		if (selectionMenu.selectedShip == this) {
-			//print(gameObject.name + " is no longer selected.");
 			selectionMenu.selectedShip = null;
 		}
 
 		//Move the ship's position
 		//Handle wrap-around from left to right side
-		if ((int)position == 0 && !toTheRight) {
+		if ((int)position == 0 && scrollDirection == ScrollDirection.left) {
 			position = (SelectionPosition)(((int)SelectionPosition.numPositions)-1);
 		}
 		//Handle wrap-around from right to left side
-		else if ((int)position == ((int)SelectionPosition.numPositions)-1 && toTheRight) {
+		else if ((int)position == ((int)SelectionPosition.numPositions)-1 && scrollDirection == ScrollDirection.right) {
 			position = (SelectionPosition)0;
 		}
 		else {
-			position += (toTheRight ? 1 : -1);
+			position += ((scrollDirection == ScrollDirection.right) ? 1 : -1);
 		}
 
 		//Select this ship if we're moving into the selection slot
 		if (position == SelectionPosition.selected) {
-			//print(gameObject.name + " is now selected.");
 			selectionMenu.selectedShip = this;
 		}
 	}
