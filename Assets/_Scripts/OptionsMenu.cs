@@ -43,8 +43,6 @@ public class OptionsMenu : MonoBehaviour {
 		}
 	}
 
-	ShipSelectionManager[] shipSelections;
-
 	// Use this for initialization
 	void Awake() {
 		rectTransform = transform.parent.GetComponent<RectTransform>();

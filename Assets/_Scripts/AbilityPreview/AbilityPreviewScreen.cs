@@ -5,7 +5,7 @@ using System.Collections;
 public class AbilityPreviewScreen : MonoBehaviour {
 	public PreviewGameManager previewGameManager;
 	[SerializeField]
-	ShipSelectionManager shipSelection;
+	ShipSelectionControls shipSelection;
 	[SerializeField]
 	Text shipNameField;
 	[SerializeField]
@@ -30,10 +30,6 @@ public class AbilityPreviewScreen : MonoBehaviour {
 		}
 	}
 
-	// Use this for initialization
-	void Awake () {
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		if (shipSelection.hasFocus) {

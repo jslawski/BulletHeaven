@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 public class ControllerSetup : MonoBehaviour {
 	public static ControllerSetup S;
-	public ShipSelectionManager[] shipSelectionMenus;
 
 	public int maxNumberOfPlayers = 2;
 	List<InputDevice> controllersInUse = new List<InputDevice>();
@@ -32,7 +31,8 @@ public class ControllerSetup : MonoBehaviour {
 		if (timeInScene < minTimeInSceneForInput) {
 			timeInScene += Time.deltaTime;
 		}
-		else {
+		else 
+		{
 			//Look for input from any device
 			for (int i = 0; i < InputManager.Devices.Count; i++) {
 				InputDevice curDevice = InputManager.Devices[i];
@@ -55,11 +55,18 @@ public class ControllerSetup : MonoBehaviour {
 			}
 		}
 		//Ship selection menu
-		if (shipSelectionMenus.Length > 0 && shipSelectionMenus[(int)this.curPlayer] != null) {
-			shipSelectionMenus[(int)this.curPlayer].device = curDevice;
+		if (UnifiedShipSelectionManager.instance.shipSelectionControls.Count > 0 && UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer] != null) {
+			UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer].SetDevice(this.curPlayer, this.curPlayer);
+
 		}
 		controllersInUse.Add(curDevice);
 		print("Player " + controllersInUse.Count + " added.");
+
+		//Kick off single-player selection coroutines
+		if (GameManager.S.singlePlayer == true) 
+		{
+			StartCoroutine(UnifiedShipSelectionManager.instance.SelectPlayerOneForSinglePlayer());
+		}
 
 		this.curPlayer = (Player)(((int)this.curPlayer + 1) % ((int)Player.none));
 	}

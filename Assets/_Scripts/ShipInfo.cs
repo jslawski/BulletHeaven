@@ -19,7 +19,7 @@ public enum SelectionPosition {
 }
 
 public class ShipInfo : MonoBehaviour {
-	ShipSelectionManager selectionMenu;
+	ShipSelectionControls selectionMenu;
 	
 	public Player selectingPlayer = Player.none;
 	public SelectionPosition position;
@@ -61,7 +61,7 @@ public class ShipInfo : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		selectionMenu = GetComponentInParent<ShipSelectionManager>();
+		selectionMenu = GetComponentInParent<ShipSelectionControls>();
 
 		GetShipInfoStrings();
 	}

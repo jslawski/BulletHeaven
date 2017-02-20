@@ -28,7 +28,7 @@ public class ShipSelectStartPrompt : MonoBehaviour {
 			}
 			else {
 				//Move prompt on-screen if all players are ready
-				if (ShipSelectionManager.AllPlayersReady()) {
+				if (UnifiedShipSelectionManager.instance.AllPlayersReady()) {
 					rect.anchorMin = Vector2.Lerp(rect.anchorMin, endAnchorMin, t);
 					rect.anchorMax = Vector2.Lerp(rect.anchorMax, endAnchorMax, t);
 				}

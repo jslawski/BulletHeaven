@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using InControl;
+
 //This behavior is responsible for the player-specific controls of selecting a ship
 public class ShipSelectionControls : MonoBehaviour {
+
+	//Unused right now
 	[HideInInspector]
 	public KeyCode left,right,A,B,Y,start;
 
@@ -13,7 +17,13 @@ public class ShipSelectionControls : MonoBehaviour {
 
 	public bool playerReady = false;
 
-	private ShipInfo[] ships;
+	public AbilityPreviewScreen abilityPreview;
+
+	public OptionsMenu optionsMenu;  //TODO: JPS Not a big fan of both selection controls having a reference to the same object.  Maybe we could reduce it to one reference somewhere...
+
+	public Player player;
+
+	public InputDevice device;
 
 	private ShipInfo _selectedShip;
 	public ShipInfo selectedShip 
@@ -31,11 +41,99 @@ public class ShipSelectionControls : MonoBehaviour {
 												//such as the world position, alpha value, and orderInLayer value
 												//Set in inspector JPS: TODO: Have this set in code, in order to allow for easier addition of ships in the future
 
+	public PersistentShipInfo persistentInfoPrefab;
+
+	[HideInInspector]
+	public ShipInfo[] ships;
+
 	[SerializeField]
 	private ShipStats shipStats;
 
-	void Start() {
+	void Awake()
+	{
+		this.persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
+
 		this.ships = GetComponentsInChildren<ShipInfo>();
+	}
+
+	void Update () 
+	{
+		//Don't allow input while it doesn't have focus
+		if (!this.hasFocus || OptionsMenu.hasFocus) 
+		{
+			return;
+		}
+		//Don't allow input while randoming ships
+		if (this.inChooseRandomShipCoroutine || GameManager.S.gameState != GameStates.shipSelect) 
+		{
+			return;
+		}
+
+		//If the device hasn't been set yet (In the case of single-player, with ships being chosen asynchronously by the same controller), abort
+		if (this.device == null) 
+		{
+			return;
+		}
+
+		#region Controller Support
+		//Controller support
+		if ((this.device.LeftStick.Right.WasPressed || this.device.DPadRight.WasPressed) && !this.playerReady) 
+		{
+			this.Scroll(ScrollDirection.right);
+		} 
+		else if ((this.device.LeftStick.Left.WasPressed || this.device.DPadLeft.WasPressed) && !this.playerReady) 
+		{
+			this.Scroll(ScrollDirection.left);
+		}
+
+		//Ready up
+		if (this.device.Action1.WasPressed && !this.playerReady) 
+		{
+			if (this.selectedShip.typeOfShip == ShipType.random) 
+			{
+				StartCoroutine(this.RandomShip());
+			} 
+			else 
+			{
+				SoundManager.instance.Play("ShipConfirm", 1);
+				this.playerReady = true;
+			}
+		}
+		else if (this.device.Action2.WasPressed && this.playerReady) 
+		{
+			this.CancelPlayer();
+		} 
+		else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != ShipType.random) 
+		{
+			abilityPreview.SetAbilityPreview(this.selectedShip);
+			}
+
+		if (GameManager.S.gameState == GameStates.shipSelect && this.device.MenuWasPressed) 
+		{
+			if (UnifiedShipSelectionManager.instance.AllPlayersReady()) 
+			{
+				SoundManager.instance.Play("StartGame");
+				GameManager.S.gameState = GameStates.countdown;
+				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+			} 
+			else 
+			{
+				optionsMenu.OpenOptionsMenu(this.device);
+			}
+		}
+		#endregion
+	}
+
+	public void CancelPlayer()
+	{
+		SoundManager.instance.Play("ShipCancel");
+		this.playerReady = false;
+	}
+
+	public void SetDevice(Player playerId, Player controllingPlayer)
+	{
+		this.player = controllingPlayer;
+		this.device = GameManager.S.players[(int)controllingPlayer].device;
 	}
 
 	public void Scroll(ScrollDirection scrollDirection) {

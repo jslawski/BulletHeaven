@@ -11,8 +11,6 @@ using UnityEngine.SceneManagement;
 	right
 }*/
 
-//TODO: Isolate Input device to ShipSelectionControls, rather than here
-//TODO: If the for Loop in Update is problematic, set it up to broadcast events for each ShipSelectionControls instance to listen to
 //TODO: Setting input keycodes for controllers at runtime.
 //TODO: Setting up ShipSelectionControls at runtime, so it's not assumed that 2 players are always selecting at the same time (could be one player selecting for both separately)
 
@@ -22,31 +20,9 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 {
 	public static UnifiedShipSelectionManager instance;
 
-	public PersistentShipInfo persistentInfoPrefab;
+	private const float MinWaitTimeForInputInSeconds = 0.25f;
 
-	public Player[] players;
-	public InputDevice device;
-
-	ShipInfo[] ships;
-
-	public AbilityPreviewScreen abilityPreview;
-
-	public OptionsMenu optionsMenu;
-	public Text selectedShipNameField;
-	public Text selectedShipDescriptionField;
-	[Header("Stat Bar References")]
-	public StatBar offenseStat;
-	public StatBar defenseStat;
-	public StatBar speedStat;
-	public StatBar maxHealthStat;
-	public StatBar difficultyStat;
-	public Text miscStatLabel;
-	public StatBar miscStat;
-
-	float minWaitTime = 0.075f;
-	float maxWaitTime = 0.075f;
-
-	private List<ShipSelectionControls> shipSelectionControls;
+	public List<ShipSelectionControls> shipSelectionControls;
 
 	void Awake() 
 	{
@@ -56,7 +32,7 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		}
 		instance = this;
 
-		this.persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
+
 	
 		ShipSelectionControls[] currentShipSelectionControls = GetComponentsInChildren<ShipSelectionControls>();
 		this.shipSelectionControls = new List<ShipSelectionControls>();
@@ -69,122 +45,92 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		DontDestroyOnLoad(this.gameObject);
 	}
 
-	// Update is called once per frame
-	void Update () 
+	public IEnumerator SelectPlayerOneForSinglePlayer()
 	{
-		foreach (ShipSelectionControls controls in shipSelectionControls) 
+		Debug.Log("===JPS=== Starting Player One Coroutine");
+
+		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+
+		this.shipSelectionControls[(int)Player.player1].playerReady = false;
+		this.shipSelectionControls[(int)Player.player1].SetDevice(Player.player1, Player.player1);
+
+		//Continue looping until player 1's ship has been confirmed
+		while (this.shipSelectionControls[(int)Player.player1].playerReady == false) 
 		{
-			//Don't allow input while it doesn't have focus
-			if (!controls.hasFocus || OptionsMenu.hasFocus) 
-			{
-				return;
-			}
-			//Don't allow input while randoming ships
-			if (controls.inChooseRandomShipCoroutine || GameManager.S.gameState != GameStates.shipSelect) 
-			{
-				return;
-			}
-
-			#region Keyboard Support
-			//Keyboard support
-			if (Input.GetKeyDown(controls.right) && !controls.playerReady) 
-			{
-				controls.Scroll(ScrollDirection.right);
-			} 
-			else if (Input.GetKeyDown(controls.left) && !controls.playerReady) 
-			{
-				controls.Scroll(ScrollDirection.left);
-			}
-
-			//Ready up
-			if (Input.GetKeyDown(controls.A) && !controls.playerReady) 
-			{
-				if (controls.selectedShip.typeOfShip == ShipType.random) 
-				{
-					StartCoroutine(controls.RandomShip());
-				} 
-				else 
-				{
-					SoundManager.instance.Play("ShipConfirm", 1);
-					controls.playerReady = true;
-				}
-			} 
-			else if (Input.GetKeyDown(controls.B) && controls.playerReady) 
-			{
-				SoundManager.instance.Play("ShipCancel");
-				controls.playerReady = false;
-			} 
-			else if (Input.GetKeyDown(controls.Y) && controls.selectedShip.typeOfShip != ShipType.random) 
-			{
-				abilityPreview.SetAbilityPreview(controls.selectedShip);
-			}
-
-			if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(controls.start)) 
-			{
-				if (AllPlayersReady()) 
-				{
-					SoundManager.instance.Play("StartGame");
-					GameManager.S.gameState = GameStates.countdown;
-					GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
-				} 
-				else 
-				{
-					optionsMenu.OpenOptionsMenu(device);
-				}
-			}
-			#endregion
-
-			#region Controller Support
-			//Controller support
-			if (device != null) {
-				if ((device.LeftStick.Right.WasPressed || device.DPadRight.WasPressed) && !controls.playerReady) 
-				{
-					controls.Scroll(ScrollDirection.right);
-				} 
-				else if ((device.LeftStick.Left.WasPressed || device.DPadLeft.WasPressed) && !controls.playerReady) 
-				{
-					controls.Scroll(ScrollDirection.left);
-				}
-
-				//Ready up
-				if (device.Action1.WasPressed && !controls.playerReady) 
-				{
-					if (controls.selectedShip.typeOfShip == ShipType.random) 
-					{
-						StartCoroutine(controls.RandomShip());
-					} 
-					else 
-					{
-						SoundManager.instance.Play("ShipConfirm", 1);
-						controls.playerReady = true;
-					}
-				}
-				else if (device.Action2.WasPressed && controls.playerReady) 
-				{
-					SoundManager.instance.Play("ShipCancel");
-					controls.playerReady = false;
-				} 
-				else if (device.Action4.WasPressed && controls.selectedShip.typeOfShip != ShipType.random) 
-				{
-					abilityPreview.SetAbilityPreview(controls.selectedShip);
-				}
-
-				if (GameManager.S.gameState == GameStates.shipSelect && device.MenuWasPressed) 
-				{
-					if (AllPlayersReady()) 
-					{
-						SoundManager.instance.Play("StartGame");
-						GameManager.S.gameState = GameStates.countdown;
-						GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
-					} 
-					else 
-					{
-						optionsMenu.OpenOptionsMenu(device);
-					}
-				}
-			}
-			#endregion
+			yield return null;
 		}
+
+		//Move on to player 2 (the COM's) ship
+		StartCoroutine(this.SelectComForSinglePlayer());
+	}
+
+	private IEnumerator SelectComForSinglePlayer()
+	{
+		Debug.Log("===JPS=== Starting COM Coroutine");
+
+		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+
+		this.shipSelectionControls[(int)Player.player2].playerReady = false;
+		this.shipSelectionControls[(int)Player.player2].SetDevice(Player.player2, Player.player1);  //Mainly used to set the Player field.  Redundantly sets the device before the handoff.  TODO: JPS Streamline this...
+		this.HandoffDevice(Player.player1, Player.player2);
+
+		//Continue looping until COM's ship has been confirmed
+		while (this.shipSelectionControls[(int)Player.player2].playerReady == false) 
+		{
+			//If the cancel button is pressed at any time when selecting the computer ship, cancel
+			//out and return to selecting player 1's ship
+			if (this.shipSelectionControls[(int)Player.player2].device.Action2.WasPressed) 
+			{
+				this.shipSelectionControls[(int)Player.player1].CancelPlayer();
+				this.HandoffDevice(Player.player2, Player.player1);
+				StartCoroutine(this.SelectPlayerOneForSinglePlayer());
+				break;
+			}
+
+			yield return null;
+		}
+			
+		//Move on to player 2 (the COM's) ship only if all players are ready
+		if (this.AllPlayersReady() == true) 
+		{
+			StartCoroutine(this.WaitForStartGameForSinglePlayer());
+		}
+	}
+
+	private IEnumerator WaitForStartGameForSinglePlayer()
+	{
+		Debug.Log("===JPS=== Starting Waiting Coroutine");
+
+		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+
+		//Wait for the game to progress to the next state
+		while (GameManager.S.gameState == GameStates.shipSelect && !this.shipSelectionControls[(int)Player.player2].device.MenuWasPressed) 
+		{
+			//If the cancel button is pressed at any time while waiting for the game to start, cancel out
+			//And return to selecting the COM's ship
+			if (this.shipSelectionControls[(int)Player.player2].device.Action2.WasPressed) 
+			{
+				this.shipSelectionControls[(int)Player.player2].CancelPlayer();
+				StartCoroutine(this.SelectComForSinglePlayer());
+				break;
+			}
+
+			yield return null;
+		}
+
+		//Handoff device back to player 1 before the game starts
+		this.HandoffDevice(Player.player2, Player.player1);
+	}
+
+	private void HandoffDevice(Player sourcePlayer, Player destinationPlayer)
+	{
+		if (this.shipSelectionControls[(int)sourcePlayer].device == null) 
+		{
+			Debug.LogError("UnifiedShipSelectionManager.HandoffDeviceToPlayerOne: No device found in source ShipSelectionControls. Handoff failed.");
+		}
+
+		this.shipSelectionControls[(int)destinationPlayer].device = this.shipSelectionControls[(int)sourcePlayer].device;
+		this.shipSelectionControls[(int)sourcePlayer].device = null;
 	}
 
 	public bool AllPlayersReady() {

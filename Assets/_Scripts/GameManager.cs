@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour {
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SoundManager.instance.Play("PressStart");
-				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection_JDS");
+				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection_JPS");
 			}
 		}
 	}
@@ -334,7 +334,7 @@ public class GameManager : MonoBehaviour {
 				curTheme = "TitleTheme";
 				Reset();
 				break;
-			case "_Scene_Ship_Selection_JDS":
+			case "_Scene_Ship_Selection_JPS":
 				gameState = GameStates.shipSelect;
 				SoundManager.instance.Play("ShipSelectTheme");
 				curTheme = "ShipSelectTheme";
