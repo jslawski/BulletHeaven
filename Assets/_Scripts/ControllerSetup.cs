@@ -56,7 +56,7 @@ public class ControllerSetup : MonoBehaviour {
 		}
 		//Ship selection menu
 		if (UnifiedShipSelectionManager.instance.shipSelectionControls.Count > 0 && UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer] != null) {
-			UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer].SetDevice(this.curPlayer, this.curPlayer);
+			UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer].SetDevice(this.curPlayer);
 
 		}
 		controllersInUse.Add(curDevice);

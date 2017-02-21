@@ -5,23 +5,21 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-/*public enum ScrollDirection 
+public enum ScrollDirection 
 {
 	left, 
 	right
-}*/
-
-//TODO: Setting input keycodes for controllers at runtime.
-//TODO: Setting up ShipSelectionControls at runtime, so it's not assumed that 2 players are always selecting at the same time (could be one player selecting for both separately)
-
+}
+	
 //This class is responsible for handling the aspects of ship selection that are universal for both players
-//Ex: Listens for input from BOTH players to call scrolling functions when needed
+//It is also responsible for handling single-player selection logic
 public class UnifiedShipSelectionManager : MonoBehaviour 
 {
 	public static UnifiedShipSelectionManager instance;
 
 	private const float MinWaitTimeForInputInSeconds = 0.25f;
 
+	[HideInInspector]
 	public List<ShipSelectionControls> shipSelectionControls;
 
 	void Awake() 
@@ -31,8 +29,6 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 			return;
 		}
 		instance = this;
-
-
 	
 		ShipSelectionControls[] currentShipSelectionControls = GetComponentsInChildren<ShipSelectionControls>();
 		this.shipSelectionControls = new List<ShipSelectionControls>();
@@ -42,17 +38,16 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 			this.shipSelectionControls.Add(controls);
 		}
 
-		DontDestroyOnLoad(this.gameObject);
+		DontDestroyOnLoad(this.gameObject);  //JPS: Do we know why this is here?  I destroy this game object when we transition to the main scene anyway...
 	}
 
+	//Called from ControllerSetup.cs the moment the first device is set in single-player
+	#region Single-Player Selection Flow
 	public IEnumerator SelectPlayerOneForSinglePlayer()
 	{
-		Debug.Log("===JPS=== Starting Player One Coroutine");
-
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		this.shipSelectionControls[(int)Player.player1].playerReady = false;
-		this.shipSelectionControls[(int)Player.player1].SetDevice(Player.player1, Player.player1);
 
 		//Continue looping until player 1's ship has been confirmed
 		while (this.shipSelectionControls[(int)Player.player1].playerReady == false) 
@@ -61,24 +56,21 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		}
 
 		//Move on to player 2 (the COM's) ship
+		this.HandoffDevice(Player.player1, Player.player2);
 		StartCoroutine(this.SelectComForSinglePlayer());
 	}
 
 	private IEnumerator SelectComForSinglePlayer()
 	{
-		Debug.Log("===JPS=== Starting COM Coroutine");
-
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		this.shipSelectionControls[(int)Player.player2].playerReady = false;
-		this.shipSelectionControls[(int)Player.player2].SetDevice(Player.player2, Player.player1);  //Mainly used to set the Player field.  Redundantly sets the device before the handoff.  TODO: JPS Streamline this...
-		this.HandoffDevice(Player.player1, Player.player2);
 
 		//Continue looping until COM's ship has been confirmed
 		while (this.shipSelectionControls[(int)Player.player2].playerReady == false) 
 		{
-			//If the cancel button is pressed at any time when selecting the computer ship, cancel
-			//out and return to selecting player 1's ship
+			//If the cancel button is pressed at any time while selecting the computer ship,
+			//cancel out and return to selecting player 1's ship
 			if (this.shipSelectionControls[(int)Player.player2].device.Action2.WasPressed) 
 			{
 				this.shipSelectionControls[(int)Player.player1].CancelPlayer();
@@ -90,7 +82,7 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 			yield return null;
 		}
 			
-		//Move on to player 2 (the COM's) ship only if all players are ready
+		//Move on to waiting state only if all players are ready
 		if (this.AllPlayersReady() == true) 
 		{
 			StartCoroutine(this.WaitForStartGameForSinglePlayer());
@@ -99,12 +91,10 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	private IEnumerator WaitForStartGameForSinglePlayer()
 	{
-		Debug.Log("===JPS=== Starting Waiting Coroutine");
-
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		//Wait for the game to progress to the next state
-		while (GameManager.S.gameState == GameStates.shipSelect && !this.shipSelectionControls[(int)Player.player2].device.MenuWasPressed) 
+		while (!this.shipSelectionControls[(int)Player.player2].device.MenuWasPressed) 
 		{
 			//If the cancel button is pressed at any time while waiting for the game to start, cancel out
 			//And return to selecting the COM's ship
@@ -119,9 +109,12 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		}
 
 		//Handoff device back to player 1 before the game starts
-		this.HandoffDevice(Player.player2, Player.player1);
+		if (this.AllPlayersReady() == true) {
+			this.HandoffDevice(Player.player2, Player.player1);
+		}
 	}
 
+	//Pass the device between ShipSelectionControls references depending on where the player is in the process of selecting ships in single-player
 	private void HandoffDevice(Player sourcePlayer, Player destinationPlayer)
 	{
 		if (this.shipSelectionControls[(int)sourcePlayer].device == null) 
@@ -131,6 +124,34 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 		this.shipSelectionControls[(int)destinationPlayer].device = this.shipSelectionControls[(int)sourcePlayer].device;
 		this.shipSelectionControls[(int)sourcePlayer].device = null;
+	}
+	#endregion
+
+	//TODO: JPS: OnLevelWasLoaded is deprecated.  Replace this implementation with SceneManager stuff at some point
+	IEnumerator OnLevelWasLoaded(int levelIndex) {
+		if (SceneManager.GetActiveScene().name != "_Scene_Main") {
+			yield break;
+		}
+
+		//Wait for GameManager to initialize itself
+		while (GameManager.S == null) {
+			yield return null;
+		}
+
+		//Wait 2 frames, since GameManager takes 1 frame to re-assign player references
+		//TODO: Can we have a more general implementation of this?
+		yield return null;
+		yield return null;
+
+		for (int curControlsIndex = 0; curControlsIndex < this.shipSelectionControls.Count; curControlsIndex++) 
+		{
+			//Create the object that will pass the information to GameManager
+			PersistentShipInfo persistentShipInfo = Instantiate(this.shipSelectionControls[curControlsIndex].persistentInfoPrefab);
+			persistentShipInfo.gameObject.name = "P" + ((int)this.shipSelectionControls[curControlsIndex].player + 1) + "_ShipInfo";
+			persistentShipInfo.Initialize(this.shipSelectionControls[curControlsIndex].selectedShip, this.shipSelectionControls[curControlsIndex].device);
+		}
+
+		Destroy(this.gameObject);
 	}
 
 	public bool AllPlayersReady() {

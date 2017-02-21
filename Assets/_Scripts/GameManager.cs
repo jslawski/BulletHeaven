@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	public Text winPromptText;
 
-	public bool singlePlayer = true;
+	[HideInInspector]
+	public bool singlePlayer;
 
 	public bool inGame {
 		get {
@@ -70,8 +71,12 @@ public class GameManager : MonoBehaviour {
 		}
 		S = this;
 
+		//**********Change this value to toggle single-player vs. multiplayer**********
+		this.singlePlayer = true;
+		//**********Change this value to toggle single-player vs. multiplayer**********
+
 		DontDestroyOnLoad(this);
-		
+
 		Options.LoadOptionsFromPlayerPrefs();
 		maxDamageAmplification = Options.maxDamageAmp;
 		minDamageAmplification = Options.minDamageAmp;

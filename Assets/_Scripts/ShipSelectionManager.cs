@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using InControl;
 using UnityEngine.SceneManagement;
 
-public enum ScrollDirection {
+/*public enum ScrollDirection {
 	left, 
 	right
-}
+}*/
 
 [System.Serializable]
 public struct PositionInfo {

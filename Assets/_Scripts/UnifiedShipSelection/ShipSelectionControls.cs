@@ -6,36 +6,13 @@ using InControl;
 
 //This behavior is responsible for the player-specific controls of selecting a ship
 public class ShipSelectionControls : MonoBehaviour {
-
-	//Unused right now
-	[HideInInspector]
 	public KeyCode left,right,A,B,Y,start;
-
 	public bool hasFocus = true;
-
-	public bool inChooseRandomShipCoroutine = false;
-
 	public bool playerReady = false;
-
 	public AbilityPreviewScreen abilityPreview;
-
-	public OptionsMenu optionsMenu;  //TODO: JPS Not a big fan of both selection controls having a reference to the same object.  Maybe we could reduce it to one reference somewhere...
-
-	public Player player;
-
+	public OptionsMenu optionsMenu;  			//TODO: JPS Not a big fan of both selection controls having a reference to the same object.  Maybe we could reduce it to one reference somewhere in the UnifiedShipSelectionManager
+	public Player player; 						//TODO: Have this not set in inspector?
 	public InputDevice device;
-
-	private ShipInfo _selectedShip;
-	public ShipInfo selectedShip 
-	{
-		get {
-			return _selectedShip;
-		}
-		set {
-			_selectedShip = value;
-			shipStats.SetStatsForShip(value);
-		}
-	}
 
 	public PositionInfo[] positionInfos;        //Information about each selection position (off-screen left, left, selected, etc.)
 												//such as the world position, alpha value, and orderInLayer value
@@ -49,11 +26,47 @@ public class ShipSelectionControls : MonoBehaviour {
 	[SerializeField]
 	private ShipStats shipStats;
 
+	private bool inChooseRandomShipCoroutine = false;
+
+	private ShipInfo _selectedShip;
+	public ShipInfo selectedShip 
+	{
+		get {
+			return _selectedShip;
+		}
+		set {
+			_selectedShip = value;
+			shipStats.SetStatsForShip(value);
+		}
+	}
+
 	void Awake()
 	{
 		this.persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
 
 		this.ships = GetComponentsInChildren<ShipInfo>();
+		foreach (ShipInfo ship in ships) {
+			ship.selectingPlayer = this.player;
+		}
+
+		#region Keyboard Support
+		if (this.player == Player.player1) {
+			this.left = KeyCode.A;
+			this.right = KeyCode.D;
+			this.A = KeyCode.Alpha1;
+			this.B = KeyCode.Alpha2;
+			this.Y = KeyCode.Alpha4;
+			this.start = KeyCode.Space;
+		}
+		else if	(this.player == Player.player2) {
+			this.left = KeyCode.LeftArrow;
+			this.right = KeyCode.RightArrow;
+			this.A = KeyCode.Keypad1;
+			this.B = KeyCode.Keypad2;
+			this.Y = KeyCode.Keypad4;
+			this.start = KeyCode.KeypadEnter;
+		}
+		#endregion
 	}
 
 	void Update () 
@@ -69,56 +82,100 @@ public class ShipSelectionControls : MonoBehaviour {
 			return;
 		}
 
-		//If the device hasn't been set yet (In the case of single-player, with ships being chosen asynchronously by the same controller), abort
-		if (this.device == null) 
+		//For single player, a null device means that no input should be accepted.  Only a player with a device will be selecting ships (for both player 1 and the COM)
+		//While a null device is checked for below, this is mostly here to maintain support for keyboard in multiplayer only.
+		//Removing it will allow keyboard to select ships for the COM while Player 1 is using a controller to select their ship, which messes up the flow of the coroutines in UnifiedShipSelectionManager.
+		if (this.device == null && GameManager.S.singlePlayer == true) 
 		{
 			return;
 		}
 
 		#region Controller Support
-		//Controller support
-		if ((this.device.LeftStick.Right.WasPressed || this.device.DPadRight.WasPressed) && !this.playerReady) 
-		{
-			this.Scroll(ScrollDirection.right);
-		} 
-		else if ((this.device.LeftStick.Left.WasPressed || this.device.DPadLeft.WasPressed) && !this.playerReady) 
-		{
+		if (device != null){
+			if ((this.device.LeftStick.Right.WasPressed || this.device.DPadRight.WasPressed) && this.playerReady == false) 
+			{
+				this.Scroll(ScrollDirection.left);
+			} 
+			else if ((this.device.LeftStick.Left.WasPressed || this.device.DPadLeft.WasPressed) && this.playerReady == false) 
+			{
+				this.Scroll(ScrollDirection.right);
+			}
+
+			//Ready up
+			if (this.device.Action1.WasPressed && this.playerReady == false) 
+			{
+				if (this.selectedShip.typeOfShip == ShipType.random) 
+				{
+					StartCoroutine(this.RandomShip());
+				} 
+				else 
+				{
+					SoundManager.instance.Play("ShipConfirm", 1);
+					this.playerReady = true;
+				}
+			}
+			else if (this.device.Action2.WasPressed && this.playerReady == true) 
+			{
+				this.CancelPlayer();
+			} 
+			else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != ShipType.random) 
+			{
+				this.abilityPreview.SetAbilityPreview(this.selectedShip);
+				}
+
+			if (GameManager.S.gameState == GameStates.shipSelect && this.device.MenuWasPressed) 
+			{
+				if (UnifiedShipSelectionManager.instance.AllPlayersReady()) 
+				{
+					SoundManager.instance.Play("StartGame");
+					GameManager.S.gameState = GameStates.countdown;
+					GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+				} 
+				else 
+				{
+					this.optionsMenu.OpenOptionsMenu(this.device);
+				}
+			}
+		}
+		#endregion
+
+		#region Keyboard Support
+		//Keyboard support
+		if (Input.GetKeyDown(this.right) && this.playerReady == false) {
 			this.Scroll(ScrollDirection.left);
+		}
+		else if (Input.GetKeyDown(this.left) && this.playerReady == false) {
+			this.Scroll(ScrollDirection.right);
 		}
 
 		//Ready up
-		if (this.device.Action1.WasPressed && !this.playerReady) 
-		{
-			if (this.selectedShip.typeOfShip == ShipType.random) 
-			{
+		if (Input.GetKeyDown(this.A) && this.playerReady == false) {
+			if (this.selectedShip.typeOfShip == ShipType.random) {
 				StartCoroutine(this.RandomShip());
-			} 
-			else 
-			{
+			}
+			else {
 				SoundManager.instance.Play("ShipConfirm", 1);
+				print(this.player + " is ready.");
 				this.playerReady = true;
 			}
 		}
-		else if (this.device.Action2.WasPressed && this.playerReady) 
-		{
-			this.CancelPlayer();
-		} 
-		else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != ShipType.random) 
-		{
-			abilityPreview.SetAbilityPreview(this.selectedShip);
-			}
+		else if (Input.GetKeyDown(this.B) && this.playerReady == true) {
+			SoundManager.instance.Play("ShipCancel");
+			print(this.player + " is no longer ready.");
+			this.playerReady = false;
+		}
+		else if (Input.GetKeyDown(this.Y) && this.selectedShip.typeOfShip != ShipType.random) {
+			this.abilityPreview.SetAbilityPreview(this.selectedShip);
+		}
 
-		if (GameManager.S.gameState == GameStates.shipSelect && this.device.MenuWasPressed) 
-		{
-			if (UnifiedShipSelectionManager.instance.AllPlayersReady()) 
-			{
+		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(this.start)) {
+			if (UnifiedShipSelectionManager.instance.AllPlayersReady()) {
 				SoundManager.instance.Play("StartGame");
 				GameManager.S.gameState = GameStates.countdown;
 				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
-			} 
-			else 
-			{
-				optionsMenu.OpenOptionsMenu(this.device);
+			}
+			else {
+				this.optionsMenu.OpenOptionsMenu(this.device);
 			}
 		}
 		#endregion
@@ -130,9 +187,8 @@ public class ShipSelectionControls : MonoBehaviour {
 		this.playerReady = false;
 	}
 
-	public void SetDevice(Player playerId, Player controllingPlayer)
+	public void SetDevice(Player controllingPlayer)
 	{
-		this.player = controllingPlayer;
 		this.device = GameManager.S.players[(int)controllingPlayer].device;
 	}
 
