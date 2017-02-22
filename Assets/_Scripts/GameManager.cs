@@ -29,7 +29,8 @@ public class GameManager : MonoBehaviour {
 
 	public PlayerShip[] players;
 	InputDevice[] controllers;
-	public string titleSceneName = "_Scene_Title";
+	public const string titleSceneName = "_Scene_Title";
+	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
 
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;
@@ -228,7 +229,7 @@ public class GameManager : MonoBehaviour {
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				SoundManager.instance.Play("PressStart");
-				TransitionScene(fadeFromTitleDuration, "_Scene_Ship_Selection_JPS");
+				TransitionScene(fadeFromTitleDuration, shipSelectionSceneName);
 			}
 		}
 	}
@@ -339,7 +340,7 @@ public class GameManager : MonoBehaviour {
 				curTheme = "TitleTheme";
 				Reset();
 				break;
-			case "_Scene_Ship_Selection_JPS":
+			case shipSelectionSceneName:
 				gameState = GameStates.shipSelect;
 				SoundManager.instance.Play("ShipSelectTheme");
 				curTheme = "ShipSelectTheme";

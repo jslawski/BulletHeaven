@@ -209,7 +209,7 @@ public class ShipSelectionControls : MonoBehaviour {
 	}
 
 	public IEnumerator RandomShip() {
-		int numPositions = positionInfos.Length;
+		int numPositions = ships.Length;
 		int randNumScrolls;
 
 		float minWaitTime = 0.075f;

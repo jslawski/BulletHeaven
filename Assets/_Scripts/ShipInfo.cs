@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 [System.Serializable]
@@ -14,15 +15,24 @@ public enum SelectionPosition {
 	selected,
 	right,
 	offscreenRight,
-	invisibleCenter,
-	numPositions
+	invisibleCenter
 }
 
 public class ShipInfo : MonoBehaviour {
+	private int numSelectionOptions {
+		get {
+			return selectionMenu.ships.Length;
+		}
+	}
 	ShipSelectionControls selectionMenu;
 	
 	public Player selectingPlayer = Player.none;
-	public SelectionPosition position;
+	private int positionIndex;
+	public SelectionPosition position {
+		get {
+			return (SelectionPosition)Mathf.Min((int)SelectionPosition.invisibleCenter, positionIndex);
+		}
+	}
 	public ShipType typeOfShip;
 	public string shipName;
 	public string description;
@@ -67,6 +77,7 @@ public class ShipInfo : MonoBehaviour {
 	}
 
 	void Start() {
+		positionIndex = Array.IndexOf(selectionMenu.ships, this);
 		if (position == SelectionPosition.selected) {
 			selectionMenu.selectedShip = this;
 		}
@@ -116,17 +127,9 @@ public class ShipInfo : MonoBehaviour {
 		}
 
 		//Move the ship's position
-		//Handle wrap-around from left to right side
-		if ((int)position == 0 && scrollDirection == ScrollDirection.left) {
-			position = (SelectionPosition)(((int)SelectionPosition.numPositions)-1);
-		}
-		//Handle wrap-around from right to left side
-		else if ((int)position == ((int)SelectionPosition.numPositions)-1 && scrollDirection == ScrollDirection.right) {
-			position = (SelectionPosition)0;
-		}
-		else {
-			position += ((scrollDirection == ScrollDirection.right) ? 1 : -1);
-		}
+		//Handle wrap-around from left to right side and vice versa
+		positionIndex += ((scrollDirection == ScrollDirection.right) ? 1 : -1);
+		positionIndex = (positionIndex == -1) ? numSelectionOptions - 1 : positionIndex % numSelectionOptions;
 
 		//Select this ship if we're moving into the selection slot
 		if (position == SelectionPosition.selected) {
