@@ -177,12 +177,20 @@ public class Bullet : PooledObj {
 			curColor.a = transparencyAlpha;
 			sprite.color = curColor;
 			sprite.sortingOrder = -1;
+
+			if (trail != null) {
+				trail.startColor = curColor;
+			}
 		}
 		else {
 			Color curColor = sprite.color;
 			curColor.a = 1;
 			sprite.color = curColor;
 			sprite.sortingOrder = 0;
+
+			if (trail != null) {
+				trail.startColor = curColor;
+			}
 		}
 	}
 
