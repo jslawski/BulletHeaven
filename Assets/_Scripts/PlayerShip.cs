@@ -55,7 +55,15 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	[HideInInspector]
 	public ShootBomb playerShooting;
 
-	public PlayerShip otherPlayer;
+	private PlayerShip _otherPlayer = null;
+	public PlayerShip otherPlayer {
+		get {
+			if (_otherPlayer == null) {
+				_otherPlayer = GameManager.S.OtherPlayerShip(this);
+			}
+			return _otherPlayer;
+		}
+	}
 
 	public delegate void OnHealthChangedEventHandler(float remainingHealth);
 	public event OnHealthChangedEventHandler onDamaged; 
@@ -188,9 +196,8 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		playerShooting.shootingDisabled = true;
 		playerMovement.movementDisabled = true;
 		//print("I am dead");
-
-		int otherPlayer = (player == Player.player1) ? (int)Player.player2 : (int)Player.player1;
-		GameManager.S.players[otherPlayer].InitializeFinalAttack();
+		
+		otherPlayer.InitializeFinalAttack();
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 		if (durationBar != null) {
 			durationBar.SetPercent(0);

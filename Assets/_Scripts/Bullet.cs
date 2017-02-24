@@ -25,8 +25,7 @@ public class Bullet : PooledObj {
 				if (GameManager.S.inGame) {
 					thisPlayer = GameManager.S.players[(int)value];
 					SetColor(thisPlayer.playerColor);
-					Player other = (value == Player.player1) ? Player.player2 : Player.player1;
-					otherPlayer = GameManager.S.players[(int)other].playerMovement;
+					otherPlayer = GameManager.S.OtherPlayerShip(thisPlayer).playerMovement;
 				}
 			}
 			else {

@@ -28,6 +28,13 @@ public class GameManager : MonoBehaviour {
 	public bool slowMo = false;
 
 	public PlayerShip[] players;
+	public PlayerShip OtherPlayerShip(PlayerShip thisShip) {
+		Player otherPlayer = (thisShip.player == Player.player1) ? Player.player2 : Player.player1;
+		return players[(int)otherPlayer];
+	}
+	public Player OtherPlayer(Player thisPlayer) {
+		return (thisPlayer == Player.player1) ? Player.player2 : Player.player1;
+	}
 	InputDevice[] controllers;
 	public const string titleSceneName = "_Scene_Title";
 	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
@@ -112,7 +119,7 @@ public class GameManager : MonoBehaviour {
 	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
 		print("Start initializing " + shipInfo.selectingPlayer);
 		Player player = shipInfo.selectingPlayer;
-		Player otherPlayer = (player == Player.player1) ? Player.player2 : Player.player1;
+		Player otherPlayer = OtherPlayer(player);
 		ShipType typeOfShip = shipInfo.typeOfShip;
 		Color playerColor = shipInfo.shipColor;
 

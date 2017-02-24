@@ -7,8 +7,8 @@ public class ShipMovement : MonoBehaviour {
 	float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
 	protected float vertMovespeedDefault = 16f;
 	protected float horizMovespeedDefault = 12.5f;
-	protected float verticalMovespeed;                  //Speed at which the player can move up and down
-	protected float horizontalMovespeed;				//Speed at which the player can move right to left
+	public float verticalMovespeed;						//Speed at which the player can move up and down
+	public float horizontalMovespeed;					//Speed at which the player can move right to left
 
 	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 15f;							//Maximum amount a ship can toward in a certain direction
@@ -67,16 +67,16 @@ public class ShipMovement : MonoBehaviour {
 
 		if (thisPlayer.device == null) {
 			if (Input.GetKey(left)) {
-				Move(Vector3.left * horizontalMovespeed * Time.deltaTime);
+				Move(Vector3.left);
 			}
 			if (Input.GetKey(right)) {
-				Move(Vector3.right * horizontalMovespeed * Time.deltaTime);
+				Move(Vector3.right);
 			}
 			if (Input.GetKey(up)) {
-				Move(Vector3.up * verticalMovespeed * Time.deltaTime);
+				Move(Vector3.up);
 			}
 			if (Input.GetKey(down)) {
-				Move(Vector3.down * verticalMovespeed * Time.deltaTime);
+				Move(Vector3.down);
 			}
 			//If no directions are being pressed, have the ship face forward
 			else if (!Input.GetKey(left) && !Input.GetKey(right) && !Input.GetKey(up) && !Input.GetKey(down)) {
@@ -121,13 +121,12 @@ public class ShipMovement : MonoBehaviour {
 			desiredPosition.y = renderCamera.ViewportToWorldPoint(new Vector3(desiredViewportPos.x, viewportMaxY, desiredViewportPos.z)).y;
 		}
 	}
-	protected void Move(Vector2 moveDirection) {
-		Vector3 moveVector = new Vector3(moveDirection.x, moveDirection.y, 0);
+	public void Move(Vector2 moveDirection) {
+		Move(new Vector3(moveDirection.x, moveDirection.y, 0));
+	}
+	public void Move(Vector3 moveVector) {
 		moveVector.x *= horizontalMovespeed * Time.deltaTime;
 		moveVector.y *= verticalMovespeed * Time.deltaTime;
-		Move(moveVector);
-	}
-	protected void Move(Vector3 moveVector) {
 		desiredPosition += moveVector;
 
 		//Turn the ship slightly
