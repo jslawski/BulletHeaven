@@ -128,7 +128,9 @@ public class ChargeShot : MonoBehaviour {
 			SoundManager.instance.Stop("FullyCharged");
 		}
 		state = ChargeState.cancelled;
-		Destroy(chargeParticle.gameObject);
+		if (chargeParticle != null) {
+			Destroy(chargeParticle.gameObject);
+		}
 		Destroy(gameObject, 2f);
 		player.playerMovement.RestoreSpeed();
 	}
