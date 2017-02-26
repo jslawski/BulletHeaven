@@ -4,7 +4,7 @@ using System.Collections;
 namespace PolarCoordinates {
 	public class PolarCoordinate {
 		public float radius;
-		public float angle;
+		public float angle;  //In Radians
 
 		public PolarCoordinate(float newRadius, Vector3 cartesianPoint) {
 			radius = newRadius;

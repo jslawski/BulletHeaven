@@ -91,6 +91,8 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	private IEnumerator WaitForStartGameForSinglePlayer()
 	{
+		//TODO: Hand controller off to Player 1 here, in case the player mashes start immediately after selecting COM's ship
+
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		//Wait for the game to progress to the next state
