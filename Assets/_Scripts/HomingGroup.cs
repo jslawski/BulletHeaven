@@ -28,7 +28,7 @@ public class HomingGroup : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/NonPooledBullet");
+		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/Bullets/NonPooledBullet");
 		physics = GetComponent<PhysicsObj>();
 		bulletsPerShell = new int[numShells];
 		for (int i = 0; i < numShells; i++) {

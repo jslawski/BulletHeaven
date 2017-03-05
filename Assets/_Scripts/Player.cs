@@ -37,6 +37,7 @@ public class Player : MonoBehaviour {
 	public Masochist masochistPrefab;
 	public TankyShip tankPrefab;
 	public VampireShip vampirePrefab;
+	public SwarmShip swarmPrefab;
 
 	public PlayerShip InstantiateShip(ShipInfo shipInfo) {
 		Debug.Assert(shipInfo.selectingPlayer == playerEnum, "Asked " + playerEnum.ToString() + " to instantiate a ship for " + shipInfo.selectingPlayer.ToString());
@@ -64,6 +65,9 @@ public class Player : MonoBehaviour {
 				break;
 			case ShipType.vampire:
 				prefab = vampirePrefab;
+				break;
+			case ShipType.swarm:
+				prefab = swarmPrefab;
 				break;
 			default:
 				Debug.LogError("Ship type " + shipInfo.typeOfShip.ToString() + " not found!");

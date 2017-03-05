@@ -9,6 +9,7 @@ public enum ShipType {
 	masochist,
 	glassCannon,
 	vampire,
+	swarm,
 	random
 }
 
@@ -82,7 +83,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
 	}
 
-	protected void Start() {
+	protected virtual void Start() {
 		player = GetComponentInParent<Player>();
 
 		health = maxHealth;

@@ -18,7 +18,7 @@ public class ProtagShipExplosion : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		bulletPrefab = Resources.Load<Bullet>("Prefabs/ProtagBullet");
+		bulletPrefab = Resources.Load<Bullet>("Prefabs/Bullets/ProtagBullet");
 		int bulletsFired = 0;
 		while (bulletsFired < numBullets) {
 			for (int i = 0; i < numBulletsPerFrame; i++) {

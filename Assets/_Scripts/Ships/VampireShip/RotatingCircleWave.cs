@@ -22,7 +22,7 @@ public class RotatingCircleWave : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/NonPooledBullet");
+		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/Bullets/NonPooledBullet");
     }
 
 	IEnumerator Start() {
