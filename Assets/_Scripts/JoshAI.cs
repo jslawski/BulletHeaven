@@ -52,7 +52,7 @@ public class JoshAI : MonoBehaviour {
 	}
 
 	class AvoidBullets : MovementRule {
-		float dangerRadius = 8f;
+		float dangerRadius = 12f;
 		Dictionary<PhysicsObj, Vector3> prevBulletsPos = new Dictionary<PhysicsObj, Vector3>();
 
 		public AvoidBullets(JoshAI ai, float weight) : base(ai, weight) { }
@@ -104,7 +104,7 @@ public class JoshAI : MonoBehaviour {
 				if (nearbyObjects[i].tag == "Bullet") {
 					Bullet bullet = nearbyObjects[i].GetComponent<Bullet>();
 					//Filter out bullets that belong to this player
-					if (bullet == null || bullet.owningPlayer == ai.thisShip.player) {
+					if (bullet == null || bullet.owningPlayer == ai.thisShip.playerEnum) {
 						continue;
 					}
 					bullets.Add(bullet.GetComponent<PhysicsObj>());
@@ -150,12 +150,14 @@ public class JoshAI : MonoBehaviour {
 				Mathf.Lerp(ai.movement.worldSpaceMinY + border, ai.movement.worldSpaceMaxY - border, unitTarget.y)
 			);
 
+			print("Target: " + scaledTarget);
+
 			return new Vector3(scaledTarget.x, scaledTarget.y, 0);
 		}
 	}
 
 	class AvoidBorders : MovementRule {
-		public static float actDistance = 2.5f;
+		public static float actDistance = 5f;
 
 		public AvoidBorders(JoshAI ai, float weight) : base(ai, weight) { }
 
@@ -328,14 +330,14 @@ public class JoshAI : MonoBehaviour {
 			}
 			#endregion
 
-			return collectiveVector;
+			return WithinUnitSphere(collectiveVector);
 		}
 
 		private Collider[] FindXBeamAttacks(Collider[] allObjects) {
 			List<Collider> xBeams = new List<Collider>();
 			for (int i = 0; i < allObjects.Length; i++) {
 				Beam thisBeam = allObjects[i].GetComponentInParent<Beam>();
-				if (thisBeam != null && thisBeam.owningPlayer != ai.thisShip.player) {
+				if (thisBeam != null && thisBeam.owningPlayer != ai.thisShip.playerEnum) {
 					xBeams.Add(allObjects[i]);
 				}
 			}
@@ -347,7 +349,7 @@ public class JoshAI : MonoBehaviour {
 			List<PhysicsObj> bombs = new List<PhysicsObj>();
 			for (int i = 0; i < allObjects.Length; i++) {
 				Bomb thisBomb = allObjects[i].GetComponent<Bomb>();
-				if (thisBomb != null && thisBomb.owningPlayer != ai.thisShip.player) {
+				if (thisBomb != null && thisBomb.owningPlayer != ai.thisShip.playerEnum) {
 					bombs.Add(thisBomb.GetComponentInParent<PhysicsObj>());
 				}
 			}
@@ -358,33 +360,163 @@ public class JoshAI : MonoBehaviour {
 		#region Glass Cannon-specific avoidance
 		private Vector3 ApplyGlassCannon() {
 			Vector3 collectiveVector = Vector3.zero;
-
-			//Don't stay horizontal
-			PlayerShip otherPlayer = GameManager.S.OtherPlayerShip(ai.thisShip);
-			Vector3 diffVector = ai.position - otherPlayer.transform.position;
+			Collider[] allObjects = FindAllObjectsInPlayerZone();
 
 			float tooFarAwayCutoff = 1.5f;
-			if (diffVector.y < tooFarAwayCutoff) {
-				float weight = Mathf.Pow(1f / Mathf.Abs(diffVector.y), 2);
-				collectiveVector += new Vector3(0, -otherPlayer.playerMovement.GetVelocity().normalized.x * weight, 0);
+
+			//Avoid Dual Laser attacks
+			Collider[] lasers = FindDualLaserAttacks(allObjects);
+			if (lasers.Length > 0) {
+				foreach (Collider laser in lasers) {
+					Vector3 diffVector = ai.position - laser.transform.position;
+					if (Mathf.Abs(diffVector.y) < tooFarAwayCutoff) {
+						Vector3 avoidanceDir = new Vector3(0, Mathf.Sign(diffVector.y), 0);
+						float weight = Mathf.Pow(1f / Mathf.Abs(diffVector.y), 2); ;
+						collectiveVector += avoidanceDir * weight;
+					}
+				}
+			}
+			else {
+				//Don't stay horizontal to your opponent
+				PlayerShip otherPlayerShip = GameManager.S.OtherPlayerShip(ai.thisShip);
+				Vector3 diffVector = ai.position - otherPlayerShip.transform.position;
+
+				if (Mathf.Abs(diffVector.y) < tooFarAwayCutoff) {
+					float weight = Mathf.Pow(1f / Mathf.Abs(diffVector.y), 2);
+					collectiveVector += new Vector3(0, -otherPlayerShip.movement.GetVelocity().normalized.y * weight, 0);
+				}
 			}
 
-			return collectiveVector;
+
+			return WithinUnitSphere(collectiveVector);
+		}
+
+		private Collider[] FindDualLaserAttacks(Collider[] allObjects) {
+			List<Collider> lasers = new List<Collider>();
+			for (int i = 0; i < allObjects.Length; i++) {
+				DualLasers thisLaser = allObjects[i].GetComponentInParent<DualLasers>();
+				if (thisLaser != null && thisLaser.owningPlayer != ai.thisShip.playerEnum) {
+					lasers.Add(allObjects[i]);
+				}
+			}
+
+			return lasers.ToArray();
 		}
 		#endregion
 		#region Masochist-specific avoidance
 		private Vector3 ApplyMasochist() {
-			return Vector3.zero;
+			PlayerShip otherPlayer = GameManager.S.OtherPlayerShip(ai.thisShip);
+			float amplification = Mathf.Lerp(0, 1, 1 - (otherPlayer.health / otherPlayer.maxHealth));
+
+			Vector3 collectiveDirection = Vector3.zero;
+
+			Collider[] allObjects = FindAllObjectsInPlayerZone();
+			PhysicsObj[] bombs = FindOpponentBombs(allObjects);
+
+			foreach (PhysicsObj bomb in bombs) {
+				Vector3 vel = bomb.velocity;
+				Vector3 diffVector = ai.position - bomb.posNext;
+
+				Vector3 avoidanceDir = diffVector - Vector3.Project(diffVector, vel);
+				float weight = Mathf.Pow((1f / diffVector.magnitude), 2);
+
+				collectiveDirection += avoidanceDir * weight * amplification;
+			}
+
+			return WithinUnitSphere(collectiveDirection);
 		}
 		#endregion
 		#region Tank-specific avoidance
 		private Vector3 ApplyTank() {
-			return Vector3.zero;
+			Collider[] allObjects = FindAllObjectsInPlayerZone();
+			Transform[] allMines = FindAllTankMines(allObjects);
+
+			Vector3 collectiveDirection = Vector3.zero;
+
+			//Avoid proximity mines
+			float tooFarAwayDistance = 4.5f;
+			float amplification = 3f;
+			foreach (Transform mine in allMines) {
+				Vector3 diffVector = ai.position - mine.position;
+
+				if (diffVector.magnitude > tooFarAwayDistance) continue;
+
+				float weight = Mathf.Pow(1f / diffVector.magnitude, 2);
+				collectiveDirection += diffVector.normalized * weight * amplification;
+			}
+
+			//Avoid center of black holes
+			Transform[] blackHoles = FindAllBlackHoles(allObjects);
+			tooFarAwayDistance = 3f;
+			foreach (Transform blackHole in blackHoles) {
+				Vector3 diffVector = ai.position - blackHole.position;
+
+				if (diffVector.magnitude > tooFarAwayDistance) continue;
+				
+				float weight = Mathf.Pow(1f / diffVector.magnitude, 2);
+				collectiveDirection += diffVector.normalized * weight * amplification;
+			}
+
+			return WithinUnitSphere(collectiveDirection);
+		}
+
+		private Transform[] FindAllTankMines(Collider[] allObjects) {
+			List<Transform> mines = new List<Transform>();
+			for (int i = 0; i < allObjects.Length; i++) {
+				ProximityMine thisMine = allObjects[i].GetComponent<ProximityMine>();
+				if (thisMine != null && thisMine.owningPlayer != ai.thisShip.playerEnum) {
+					mines.Add(thisMine.transform);
+				}
+			}
+
+			return mines.ToArray();
+		}
+
+		private Transform[] FindAllBlackHoles(Collider[] allObjects) {
+			List<Transform> bHoles = new List<Transform>();
+			for (int i = 0; i < allObjects.Length; i++) {
+				BlackHoleInner blackHole = allObjects[i].GetComponent<BlackHoleInner>();
+				if (blackHole != null && blackHole.blackHole.owningPlayer != ai.thisShip.playerEnum) {
+					bHoles.Add(blackHole.transform);
+				}
+			}
+
+			return bHoles.ToArray();
 		}
 		#endregion
 		#region Vampire-specific avoidance
 		private Vector3 ApplyVampire() {
-			return Vector3.zero;
+			Collider[] allObjects = FindAllObjectsInPlayerZone();
+			SphereCollider[] lifeSapZones = FindAllLifeSapZones(allObjects);
+
+			Vector3 collectiveDirection = Vector3.zero;
+
+			float amplification = 1000;
+
+			foreach (SphereCollider zone in lifeSapZones) {
+				float zoneSize = zone.radius;
+				float tooFarAwayCutoff = zoneSize + 2f;
+				Vector3 diffVector = ai.position - zone.transform.position;
+
+				if (diffVector.magnitude > tooFarAwayCutoff) continue;
+
+				float weight = 1f / diffVector.magnitude;
+				collectiveDirection += diffVector.normalized * weight * amplification;
+			}
+
+			return WithinUnitSphere(collectiveDirection);
+		}
+
+		private SphereCollider[] FindAllLifeSapZones(Collider[] allObjects) {
+			List<SphereCollider> lifeSapZones = new List<SphereCollider>();
+			for (int i = 0; i < allObjects.Length; i++) {
+				LifeSapZone lifeSapZone = allObjects[i].GetComponentInParent<LifeSapZone>();
+				if (lifeSapZone != null && lifeSapZone.owningPlayer != ai.thisShip.playerEnum) {
+					lifeSapZones.Add((SphereCollider)allObjects[i]);
+				}
+			}
+
+			return lifeSapZones.ToArray();
 		}
 		#endregion
 
@@ -392,17 +524,16 @@ public class JoshAI : MonoBehaviour {
 	#endregion
 
 	IEnumerator Locomotion() {
-		period = 4f * Time.fixedDeltaTime;
+		period = 1f * Time.fixedDeltaTime;
 		float timeUntilNextMovementCalc = 0;
 
 		MovementRule[] rules = new MovementRule[] {
 			new AvoidBullets(this, 6f),
 			new MoveTowardsRandTarget(this, 1f),
-			new AvoidBorders(this, .9f),
+			new AvoidBorders(this, 4f),
 			new SeekHealthPack(this, 8f),
 			new AvoidOtherPlayerAttacks(this, 8f)
 		};
-
 
 		while (GameManager.S.gameState == GameStates.playing) {
 			//Add different influences for movement direction
@@ -410,7 +541,6 @@ public class JoshAI : MonoBehaviour {
 			for (int i = 0; i < rules.Length; i++) {
 				moveDirection += rules[i].Apply() * rules[i].weight;
 			}
-			
 
 			//Reapply last movement vector every frame until we need to recalculate
 			while (timeUntilNextMovementCalc > 0) {
@@ -426,6 +556,10 @@ public class JoshAI : MonoBehaviour {
 	static Vector3 WithinUnitSphere(Vector3 inVector) {
 		return (inVector.magnitude > 1) ? inVector.normalized : inVector;
 	}
+
+
+	#endregion
+	#region Attacking behavior
 
 
 	#endregion

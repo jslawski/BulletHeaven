@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class DualLasers : MonoBehaviour {
-	Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -15,7 +15,7 @@ public class DualLasers : MonoBehaviour {
 			}
 		}
 	}
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 
 	GameObject explosionPrefab;
 	public ParticleSystem[] lasers;
@@ -43,12 +43,12 @@ public class DualLasers : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		X = (owningPlayer == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
+		X = (owningPlayer == PlayerEnum.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
 		damage = maxDamage;
 
 		//Set this as a child of the player
 		if (thisPlayer != null) {
-			transform.SetParent(thisPlayer.transform, false);
+			transform.SetParent(thisPlayer.ship.transform, false);
 			transform.localPosition = Vector3.zero;
 		}
 		//Wait while charging
@@ -72,7 +72,7 @@ public class DualLasers : MonoBehaviour {
 		}
 		//yield return new WaitForSeconds(chargeTime);
 		StartCoroutine(LoseEnergy());
-		thisPlayer.playerShooting.ExpendAttackSlot();
+		thisPlayer.ship.shooting.ExpendAttackSlot();
 		//Turn on the hitboxes
 		foreach (var hitbox in hitboxes) {
 			hitbox.enabled = !hasEnded;
@@ -82,7 +82,7 @@ public class DualLasers : MonoBehaviour {
 		while (thisPlayer != null && !hasEnded && timeFired < maxDuration) {
 			timeFired += Time.deltaTime;
 
-			thisPlayer.playerMovement.SlowPlayer(useSlowingFactor, 0.2f, true);
+			thisPlayer.ship.movement.SlowPlayer(useSlowingFactor, 0.2f, true);
 			if (thisPlayer.durationBar != null) {
 				thisPlayer.durationBar.SetPercent(1 - timeFired / maxDuration);
 			}
@@ -138,8 +138,8 @@ public class DualLasers : MonoBehaviour {
 			hitbox.enabled = false;
 		}
 		//Restore the player's speed
-		if (owningPlayer != Player.none) {
-			thisPlayer.playerMovement.RestoreSpeed();
+		if (owningPlayer != PlayerEnum.none) {
+			thisPlayer.ship.movement.RestoreSpeed();
 			if (thisPlayer.durationBar != null) {
 				thisPlayer.durationBar.SetPercent(0);
 			}
@@ -162,7 +162,7 @@ public class DualLasers : MonoBehaviour {
 				EndLaserAttack();
 			}
 		}
-		if (thisPlayer.dead) {
+		if (thisPlayer.ship.dead) {
 			EndLaserAttack();
 		}
 	}
@@ -171,7 +171,7 @@ public class DualLasers : MonoBehaviour {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
-			if (player.player != owningPlayer) {
+			if (player.playerEnum != owningPlayer) {
 				//Do damage to the player hit
 				player.TakeDamage(damage);
 
@@ -195,7 +195,7 @@ public class DualLasers : MonoBehaviour {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
-			if (player.player != owningPlayer) {
+			if (player.playerEnum != owningPlayer) {
 				//Restore the player's speed after leaving the beam
 				playerMovement.RestoreSpeed();
 			}

@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class ChargeShot : MonoBehaviour {
-	public Player owningPlayer;
-	public PlayerShip player;
+	public PlayerEnum owningPlayer;
+	public PlayerShip playerShip;
 
 	enum ChargeState {
 		charging,
@@ -39,20 +39,20 @@ public class ChargeShot : MonoBehaviour {
 		shotParticle = transform.FindChild("ShotParticles").GetComponent<ParticleSystem>();
 		chargeParticle = transform.FindChild("ChargeParticles").GetComponent<ParticleSystem>();
 
-		if (player != null) {
-			transform.SetParent(player.transform, false);
+		if (playerShip != null) {
+			transform.SetParent(playerShip.transform, false);
 			transform.localPosition = Vector3.zero;
 			transform.localRotation = Quaternion.Euler(Vector3.zero);
 		}
 
-		Y = (owningPlayer == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
+		Y = (owningPlayer == PlayerEnum.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
 		StartCoroutine(Charge());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (player.dead) {
+		if (playerShip.dead) {
 			state = ChargeState.cancelled;
 		}
 
@@ -60,7 +60,7 @@ public class ChargeShot : MonoBehaviour {
 			return;
 		}
 
-		if (Input.GetKeyUp(Y) || (player != null && player.device != null && player.device.Action4.WasReleased)) {
+		if (Input.GetKeyUp(Y) || (playerShip != null && playerShip.player.device != null && playerShip.player.device.Action4.WasReleased)) {
 			//Cancel the charge if we're not ready yet
 			if (state == ChargeState.charging) {
 				CancelCharge();
@@ -100,7 +100,7 @@ public class ChargeShot : MonoBehaviour {
 			chargeParticle.startSize = Mathf.Lerp(maxStartSize, minStartSize, percent * percent);
 			chargeParticle.startColor = Color.Lerp(startColor, endColor, percent * percent);
 
-			player.playerMovement.SlowPlayer(Mathf.Lerp(1, maxChargeSlow, percent), 0, true);
+			playerShip.movement.SlowPlayer(Mathf.Lerp(1, maxChargeSlow, percent), 0, true);
 
 			yield return null;
 		}
@@ -113,7 +113,7 @@ public class ChargeShot : MonoBehaviour {
 		}
 
 		while (state == ChargeState.charged) {
-			player.playerMovement.SlowPlayer(maxChargeSlow, 0, true);
+			playerShip.movement.SlowPlayer(maxChargeSlow, 0, true);
 			yield return null;
 		}
 
@@ -132,12 +132,12 @@ public class ChargeShot : MonoBehaviour {
 			Destroy(chargeParticle.gameObject);
 		}
 		Destroy(gameObject, 2f);
-		player.playerMovement.RestoreSpeed();
+		playerShip.movement.RestoreSpeed();
 	}
 
 	public void Fire() {
 		state = ChargeState.fired;
-		player.playerShooting.ExpendAttackSlot();
+		playerShip.shooting.ExpendAttackSlot();
 		shotParticle.transform.SetParent(null, true);
 		shotParticle.Play();
 
@@ -157,7 +157,7 @@ public class ChargeShot : MonoBehaviour {
 				//Connect with players
 				if (hitscan.collider.gameObject.tag == "Player") {
 					PlayerShip hitPlayer = hitscan.collider.gameObject.GetComponentInParent<PlayerShip>();
-					if (hitPlayer.player != owningPlayer) {
+					if (hitPlayer.playerEnum != owningPlayer) {
 						StartCoroutine(DealDamageCoroutine(hitPlayer));
 					}
 				}
@@ -171,7 +171,7 @@ public class ChargeShot : MonoBehaviour {
 
 		Destroy(chargeParticle.gameObject);
 		Destroy(gameObject, 2f);
-		player.playerMovement.RestoreSpeed();
+		playerShip.movement.RestoreSpeed();
 	}
 
 	IEnumerator DealDamageCoroutine(PlayerShip hitShip) {

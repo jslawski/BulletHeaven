@@ -11,7 +11,7 @@ public class ShipSelectionControls : MonoBehaviour {
 	public bool playerReady = false;
 	public AbilityPreviewScreen abilityPreview;
 	public OptionsMenu optionsMenu;  			//TODO: JPS Not a big fan of both selection controls having a reference to the same object.  Maybe we could reduce it to one reference somewhere in the UnifiedShipSelectionManager
-	public Player player; 						//TODO: Have this not set in inspector?
+	public PlayerEnum player; 						//TODO: Have this not set in inspector?
 	public InputDevice device;
 
 	public PositionInfo[] positionInfos;        //Information about each selection position (off-screen left, left, selected, etc.)
@@ -50,7 +50,7 @@ public class ShipSelectionControls : MonoBehaviour {
 		}
 
 		#region Keyboard Support
-		if (this.player == Player.player1) {
+		if (this.player == PlayerEnum.player1) {
 			this.left = KeyCode.A;
 			this.right = KeyCode.D;
 			this.A = KeyCode.Alpha1;
@@ -58,7 +58,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			this.Y = KeyCode.Alpha4;
 			this.start = KeyCode.Space;
 		}
-		else if	(this.player == Player.player2) {
+		else if	(this.player == PlayerEnum.player2) {
 			this.left = KeyCode.LeftArrow;
 			this.right = KeyCode.RightArrow;
 			this.A = KeyCode.Keypad1;
@@ -187,7 +187,7 @@ public class ShipSelectionControls : MonoBehaviour {
 		this.playerReady = false;
 	}
 
-	public void SetDevice(Player controllingPlayer)
+	public void SetDevice(PlayerEnum controllingPlayer)
 	{
 		this.device = GameManager.S.players[(int)controllingPlayer].device;
 	}

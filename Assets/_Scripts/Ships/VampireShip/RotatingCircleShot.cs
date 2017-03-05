@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class RotatingCircleShot : MonoBehaviour, BombAttack {
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public PlayerShip thisPlayer;
-	public Player owningPlayer {
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}

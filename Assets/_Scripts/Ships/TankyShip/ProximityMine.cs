@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ProximityMine : MonoBehaviour {
-	public Player owningPlayer = Player.none;
+	public PlayerEnum owningPlayer = PlayerEnum.none;
 	PhysicsObj physics;
 	SphereCollider hitbox;
 
@@ -83,7 +83,7 @@ public class ProximityMine : MonoBehaviour {
 			if (obj.gameObject.tag == "Player") {
 				//Ignore the mine's owner
 				PlayerShip playerHit = obj.gameObject.GetComponentInParent<PlayerShip>();
-				if (playerHit.player == owningPlayer) {
+				if (playerHit.playerEnum == owningPlayer) {
 					continue;
 				}
 				//Deal damage to any other player
@@ -117,7 +117,7 @@ public class ProximityMine : MonoBehaviour {
 		//Explode on impact as well
 		if (other.gameObject.tag == "Player") {
 			PlayerShip otherShip = other.gameObject.GetComponentInParent<PlayerShip>();
-			if (otherShip.player != owningPlayer) {
+			if (otherShip.playerEnum != owningPlayer) {
 				Explode();
 			}
 		}

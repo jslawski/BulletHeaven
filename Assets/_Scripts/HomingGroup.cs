@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using PolarCoordinates;
 
 public class HomingGroup : MonoBehaviour {
-	public PlayerShip thisPlayer;
-	public Player owningPlayer;
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer;
 	public Transform target;
 	NonPooledBullet bulletPrefab;
 	PhysicsObj physics;

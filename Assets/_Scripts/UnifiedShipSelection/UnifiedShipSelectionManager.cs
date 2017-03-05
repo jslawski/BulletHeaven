@@ -47,16 +47,16 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 	{
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
-		this.shipSelectionControls[(int)Player.player1].playerReady = false;
+		this.shipSelectionControls[(int)PlayerEnum.player1].playerReady = false;
 
 		//Continue looping until player 1's ship has been confirmed
-		while (this.shipSelectionControls[(int)Player.player1].playerReady == false) 
+		while (this.shipSelectionControls[(int)PlayerEnum.player1].playerReady == false) 
 		{
 			yield return null;
 		}
 
 		//Move on to player 2 (the COM's) ship
-		this.HandoffDevice(Player.player1, Player.player2);
+		this.HandoffDevice(PlayerEnum.player1, PlayerEnum.player2);
 		StartCoroutine(this.SelectComForSinglePlayer());
 	}
 
@@ -64,17 +64,17 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 	{
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
-		this.shipSelectionControls[(int)Player.player2].playerReady = false;
+		this.shipSelectionControls[(int)PlayerEnum.player2].playerReady = false;
 
 		//Continue looping until COM's ship has been confirmed
-		while (this.shipSelectionControls[(int)Player.player2].playerReady == false) 
+		while (this.shipSelectionControls[(int)PlayerEnum.player2].playerReady == false) 
 		{
 			//If the cancel button is pressed at any time while selecting the computer ship,
 			//cancel out and return to selecting player 1's ship
-			if (this.shipSelectionControls[(int)Player.player2].device.Action2.WasPressed) 
+			if (this.shipSelectionControls[(int)PlayerEnum.player2].device.Action2.WasPressed) 
 			{
-				this.shipSelectionControls[(int)Player.player1].CancelPlayer();
-				this.HandoffDevice(Player.player2, Player.player1);
+				this.shipSelectionControls[(int)PlayerEnum.player1].CancelPlayer();
+				this.HandoffDevice(PlayerEnum.player2, PlayerEnum.player1);
 				StartCoroutine(this.SelectPlayerOneForSinglePlayer());
 				break;
 			}
@@ -94,13 +94,13 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		//Wait for the game to progress to the next state
-		while (!this.shipSelectionControls[(int)Player.player2].device.MenuWasPressed) 
+		while (!this.shipSelectionControls[(int)PlayerEnum.player2].device.MenuWasPressed) 
 		{
 			//If the cancel button is pressed at any time while waiting for the game to start, cancel out
 			//And return to selecting the COM's ship
-			if (this.shipSelectionControls[(int)Player.player2].device.Action2.WasPressed) 
+			if (this.shipSelectionControls[(int)PlayerEnum.player2].device.Action2.WasPressed) 
 			{
-				this.shipSelectionControls[(int)Player.player2].CancelPlayer();
+				this.shipSelectionControls[(int)PlayerEnum.player2].CancelPlayer();
 				StartCoroutine(this.SelectComForSinglePlayer());
 				break;
 			}
@@ -110,12 +110,12 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 		//Handoff device back to player 1 before the game starts
 		if (this.AllPlayersReady() == true) {
-			this.HandoffDevice(Player.player2, Player.player1);
+			this.HandoffDevice(PlayerEnum.player2, PlayerEnum.player1);
 		}
 	}
 
 	//Pass the device between ShipSelectionControls references depending on where the player is in the process of selecting ships in single-player
-	private void HandoffDevice(Player sourcePlayer, Player destinationPlayer)
+	private void HandoffDevice(PlayerEnum sourcePlayer, PlayerEnum destinationPlayer)
 	{
 		if (this.shipSelectionControls[(int)sourcePlayer].device == null) 
 		{

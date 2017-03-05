@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class ClusterBomb : MonoBehaviour, BombAttack {
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -55,7 +55,7 @@ public class ClusterBomb : MonoBehaviour, BombAttack {
 		foreach (var obj in allObjectsHit) {
 			if (obj.gameObject.tag == "Player") {
 				PlayerShip playerHit = obj.gameObject.GetComponentInParent<PlayerShip>();
-				if (playerHit.player == owningPlayer) {
+				if (playerHit.playerEnum == owningPlayer) {
 					return;
 				}
 				else {

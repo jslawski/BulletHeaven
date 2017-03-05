@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class ExplodeAttack : MonoBehaviour, BombAttack {
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -45,7 +45,7 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
 
 		//Scale the explosion size based on the damage multiplier
-		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 		if (masochistPlayer != null) {
 			explosionRadius = explosionRadius * masochistPlayer.damageMultiplier;
 			explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.damageMultiplier;
@@ -67,7 +67,7 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			//Do damage to the player hit
 			float multiplier = 1f;
-			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 			if (masochistPlayer != null) {
 				multiplier = masochistPlayer.damageMultiplier;
 			}
@@ -80,7 +80,7 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 		}
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 			if (masochistPlayer != null) {
 				damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
 			}

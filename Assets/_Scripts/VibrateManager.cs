@@ -29,8 +29,8 @@ public class VibrateManager : MonoBehaviour {
 		}
 	}
 	
-	public void RumbleVibrate(Player player, float duration, float intensity, bool stack=true) {
-		PlayerShip curPlayer = GameManager.S.players[(int)player];
+	public void RumbleVibrate(PlayerEnum player, float duration, float intensity, bool stack=true) {
+		Player curPlayer = GameManager.S.players[(int)player];
 		//Ignore vibrations until the player has a controller plugged in
 		if (curPlayer.device == null) {
 			return;
@@ -39,9 +39,9 @@ public class VibrateManager : MonoBehaviour {
 	}
 
 	//Disable the vibrating after a specific duration
-	IEnumerator RumbleVibrateCoroutine(PlayerShip player, float duration, float intensity, bool stack) {
+	IEnumerator RumbleVibrateCoroutine(Player player, float duration, float intensity, bool stack) {
 		float timeElapsed = 0;
-		int index = (int)player.player;
+		int index = (int)player.playerEnum;
 		bool hasTakenEffect = false;
 
 		//If the vibration stacks, add it to the total vibration value

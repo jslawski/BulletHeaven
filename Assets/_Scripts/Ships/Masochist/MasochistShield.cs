@@ -6,20 +6,20 @@ using System.Collections.Generic;
 public class MasochistShield : MonoBehaviour {
 	SphereCollider thisCollider;
 	SpriteRenderer shieldSprite;
-	Player otherPlayer;
+	PlayerEnum otherPlayer;
 
 	List<PhysicsObj> absorbedBullets;
 	int maxBulletCount = 100;
 
 	float rotationSpeed_c = 100f;
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	public Masochist thisMasochist;
 	float shieldDuration = 1.5f;
 
 	bool shooting = false;
 
-	public Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	public PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -29,8 +29,8 @@ public class MasochistShield : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		if (thisPlayer != null && thisPlayer is Masochist) {
-			thisMasochist = thisPlayer as Masochist;
+		if (thisPlayer != null && thisPlayer.ship is Masochist) {
+			thisMasochist = thisPlayer.ship as Masochist;
 		}
 		thisCollider = GetComponent<SphereCollider>();
 		shieldSprite = GetComponentInChildren<SpriteRenderer>();
@@ -87,7 +87,7 @@ public class MasochistShield : MonoBehaviour {
 			thisMasochist.shieldUp = false;
 		}
 
-		Vector3 reflectionVector = owningPlayer == Player.player1 ? Vector3.right : Vector3.left;
+		Vector3 reflectionVector = owningPlayer == PlayerEnum.player1 ? Vector3.right : Vector3.left;
 		//Fire each bullet
 		foreach (PhysicsObj bullet in absorbedBullets) {
 			if (bullet == null) {

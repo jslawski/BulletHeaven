@@ -8,7 +8,7 @@ public class ControllerSetup : MonoBehaviour {
 
 	public int maxNumberOfPlayers = 2;
 	List<InputDevice> controllersInUse = new List<InputDevice>();
-	public Player curPlayer = Player.player1;
+	public PlayerEnum curPlayer = PlayerEnum.player1;
 
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;
@@ -48,11 +48,8 @@ public class ControllerSetup : MonoBehaviour {
 	public void AddCurrentPlayer(InputDevice curDevice) {
 		//In-game controller addition -- debuggin purposes only, no longer used in game loop
 		if (GameManager.S != null) {
-			PlayerShip player = GameManager.S.players[(int)this.curPlayer];
+			Player player = GameManager.S.players[(int)this.curPlayer];
 			player.device = curDevice;
-			if (player.controllerPrompt != null) {
-				player.controllerPrompt.HidePressStartPrompt();
-			}
 		}
 		//Ship selection menu
 		if (UnifiedShipSelectionManager.instance.shipSelectionControls.Count > 0 && UnifiedShipSelectionManager.instance.shipSelectionControls[(int)this.curPlayer] != null) {
@@ -68,6 +65,6 @@ public class ControllerSetup : MonoBehaviour {
 			StartCoroutine(UnifiedShipSelectionManager.instance.SelectPlayerOneForSinglePlayer());
 		}
 
-		this.curPlayer = (Player)(((int)this.curPlayer + 1) % ((int)Player.none));
+		this.curPlayer = (PlayerEnum)(((int)this.curPlayer + 1) % ((int)PlayerEnum.none));
 	}
 }

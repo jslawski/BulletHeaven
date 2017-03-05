@@ -31,7 +31,7 @@ public class TankBomb : Bomb {
 				coneShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					coneShot.thisPlayer = thisPlayer;
-					coneShot.target = thisPlayer.otherPlayer.transform;
+					coneShot.target = thisPlayer.otherPlayer.ship.transform;
 					coneShot.playerColor = thisPlayer.playerColor;
 				}
 				coneShot.FireBurst();
@@ -42,7 +42,7 @@ public class TankBomb : Bomb {
 				weaveShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					weaveShot.thisPlayer = thisPlayer;
-					weaveShot.target = thisPlayer.otherPlayer.transform;
+					weaveShot.target = thisPlayer.otherPlayer.ship.transform;
 				}
 				weaveShot.FireBurst();
 				break;

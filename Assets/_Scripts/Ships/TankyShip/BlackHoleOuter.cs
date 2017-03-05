@@ -44,12 +44,11 @@ public class BlackHoleOuter : MonoBehaviour {
 				
         }
 		else if (other.gameObject.tag == "Player") {
-			PlayerShip otherPlayer = other.gameObject.GetComponentInParent<PlayerShip>();
-			if (otherPlayer.player != blackHole.owningPlayer) {
+			PlayerShip otherPlayerShip = other.gameObject.GetComponentInParent<PlayerShip>();
+			if (otherPlayerShip.playerEnum != blackHole.owningPlayer) {
 				float t = 1-(other.transform.position - transform.position).magnitude/outerRadius;
                 float slow = Mathf.Lerp(0, blackHole.maxSlow, t*t);
-				//print(blackHole.maxSlow + " " + slow);
-				otherPlayer.playerMovement.SlowPlayer(1-slow);
+				otherPlayerShip.movement.SlowPlayer(1-slow);
 			}
 		}
 	}
@@ -59,10 +58,5 @@ public class BlackHoleOuter : MonoBehaviour {
 			Bullet bullet = other.gameObject.GetComponent<Bullet>();
 			bullet.physics.acceleration = Vector3.zero;
 		}
-	}
-
-	// Update is called once per frame
-	void Update () {
-	
 	}
 }

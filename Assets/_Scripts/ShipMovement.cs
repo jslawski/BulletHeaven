@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
-	public PlayerShip thisPlayer;
+	public PlayerShip thisPlayerShip;
 	public Camera renderCamera;
 	float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
 	protected float vertMovespeedDefault = 16f;
@@ -39,7 +39,7 @@ public class ShipMovement : MonoBehaviour {
 	// Use this for initialization
 	protected virtual void Awake() {
 		renderCamera = Camera.main;
-		thisPlayer = GetComponent<PlayerShip>();
+		thisPlayerShip = GetComponent<PlayerShip>();
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
@@ -65,7 +65,7 @@ public class ShipMovement : MonoBehaviour {
 			return;
 		}
 
-		if (thisPlayer.device == null) {
+		if (thisPlayerShip.player.device == null) {
 			if (Input.GetKey(left)) {
 				Move(Vector3.left);
 			}
@@ -85,8 +85,8 @@ public class ShipMovement : MonoBehaviour {
 		}
 		//Controller input
 		else {
-			if (thisPlayer.device.LeftStick) {
-				Move(thisPlayer.device.LeftStick.Vector);
+			if (thisPlayerShip.player.device.LeftStick) {
+				Move(thisPlayerShip.player.device.LeftStick.Vector);
 			}
 			else {
 				desiredRotation = startRotation;

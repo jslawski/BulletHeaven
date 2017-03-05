@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class TerritoryBorder : MonoBehaviour {
-	public Player owningPlayer;
+	public PlayerEnum owningPlayer;
 	Image territoryImage;
-	ShipMovement thisPlayer;
+	ShipMovement shipMovement;
 
 	float maxAlpha = 0.2f;
 	float threshold;
@@ -13,24 +13,26 @@ public class TerritoryBorder : MonoBehaviour {
 	// Use this for initialization
 	IEnumerator Start () {
 		territoryImage = GetComponent<Image>();
-		yield return null;
-		thisPlayer = GameManager.S.players[(int)owningPlayer].playerMovement;
+		while (!GameManager.S.shipsReady) {
+			yield return null;
+		}
+		shipMovement = GameManager.S.players[(int)owningPlayer].ship.movement;
 
 		yield return new WaitForSeconds(0.1f);
-		Color startColor = thisPlayer.thisPlayer.playerColor;
+		Color startColor = shipMovement.thisPlayerShip.player.playerColor;
 		startColor.a = 0;
 		territoryImage.color = startColor;
 
-		if (owningPlayer == Player.player1) {
-			threshold = thisPlayer.worldSpaceMaxX - GameManager.S.players[1].playerMovement.worldSpaceMinX;
+		if (owningPlayer == PlayerEnum.player1) {
+			threshold = shipMovement.worldSpaceMaxX - GameManager.S.players[1].ship.movement.worldSpaceMinX;
 		}
-		else if (owningPlayer == Player.player2) {
-			threshold = GameManager.S.players[0].playerMovement.worldSpaceMaxX - thisPlayer.worldSpaceMinX;
+		else if (owningPlayer == PlayerEnum.player2) {
+			threshold = GameManager.S.players[0].ship.movement.worldSpaceMaxX - shipMovement.worldSpaceMinX;
 		}
 
-		while (thisPlayer != null && GameManager.S.gameState != GameStates.finalAttack){
-			if (owningPlayer == Player.player1) {
-				float shiftedPos = thisPlayer.transform.position.x - (thisPlayer.worldSpaceMaxX - threshold);
+		while (shipMovement != null && GameManager.S.gameState != GameStates.finalAttack){
+			if (owningPlayer == PlayerEnum.player1) {
+				float shiftedPos = shipMovement.transform.position.x - (shipMovement.worldSpaceMaxX - threshold);
 				if (shiftedPos > 0) {
 					Color curColor = territoryImage.color;
 					curColor.a = maxAlpha * shiftedPos / threshold;
@@ -42,8 +44,8 @@ public class TerritoryBorder : MonoBehaviour {
 					territoryImage.color = curColor;
 				}
 	        }
-			else if (owningPlayer == Player.player2) {
-				float shiftedPos = (thisPlayer.worldSpaceMinX + threshold) - thisPlayer.transform.position.x;
+			else if (owningPlayer == PlayerEnum.player2) {
+				float shiftedPos = (shipMovement.worldSpaceMinX + threshold) - shipMovement.transform.position.x;
 				if (shiftedPos > 0) {
 					Color curColor = territoryImage.color;
 					curColor.a = maxAlpha * shiftedPos / threshold;
@@ -59,10 +61,5 @@ public class TerritoryBorder : MonoBehaviour {
 		}
 
 		territoryImage.enabled = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
 	}
 }

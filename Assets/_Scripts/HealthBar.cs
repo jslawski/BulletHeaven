@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour {
 	[SerializeField]
-	private Player owningPlayer;
+	private PlayerEnum owningPlayer;
 	[SerializeField]
 	private PlayerShip owningPlayerShip;
 
@@ -62,13 +62,13 @@ public class HealthBar : MonoBehaviour {
 		//Wait until the player ships are fully instantiated and set in the GameManager
 		//JPS: I don't like that we have to check for the ShipType != none here.  I'd like to refactor the way we load the game so
 		//     we don't populate the players array in the GameManager twice...
-		while (GameManager.S.players[(int)this.owningPlayer] == null || GameManager.S.players[(int)this.owningPlayer].typeOfShip == ShipType.none) {
+		while (GameManager.S.players[(int)this.owningPlayer] == null || GameManager.S.players[(int)this.owningPlayer].ship == null) {
 			yield return null;
 		}
 
-		this.owningPlayerShip = GameManager.S.players[(int)this.owningPlayer];
+		this.owningPlayerShip = GameManager.S.players[(int)this.owningPlayer].ship;
 		this.maxHealth = owningPlayerShip.maxHealth;
-		this.SetColor(owningPlayerShip.playerColor);
+		this.SetColor(owningPlayerShip.player.playerColor);
 		this.SetHealth(maxHealth);
 		this.UnsubscribeFromEvents();
 		this.SubscribeToEvents();

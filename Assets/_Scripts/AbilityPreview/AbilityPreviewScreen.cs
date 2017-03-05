@@ -94,20 +94,16 @@ public class AbilityPreviewScreen : MonoBehaviour {
 		previewGameManager.players[(int)shipSelection.player].InitializeShip(shipInfo);
 
 		ShipInfo targetShipInfo = new ShipInfo();
-		targetShipInfo.selectingPlayer = (previewGameManager.sceneOwner == Player.player1) ? Player.player2 : Player.player1;
+		targetShipInfo.selectingPlayer = (previewGameManager.sceneOwner == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 		if (shipInfo.typeOfShip != ShipType.tank) {
 			targetShipInfo.shipColor = new Color(0, 1, 15f / 255f);
 			targetShipInfo.typeOfShip = ShipType.tank;
-			targetShipInfo.hitBoxOffset = 0f;
-			targetShipInfo.hitBoxRadius = 0.6f;
 		}
 		else {
 			targetShipInfo.shipColor = new Color(57f/255f, 155f/255f, 234f / 255f);
 			targetShipInfo.typeOfShip = ShipType.glassCannon;
-			targetShipInfo.hitBoxOffset = -0.85f;
-			targetShipInfo.hitBoxRadius = 0.34f;
 		}
-		previewGameManager.players[(int)previewGameManager.target.player].InitializeShip(targetShipInfo);
+		previewGameManager.players[(int)previewGameManager.target.playerEnum].InitializeShip(targetShipInfo);
 
 		//Don't waste time setting information if it's not new
 		if (shipInfo == selectedShip) {

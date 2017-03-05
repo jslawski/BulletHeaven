@@ -4,8 +4,8 @@ using PolarCoordinates;
 
 public class RotatingCircleWave : MonoBehaviour {
 	public int direction = 1;
-	public PlayerShip thisPlayer;
-	public Player owningPlayer;
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer;
 	NonPooledBullet bulletPrefab;
 	int numBulletsPerBurst = 13;
 	public float timeBetweenBursts = 0.1f;

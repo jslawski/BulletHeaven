@@ -9,7 +9,7 @@ public class DurationBar : MonoBehaviour {
 	Transform durationBar;
 	Transform durationBarBackground;
 
-	Vector2 offset = new Vector2(0, -0.1f);
+	Vector2 offset = new Vector2(0f, -0.2f);
 	Vector2 size;
 
 	public void SetPercent(float percent) {

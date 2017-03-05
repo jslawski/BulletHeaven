@@ -14,18 +14,18 @@ public class Bullet : PooledObj {
 	ParticleSystem trail;
 	public PhysicsObj physics;
 	public SphereCollider hitbox;
-	protected Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	protected PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			if (value != Player.none) {
+			if (value != PlayerEnum.none) {
 				if (GameManager.S.inGame) {
 					thisPlayer = GameManager.S.players[(int)value];
 					SetColor(thisPlayer.playerColor);
-					otherPlayer = GameManager.S.OtherPlayerShip(thisPlayer).playerMovement;
+					otherPlayer = GameManager.S.OtherPlayer(thisPlayer).ship.movement;
 				}
 			}
 			else {
@@ -33,7 +33,7 @@ public class Bullet : PooledObj {
 			}
 		}
 	}
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	public ShipMovement otherPlayer;
 	protected bool _transparent = false;
 	protected bool transparent {
@@ -117,7 +117,7 @@ public class Bullet : PooledObj {
 			PlayerShip playerHit = other.gameObject.GetComponentInParent<PlayerShip>();
 
 			//print("Player hit: " + playerHit.name + "\nOwning Player: " + owningPlayer + "\nThisPlayer.TypeOfShip: " + thisPlayer.typeOfShip);
-			if (playerHit.player != owningPlayer) {
+			if (playerHit.playerEnum != owningPlayer) {
 				//Masochists with the shield up are immune to incoming bullets
 				if (playerHit.typeOfShip == ShipType.masochist) {
 					Masochist masochistHit = playerHit as Masochist;
@@ -127,8 +127,8 @@ public class Bullet : PooledObj {
 				}
 
 				//Do damage to the player hit
-				if (GameManager.S.inGame && owningPlayer != Player.none && thisPlayer is Masochist) {  //kinky...
-					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+				if (GameManager.S.inGame && owningPlayer != PlayerEnum.none && thisPlayer.ship is Masochist) {  //kinky...
+					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 					playerHit.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 				}
 				else {
@@ -141,7 +141,7 @@ public class Bullet : PooledObj {
 				ReturnToPool();
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
-			else if (owningPlayer != Player.none && thisPlayer.typeOfShip == ShipType.vampire) {
+			else if (owningPlayer != PlayerEnum.none && thisPlayer.ship.typeOfShip == ShipType.vampire) {
 				if (curState == BulletState.absorbedByVampire) {
 					playerHit.TakeDamage(damage * -vampShieldHealAmount);
 					curState = BulletState.none;
@@ -153,8 +153,8 @@ public class Bullet : PooledObj {
 		//Deal damage to any ProtagShip hit
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			if (GameManager.S.inGame && owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {
-				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			if (GameManager.S.inGame && owningPlayer != PlayerEnum.none && GameManager.S.players[(int)owningPlayer].ship is Masochist) {
+				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 				otherShip.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 			}
 			else {
@@ -201,13 +201,13 @@ public class Bullet : PooledObj {
 		}
 
 		//Player1 check
-		if (owningPlayer == Player.player1) {
+		if (owningPlayer == PlayerEnum.player1) {
 			if (transform.position.x < otherPlayer.worldSpaceMinX) {
 				return true;
 			}
 		}
 		//Player2 check
-		else if (owningPlayer == Player.player2) {
+		else if (owningPlayer == PlayerEnum.player2) {
 			if (transform.position.x > otherPlayer.worldSpaceMaxX) {
 				return true;
 			}

@@ -26,7 +26,7 @@ public class ShipInfo : MonoBehaviour {
 	}
 	ShipSelectionControls selectionMenu;
 	
-	public Player selectingPlayer = Player.none;
+	public PlayerEnum selectingPlayer = PlayerEnum.none;
 	private int positionIndex;
 	public SelectionPosition position {
 		get {
@@ -39,11 +39,6 @@ public class ShipInfo : MonoBehaviour {
 	public Color shipColor;
 	public Color shipSecondaryColor;
 	public SpriteRenderer spriteRenderer;
-
-	[Range(-4f,4f)]
-	public float hitBoxOffset;
-	[Range(0.1f,0.6f)]
-	public float hitBoxRadius;
 
 	float scrollSpeed = 0.1f;
 	float timeSelected = 0f;

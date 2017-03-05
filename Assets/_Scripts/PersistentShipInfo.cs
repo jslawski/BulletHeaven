@@ -35,7 +35,7 @@ public class PersistentShipInfo : MonoBehaviour {
 			yield return null;
 
 			//Wait an additional frame to intialize player2 to guarantee order
-			if (shipInfo.selectingPlayer == Player.player2) {
+			if (shipInfo.selectingPlayer == PlayerEnum.player2) {
 				yield return null;
 			}
 			GameManager.S.InitializePlayerShip(shipInfo, device);

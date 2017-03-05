@@ -15,8 +15,8 @@ public class PreviewShip : PlayerShip {
 		masochistShieldPrefab = Resources.Load<MasochistShield>("Prefabs/MasochistShield");
 		vampireShieldPrefab = Resources.Load<VampireShield>("Prefabs/VampireShield");
 
-		playerMovement = GetComponent<ShipMovement>();
-		playerShooting = GetComponent<ShootBomb>();
+		movement = GetComponent<ShipMovement>();
+		shooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
 		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
 	}
@@ -34,21 +34,14 @@ public class PreviewShip : PlayerShip {
 
 	public void InitializeShip(ShipInfo shipInfo) {
 		print("Start initializing " + shipInfo.selectingPlayer);
-		player = shipInfo.selectingPlayer;
+		playerEnum = shipInfo.selectingPlayer;
 		typeOfShip = shipInfo.typeOfShip;
-		playerColor = shipInfo.shipColor;
+		player.playerColor = shipInfo.shipColor;
 
 		SetSprite();
 
-		//Set up the hitboxes appropriately
-		SphereCollider hitbox = GetComponentInChildren<SphereCollider>();
-		hitbox.radius = shipInfo.hitBoxRadius;
-		Vector3 hitboxPos = hitbox.transform.localPosition;
-		hitboxPos.y = shipInfo.hitBoxOffset;
-		hitbox.transform.localPosition = hitboxPos;
-
 		//Set the type of bomb and fix old references
-		playerShooting.SetBombType(typeOfShip);
+		shooting.SetBombType(typeOfShip);
 	}
 
 	void SetSprite() {
@@ -86,9 +79,9 @@ public class PreviewShip : PlayerShip {
 
 	public void FireDualLasers() {
 		DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
-		dualLaser.owningPlayer = player;
-		dualLaser.SetColor(playerColor);
-		dualLaser.thisPlayer = this;
+		dualLaser.owningPlayer = playerEnum;
+		dualLaser.SetColor(player.playerColor);
+		dualLaser.thisPlayer = this.player;
 	}
 
 	public void FireChargeShot() {
@@ -99,8 +92,8 @@ public class PreviewShip : PlayerShip {
 	IEnumerator FireChargeShotCoroutine() {
 		inFireChargeShotCoroutine = true;
 		ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
-		chargeShot.owningPlayer = player;
-		chargeShot.player = this;
+		chargeShot.owningPlayer = playerEnum;
+		chargeShot.playerShip = this;
 
 		yield return new WaitForSeconds(3f);
 
@@ -112,17 +105,17 @@ public class PreviewShip : PlayerShip {
 	public void UseMasochistShield() {
 		MasochistShield newShield = Instantiate(masochistShieldPrefab, transform.position, new Quaternion()) as MasochistShield;
 		newShield.transform.parent = gameObject.transform;
-		newShield.thisPlayer = this;
-		newShield.owningPlayer = player;
+		newShield.thisPlayer = this.player;
+		newShield.owningPlayer = playerEnum;
 		newShield.ActivateShield();
 	}
 	
 	public void UseVampireShield() {
 		VampireShield newShield = Instantiate(vampireShieldPrefab, transform.position, new Quaternion()) as VampireShield;
 		newShield.transform.parent = gameObject.transform;
-		newShield.thisPlayer = this;
+		newShield.thisPlayer = this.player;
 		newShield.hitboxOffset = transform.FindChild("Hitbox").localPosition.y;
-		newShield.owningPlayer = player;
+		newShield.owningPlayer = playerEnum;
 		newShield.ActivateShield();
 	}
 }

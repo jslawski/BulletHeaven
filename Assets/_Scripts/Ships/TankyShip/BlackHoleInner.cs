@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BlackHoleInner : MonoBehaviour {
-	BlackHole blackHole;
+	public BlackHole blackHole;
 	GameObject explosionPrefab;
 
 	// Use this for initialization
@@ -37,7 +37,7 @@ public class BlackHoleInner : MonoBehaviour {
 	void OnTriggerStay(Collider other) {
 		if (other.gameObject.tag == "Player") {
 			PlayerShip otherShip = other.GetComponentInParent<PlayerShip>();
-			if (otherShip.player != blackHole.owningPlayer) {
+			if (otherShip.playerEnum != blackHole.owningPlayer) {
 				//Do damage to the player hit
 				otherShip.TakeDamage(blackHole.directDamageInCenter);
 

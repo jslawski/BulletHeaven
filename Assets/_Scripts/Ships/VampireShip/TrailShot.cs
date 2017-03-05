@@ -3,22 +3,22 @@ using System.Collections;
 using PolarCoordinates;
 
 public class TrailShot : MonoBehaviour, BombAttack {
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
 			if (GameManager.S.inGame) {
-				Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
-				target = GameManager.S.players[(int)targetPlayer].transform;
+				PlayerEnum targetPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
+				target = GameManager.S.players[(int)targetPlayer].ship.transform;
 			}
 		}
 	}
 
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	public Transform target;
 	public TrailBullet bulletPrefab;
 
@@ -33,7 +33,7 @@ public class TrailShot : MonoBehaviour, BombAttack {
 	}
 
 	IEnumerator FireBurstCoroutine() {
-		if (owningPlayer == Player.none) {
+		if (owningPlayer == PlayerEnum.none) {
 			Debug.LogError("Trail shot does not have owning player set");
 			yield break;
 		}

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class RoundWinsText : MonoBehaviour {
-	public Player player;
+	public PlayerEnum player;
 
 	int _roundWins = 0;
 	public int roundWins {

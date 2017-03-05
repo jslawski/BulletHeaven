@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MasochistAura : MonoBehaviour {
-	public Masochist player;
+	public Masochist playerShip;
 
 	// Use this for initialization
 	void Start () {
@@ -11,8 +11,8 @@ public class MasochistAura : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if (player != null) {
-			gameObject.transform.position = player.transform.position;
+		if (playerShip != null) {
+			gameObject.transform.position = playerShip.transform.position;
 		}
 		else {
 			Destroy(gameObject);

@@ -22,7 +22,7 @@ public class TankyShip : PlayerShip {
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 
-		playerMovement.SetBaseSpeed(0.6f);
+		movement.SetBaseSpeed(0.6f);
 	}
 
 	public override void TakeDamage(float damageIn) {

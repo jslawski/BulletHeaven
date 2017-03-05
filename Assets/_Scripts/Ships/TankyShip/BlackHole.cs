@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BlackHole : MonoBehaviour, BombAttack {
-	public PlayerShip thisPlayer;
-	Player _owningPlayer = Player.none;
+	public Player thisPlayer;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}

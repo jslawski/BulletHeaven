@@ -5,14 +5,14 @@ public class Beam : MonoBehaviour, BombAttack {
 	public GameObject explosionPrefab;
 	float vibrationIntensity = 0.15f;
 
-	Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			if (value != Player.none) {
+			if (value != PlayerEnum.none) {
 				if (GameManager.S.inGame) {
 					SetColor(GameManager.S.players[(int)value].playerColor);
 				}
@@ -48,8 +48,8 @@ public class Beam : MonoBehaviour, BombAttack {
 		}
 
 		if (GameManager.S.gameState == GameStates.playing) {
-			VibrateManager.S.RumbleVibrate(Player.player1, beamDuration, vibrationIntensity, false);
-			VibrateManager.S.RumbleVibrate(Player.player2, beamDuration, vibrationIntensity, false);
+			VibrateManager.S.RumbleVibrate(PlayerEnum.player1, beamDuration, vibrationIntensity, false);
+			VibrateManager.S.RumbleVibrate(PlayerEnum.player2, beamDuration, vibrationIntensity, false);
 			CameraEffects.S.CameraShake(1.5f, 0.75f, true);
 		}
 
@@ -78,7 +78,7 @@ public class Beam : MonoBehaviour, BombAttack {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
-			if (player.player != owningPlayer) {
+			if (player.playerEnum != owningPlayer) {
 				//Do damage to the player hit
 				player.TakeDamage(damage);
 
@@ -102,7 +102,7 @@ public class Beam : MonoBehaviour, BombAttack {
 		if (other.tag == "Player") {
 			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
-			if (player.player != owningPlayer) {
+			if (player.playerEnum != owningPlayer) {
 				//Slow the player while in the beam
 				playerMovement.RestoreSpeed();
 			}

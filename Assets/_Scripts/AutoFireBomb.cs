@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AutoFireBomb : MonoBehaviour {
 
-	PlayerShip thisPlayer;
+	Player thisPlayer;
 	public Bomb bombPrefab;
 	Bomb curBomb;
 
@@ -14,7 +14,7 @@ public class AutoFireBomb : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		thisPlayer = GetComponent<PlayerShip>();
+		thisPlayer = GetComponentInParent<Player>();
 		StartCoroutine(FireRandomBombs());
 	}
 	
@@ -35,7 +35,7 @@ public class AutoFireBomb : MonoBehaviour {
 		PhysicsObj bombPhysics = curBomb.GetComponent<PhysicsObj>();
 
 		//Set the owner of the fired bomb
-		curBomb.owningPlayer = thisPlayer.player;
+		curBomb.owningPlayer = thisPlayer.playerEnum;
 
 		//Set the initial speed of the fired bomb
 		float speed = Random.Range(minSpeed, maxSpeed);

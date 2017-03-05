@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AutoMoveShip : MonoBehaviour {
 
-	PlayerShip thisPlayer;
+	Player thisPlayer;
 	Transform thisTransform;
 
 	Vector3 curDirection;
@@ -11,10 +11,10 @@ public class AutoMoveShip : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		thisPlayer = GetComponent<PlayerShip>();
+		thisPlayer = GetComponentInParent<Player>();
 		thisTransform = GetComponent<Transform>();
 
-		curDirection = (thisPlayer.player == Player.player1) ? Vector3.up : Vector3.down;
+		curDirection = (thisPlayer.playerEnum == PlayerEnum.player1) ? Vector3.up : Vector3.down;
 
 		StartCoroutine(ChangeDirection());
 	}

@@ -26,7 +26,7 @@ public class PreviewShipMovement : ShipMovement {
 
 	// Use this for initialization
 	protected override void Awake() {
-		thisPlayer = GetComponent<PlayerShip>();
+		thisPlayerShip = GetComponent<PlayerShip>();
 
 		startPos = transform.position;
 
