@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using PolarCoordinates;
 
 public class HomingGroup : MonoBehaviour {
-	public PlayerShip thisPlayer;
-	public Player owningPlayer;
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer;
 	public Transform target;
 	NonPooledBullet bulletPrefab;
 	PhysicsObj physics;
@@ -28,7 +28,7 @@ public class HomingGroup : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/NonPooledBullet");
+		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/Bullets/NonPooledBullet");
 		physics = GetComponent<PhysicsObj>();
 		bulletsPerShell = new int[numShells];
 		for (int i = 0; i < numShells; i++) {

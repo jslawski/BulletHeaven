@@ -4,9 +4,9 @@ using PolarCoordinates;
 
 public class AltCircleShot : MonoBehaviour, BombAttack {
 
-	Player _owningPlayer = Player.none;
-	public PlayerShip thisPlayer;
-	public Player owningPlayer {
+	PlayerEnum _owningPlayer = PlayerEnum.none;
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}

@@ -23,46 +23,46 @@ public class GlassCannon : PlayerShip {
 	new void Start () {
 		base.Start();
 
-		X = (player == Player.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
-		Y = (player == Player.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
+		X = (playerEnum == PlayerEnum.player1) ? KeyCode.Alpha3 : KeyCode.Keypad3;
+		Y = (playerEnum == PlayerEnum.player1) ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, true, true);
 
 		health = maxHealth;
 
-		playerMovement.SetBaseSpeed(1.3f);
+		movement.SetBaseSpeed(1.3f);
 	}
 
 	protected override void Update() {
 		base.Update();
 
-		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+		if (shooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
 			return;
 		}
 
 		//Dual laser attack
 		if (Input.GetKeyDown(X)) {
 			DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
-			dualLaser.owningPlayer = player;
+			dualLaser.owningPlayer = playerEnum;
 		}
-		if (device != null) {
-			if (device.Action3.WasPressed) {
+		if (player.device != null) {
+			if (player.device.Action3.WasPressed) {
 				DualLasers dualLaser = Instantiate(dualLaserPrefab, transform.position, new Quaternion()) as DualLasers;
-				dualLaser.owningPlayer = player;
+				dualLaser.owningPlayer = playerEnum;
 			}
 		}
 
 		//Charge shot attack
 		if (Input.GetKeyDown(Y)) {
 			ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
-			chargeShot.owningPlayer = player;
-			chargeShot.player = this;
+			chargeShot.owningPlayer = playerEnum;
+			chargeShot.playerShip = this;
 		}
-		if (device != null) {
-			if (device.Action4.WasPressed) {
+		if (player.device != null) {
+			if (player.device.Action4.WasPressed) {
 				ChargeShot chargeShot = Instantiate(chargeShotPrefab, transform.position, new Quaternion()) as ChargeShot;
-				chargeShot.owningPlayer = player;
-				chargeShot.player = this;
+				chargeShot.owningPlayer = playerEnum;
+				chargeShot.playerShip = this;
 			}
 		}
 	}

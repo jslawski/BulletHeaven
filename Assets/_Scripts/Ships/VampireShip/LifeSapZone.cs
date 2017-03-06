@@ -2,9 +2,9 @@
 using System.Collections;
 
 public class LifeSapZone : MonoBehaviour, BombAttack {
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -16,7 +16,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 		}
 	}
 
-	public PlayerShip owner;
+	public Player owner;
 
 	float lifespan = 6f;
 	float timeToGrow = 3f;
@@ -187,9 +187,9 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 			if (GameManager.S.inGame) {
 				SoundManager.instance.Play("DrainLife", 1);
 			}
-			targetShip.playerMovement.SlowPlayer(slowFieldPercent, particleTravelTime);
+			targetShip.movement.SlowPlayer(slowFieldPercent, particleTravelTime);
 			targetShip.TakeDamage(damagePerTick);
-			owner.TakeDamage(-damagePerTick * healScalar);
+			owner.ship.TakeDamage(-damagePerTick * healScalar);
 			yield return new WaitForSeconds(particleTravelTime);
 		}
 	}

@@ -29,33 +29,33 @@ public class WinnerPanel : MonoBehaviour {
 		roundWonText = transform.FindChild("RoundWonText").GetComponent<Text>();
     }
 
-	public void DisplayWinner(Player winner) {
+	public void DisplayWinner(PlayerEnum winner) {
 		foreach (var childTextComponent in transform.GetComponentsInChildren<Text>()) {
 			childTextComponent.enabled = true;
 		}
 		Color winnerColor = GameManager.S.players[(int)winner].playerColor;
 
-		if (winner == Player.player1) {
+		if (winner == PlayerEnum.player1) {
 			winningPlayerText.text = "Player 1 is the";
 		}
-		else if (winner == Player.player2) {
+		else if (winner == PlayerEnum.player2) {
 			winningPlayerText.text = "Player 2 is the";
 		}
 
 		//Display a different message for a mid-round win
 		if (GameManager.S.gameState == GameStates.midRoundVictory) {
-			if (winner == Player.player1) {
+			if (winner == PlayerEnum.player1) {
 				roundWonText.text = "Player 1";
 			}
-			else if (winner == Player.player2) {
+			else if (winner == PlayerEnum.player2) {
 				roundWonText.text = "Player 2";
 			}
 
 			//Personalized semi-random message depending on how close the match was
 			//If the total remaining health from the winning player is less than <closenessFactor>% at the end of the round, it is considered a "close win"
-			winThreshold = (GameManager.S.players[(int)Player.player1].maxHealth + GameManager.S.players[(int)Player.player2].maxHealth) * closenessFactor;
+			winThreshold = (GameManager.S.players[(int)PlayerEnum.player1].ship.maxHealth + GameManager.S.players[(int)PlayerEnum.player2].ship.maxHealth) * closenessFactor;
 			int winMessageIndex = Random.Range(0, closeWinVerbs.Count);
-			if (Mathf.Abs(GameManager.S.players[(int)Player.player1].health - GameManager.S.players[(int)Player.player2].health) > winThreshold) {
+			if (Mathf.Abs(GameManager.S.players[(int)PlayerEnum.player1].ship.health - GameManager.S.players[(int)PlayerEnum.player2].ship.health) > winThreshold) {
 				roundWonText.text += "\n" + bigWinVerbs[winMessageIndex];
 			}
 			else {
@@ -72,7 +72,7 @@ public class WinnerPanel : MonoBehaviour {
 		StartCoroutine(FadeInWinner(winnerColor, winner));
 	}
 
-	IEnumerator FadeInWinner(Color winnerColor, Player winner) {
+	IEnumerator FadeInWinner(Color winnerColor, PlayerEnum winner) {
 		Color startColor = winnerColor;
 		startColor.a = 0;
 

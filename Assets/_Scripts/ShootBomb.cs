@@ -21,7 +21,7 @@ public enum Attack {
 
 public class ShootBomb : MonoBehaviour {
 	GameObject bombPrefab;
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	public bool shootingDisabled = false;
 
 	public List<Bomb> bombsInAir = new List<Bomb>();         //Bombs that have been fired but not detonated
@@ -38,13 +38,12 @@ public class ShootBomb : MonoBehaviour {
 
 	public float reloadDuration = 4f;
 	public int curAmmo = 2;
-	public Ammo[] ammoImages;
 
 	public KeyCode shootBomb, A, B, X, Y;
 
 	// Use this for initialization
 	void Awake () {
-		thisPlayer = GetComponent<PlayerShip>();
+		thisPlayer = GetComponentInParent<Player>();
 	}
 
 	void Start() {
@@ -70,7 +69,7 @@ public class ShootBomb : MonoBehaviour {
 				bombPrefab = Resources.Load<GameObject>("Prefabs/GlassCannonBomb");
 				break;
 			default:
-				Debug.LogError("Ship type " + thisPlayer.typeOfShip + " is not defined!");
+				Debug.LogError("Ship type " + thisPlayer.ship.typeOfShip + " is not defined!");
 				break;
 		}
 	}
@@ -154,12 +153,12 @@ public class ShootBomb : MonoBehaviour {
 		PhysicsObj bombPhysics = newBomb.GetComponentInParent<PhysicsObj>();
 
 		//Set the owner of the fired bomb
-		newBomb.owningPlayer = thisPlayer.player;
+		newBomb.owningPlayer = thisPlayer.playerEnum;
 
 		//Set the initial speed of the fired bomb
 		float speed = Random.Range(minSpeed, maxSpeed);
 		Vector3 aimDirection = ApplySpread(transform.up, bombSpread);
-		Vector3 momentumVector = thisPlayer.playerMovement.GetVelocity();
+		Vector3 momentumVector = thisPlayer.ship.movement.GetVelocity();
 		momentumVector.x *= momentumInfluenceX;
 		momentumVector.y *= momentumInfluenceY;
 		bombPhysics.velocity = speed*aimDirection + momentumVector;
@@ -184,11 +183,11 @@ public class ShootBomb : MonoBehaviour {
 			curAmmo--;
 			StartCoroutine(ReloadBomb());
 			//Disable the correct ammo image
-			if (ammoImages[0].reloading == false) {
-				StartCoroutine(ammoImages[0].DisplayReloadCoroutine(reloadDuration));
+			if (thisPlayer.ammoImages[0].reloading == false) {
+				StartCoroutine(thisPlayer.ammoImages[0].DisplayReloadCoroutine(reloadDuration));
 			}
-			else if (ammoImages[1].reloading == false) {
-				StartCoroutine(ammoImages[1].DisplayReloadCoroutine(reloadDuration));
+			else if (thisPlayer.ammoImages[1].reloading == false) {
+				StartCoroutine(thisPlayer.ammoImages[1].DisplayReloadCoroutine(reloadDuration));
 			}
 		}
 	}

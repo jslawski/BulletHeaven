@@ -18,7 +18,7 @@ public class ProtagShipExplosion : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		bulletPrefab = Resources.Load<Bullet>("Prefabs/ProtagBullet");
+		bulletPrefab = Resources.Load<Bullet>("Prefabs/Bullets/ProtagBullet");
 		int bulletsFired = 0;
 		while (bulletsFired < numBullets) {
 			for (int i = 0; i < numBulletsPerFrame; i++) {
@@ -26,7 +26,7 @@ public class ProtagShipExplosion : MonoBehaviour {
 				Vector3 spawnPos = transform.position + new Vector3(randCircle.x, randCircle.y, 0);
 
 				Bullet newBullet = bulletPrefab.GetPooledInstance<Bullet>(transform.position);
-				newBullet.owningPlayer = Player.none;
+				newBullet.owningPlayer = PlayerEnum.none;
 				newBullet.physics.velocity = (transform.position - spawnPos).normalized * bulletMovespeed;
 				newBullet.physics.acceleration = (transform.position - spawnPos).normalized * bulletAcceleration;
 			}

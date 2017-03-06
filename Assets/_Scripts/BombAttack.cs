@@ -2,7 +2,7 @@
 using System.Collections;
 
 public interface BombAttack {
-	Player owningPlayer { get; set; }
+	PlayerEnum owningPlayer { get; set; }
 
 	void FireBurst();
 }

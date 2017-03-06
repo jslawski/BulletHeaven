@@ -4,7 +4,7 @@ using System.Collections;
 using InControl;
 using UnityEngine.UI;
 
-public enum Player {
+public enum PlayerEnum {
 	player1,
 	player2,
 	none
@@ -27,14 +27,20 @@ public class GameManager : MonoBehaviour {
 	public static bool emergencyBumperControls = false;
 	public bool slowMo = false;
 
-	public PlayerShip[] players;
+	private static int numPlayers = 2;
+	public Player[] players;
 	public PlayerShip OtherPlayerShip(PlayerShip thisShip) {
-		Player otherPlayer = (thisShip.player == Player.player1) ? Player.player2 : Player.player1;
-		return players[(int)otherPlayer];
+		return OtherPlayer(thisShip.player).ship;
+	}
+	public PlayerEnum OtherPlayerEnum(PlayerEnum thisPlayerEnum) {
+		return (thisPlayerEnum == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 	}
 	public Player OtherPlayer(Player thisPlayer) {
-		return (thisPlayer == Player.player1) ? Player.player2 : Player.player1;
+		PlayerEnum otherPlayerEnum = OtherPlayerEnum(thisPlayer.playerEnum);
+		return players[(int)otherPlayerEnum];
 	}
+	public bool shipsReady = false;
+
 	InputDevice[] controllers;
 	public const string titleSceneName = "_Scene_Title";
 	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
@@ -92,14 +98,14 @@ public class GameManager : MonoBehaviour {
 
 		curDamageAmplification = minDamageAmplification;
 
-		players = new PlayerShip[2];
-		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
-		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+		players = new Player[numPlayers];
+		players[0] = GameObject.Find("Player1").GetComponent<Player>();
+		players[1] = GameObject.Find("Player2").GetComponent<Player>();
 
-		roundsWon = new int[2];
+		roundsWon = new int[numPlayers];
 		roundsWon[0] = roundsWon[1] = 0;
 
-		controllers = new InputDevice[2];
+		controllers = new InputDevice[numPlayers];
 	}
 
 	// Use this for initialization
@@ -118,88 +124,25 @@ public class GameManager : MonoBehaviour {
 
 	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
 		print("Start initializing " + shipInfo.selectingPlayer);
-		Player player = shipInfo.selectingPlayer;
-		Player otherPlayer = OtherPlayer(player);
-		ShipType typeOfShip = shipInfo.typeOfShip;
-		Color playerColor = shipInfo.shipColor;
 
-		//If both players are running the same type of ship, use the secondary color for the ship instead
-		print(typeOfShip + " " + players[(int)otherPlayer].typeOfShip);
-		if (typeOfShip == players[(int)otherPlayer].typeOfShip) {
-			playerColor = shipInfo.shipSecondaryColor;
+		Player curPlayer = players[(int)shipInfo.selectingPlayer];
+		curPlayer.InstantiateShip(shipInfo);
+
+		//Remember the controller in Player and GameManager
+		controllers[(int)shipInfo.selectingPlayer] = device;
+		curPlayer.device = device;
+
+		////Set the type of bomb and fix old references
+		//newPlayerShip.playerShooting.SetBombType(typeOfShip);
+		//newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
+		//newPlayerShip.playerMovement.thisPlayer = newPlayerShip;
+		//players[(int)playerEnum] = newPlayerShip;
+
+		if ((int)shipInfo.selectingPlayer == numPlayers-1) {
+			shipsReady = true;
 		}
 
-		PlayerShip oldPlayerShip = players[(int)player];
-		GameObject playerShipGO = oldPlayerShip.gameObject;
-
-		//Set up the hitboxes appropriately
-		SphereCollider hitbox = playerShipGO.GetComponentInChildren<SphereCollider>();
-		hitbox.radius = shipInfo.hitBoxRadius;
-		Vector3 hitboxPos = hitbox.transform.localPosition;
-		hitboxPos.y = shipInfo.hitBoxOffset;
-		hitbox.transform.localPosition = hitboxPos;
-
-		PlayerShip newPlayerShip;
-		switch (typeOfShip) {
-			case ShipType.generalist:
-				newPlayerShip = playerShipGO.AddComponent<Generalist>();
-				break;
-			case ShipType.vampire:
-				newPlayerShip = playerShipGO.AddComponent<VampireShip>();
-				break;
-			case ShipType.masochist:
-				newPlayerShip = playerShipGO.AddComponent<Masochist>();
-				break;
-			case ShipType.tank:
-				newPlayerShip = playerShipGO.AddComponent<TankyShip>();
-				break;
-			case ShipType.glassCannon:
-				newPlayerShip = playerShipGO.AddComponent<GlassCannon>();
-				break;
-			default:
-				Debug.LogError("ShipType " + typeOfShip + " not handled in InitializePlayerShip()");
-				return;
-		}
-
-		//Grab some values from the old script to apply them to the new one
-		newPlayerShip.player = player;
-		newPlayerShip.typeOfShip = typeOfShip;
-		newPlayerShip.durationBar = oldPlayerShip.durationBar;
-		newPlayerShip.controllerPrompt = oldPlayerShip.controllerPrompt;
-		newPlayerShip.finishAttackPrompt = oldPlayerShip.finishAttackPrompt;
-		newPlayerShip.deathExplosionPrefab = oldPlayerShip.deathExplosionPrefab;
-		newPlayerShip.explosionPrefab = oldPlayerShip.explosionPrefab;
-		newPlayerShip.playerShooting = oldPlayerShip.playerShooting;
-		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
-		newPlayerShip.playerMovement = oldPlayerShip.playerMovement;
-		newPlayerShip.finalAttackPrefab = oldPlayerShip.finalAttackPrefab;
-
-		//Remove the old script and replace the GameManager reference with the new one
-		Destroy(oldPlayerShip);
-
-		//Remember the controller in PlayerShip and GameManager
-		controllers[(int)player] = device;
-		newPlayerShip.device = device;
-
-		//If the controller prompt is up, hide it
-		if (newPlayerShip.controllerPrompt && PressStartPrompt.promptsEnabled) {
-			newPlayerShip.controllerPrompt.HidePressStartPrompt();
-		}
-
-		//Set player's color
-		newPlayerShip.playerColor = playerColor;
-		foreach (var ammo in newPlayerShip.playerShooting.ammoImages) {
-			ammo.GetComponent<Image>().color = playerColor;
-		}
-		newPlayerShip.durationBar.SetColor(playerColor);
-
-		//Set the type of bomb and fix old references
-		newPlayerShip.playerShooting.SetBombType(typeOfShip);
-		newPlayerShip.playerShooting.thisPlayer = newPlayerShip;
-		newPlayerShip.playerMovement.thisPlayer = newPlayerShip;
-		players[(int)player] = newPlayerShip;
-
-		print("Done initializing " + player);
+		print("Done initializing " + shipInfo.selectingPlayer);
 	}
 	
 	// Update is called once per frame
@@ -267,7 +210,7 @@ public class GameManager : MonoBehaviour {
 		SceneManager.LoadScene(nextScene);
 	}
 
-	public void DisplayDamage(Player playerDamaged, float damageIn) {
+	public void DisplayDamage(PlayerEnum playerDamaged, float damageIn) {
 		if (damageValues.Length == 2 && damageValues[(int)playerDamaged] != null) {
 			damageValues[(int)playerDamaged].DisplayDamage(damageIn);
 		}
@@ -299,7 +242,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void EndRound(Player winner) {
+	public void EndRound(PlayerEnum winner) {
 		roundsWon[(int)winner]++;
 
 		if (roundsWon[(int)winner] > Options.numRounds/2) {
@@ -314,16 +257,16 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void EndGame(Player winner) {
+	public void EndGame(PlayerEnum winner) {
 		gameState = GameStates.winnerScreen;
 		WinnerPanel.S.DisplayWinner(winner);
 	}
 
 	void Reset() {
 		maxDamageAmplification = Options.maxDamageAmp;
-		players = new PlayerShip[2];
-		players[0] = GameObject.Find("Player1").GetComponent<PlayerShip>();
-		players[1] = GameObject.Find("Player2").GetComponent<PlayerShip>();
+		players = new Player[2];
+		players[0] = GameObject.Find("Player1").GetComponent<Player>();
+		players[1] = GameObject.Find("Player2").GetComponent<Player>();
 		damageValues = new DamageValues[players.Length];
 		if (gameState != GameStates.titleScreen) {
 			damageValues[0] = GameObject.Find("Player1DamageValues").GetComponent<DamageValues>();
@@ -333,6 +276,7 @@ public class GameManager : MonoBehaviour {
 		damageAmplificationTime = Options.damageAmpTime;
 		curDamageAmplification = minDamageAmplification;
 
+		shipsReady = false;
 		timeInScene = 0;
 		slowMo = false;
 	}

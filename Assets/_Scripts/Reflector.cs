@@ -7,15 +7,15 @@ public class Reflector : MonoBehaviour, BombAttack {
 	float reflectorDuration = 4f;
 	float reflectionVelocity = 10f;
 
-	public PlayerShip thisPlayer;
-	Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	public Player thisPlayer;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			if (value != Player.none) {
+			if (value != PlayerEnum.none) {
 				//if (value == Player.player1) {
 				//	reflectorParticles[0].Play();
 				//}
@@ -23,14 +23,14 @@ public class Reflector : MonoBehaviour, BombAttack {
 				//	reflectorParticles[1].Play();
 				//}
 				if (GameManager.S.inGame) {
-					Player other = (value == Player.player1) ? Player.player2 : Player.player1;
+					PlayerEnum other = (value == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 					otherPlayer = GameManager.S.players[(int)other];
 					SetColor(GameManager.S.players[(int)value].playerColor);
 				}
 			}
 		}
 	}
-	public PlayerShip otherPlayer;
+	public Player otherPlayer;
 
 	void Awake() {
 		if (GameManager.S.inGame) {
@@ -67,7 +67,7 @@ public class Reflector : MonoBehaviour, BombAttack {
 			if (otherPlayer != null) {
 				otherBullet.curState = BulletState.reflected;
 
-				Vector3 otherPlayerPosition = otherPlayer.transform.position;
+				Vector3 otherPlayerPosition = otherPlayer.ship.transform.position;
 
 				//Determine reflection vector
 				Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);

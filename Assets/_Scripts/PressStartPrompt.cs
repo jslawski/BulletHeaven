@@ -6,7 +6,7 @@ public class PressStartPrompt : MonoBehaviour {
 	//Set this to false if the prompt is annoying you in development
 	public static readonly bool promptsEnabled = false;
 	public static bool[] playersReady;
-	public Player thisPlayer;
+	public PlayerEnum thisPlayer;
 
 	// Use this for initialization
 	void Awake () {
@@ -58,7 +58,7 @@ public class PressStartPrompt : MonoBehaviour {
 	
 	IEnumerator IncrementCurPlayer() {
 		yield return new WaitForEndOfFrame();
-		ControllerSetup.S.curPlayer = (Player)(((int)ControllerSetup.S.curPlayer + 1) % ((int)Player.none));
+		ControllerSetup.S.curPlayer = (PlayerEnum)(((int)ControllerSetup.S.curPlayer + 1) % ((int)PlayerEnum.none));
 		HidePressStartPrompt();
 	}
 }

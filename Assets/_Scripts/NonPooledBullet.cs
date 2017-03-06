@@ -11,7 +11,7 @@ public class NonPooledBullet : Bullet {
 		else if (other.tag == "Player") {
 			PlayerShip playerHit = other.gameObject.GetComponentInParent<PlayerShip>();
 
-			if (playerHit.player != owningPlayer) {
+			if (playerHit.playerEnum != owningPlayer) {
 				//Masochists with the shield up are immune to incoming bullets
 				if (playerHit.typeOfShip == ShipType.masochist) {
 					Masochist masochistHit = playerHit as Masochist;
@@ -21,8 +21,8 @@ public class NonPooledBullet : Bullet {
 				}
 
 				//Do damage to the player hit
-				if (GameManager.S.inGame && owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {  //kinky...
-					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+				if (GameManager.S.inGame && owningPlayer != PlayerEnum.none && GameManager.S.players[(int)owningPlayer].ship is Masochist) {  //kinky...
+					Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 					playerHit.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 				}
 				else {
@@ -35,7 +35,7 @@ public class NonPooledBullet : Bullet {
 				Destroy(gameObject);
 			}
 			//If the bullet was absorbed by the vampire with it's shield up, heal slightly instead of doing damage
-			else if (owningPlayer != Player.none && thisPlayer.typeOfShip == ShipType.vampire) {
+			else if (owningPlayer != PlayerEnum.none && thisPlayer.ship.typeOfShip == ShipType.vampire) {
 				if (curState == BulletState.absorbedByVampire) {
 					curState = BulletState.none;
 					playerHit.TakeDamage(damage * -vampShieldHealAmount);
@@ -46,8 +46,8 @@ public class NonPooledBullet : Bullet {
 		//Deal damage to any ProtagShip hit
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			if (GameManager.S.inGame && owningPlayer != Player.none && GameManager.S.players[(int)owningPlayer] is Masochist) {
-				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+			if (GameManager.S.inGame && owningPlayer != PlayerEnum.none && GameManager.S.players[(int)owningPlayer].ship is Masochist) {
+				Masochist masochistOwningPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 				otherShip.TakeDamage(damage * masochistOwningPlayer.damageMultiplier);
 			}
 			else {

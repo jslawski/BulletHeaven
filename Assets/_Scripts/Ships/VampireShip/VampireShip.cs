@@ -12,7 +12,7 @@ public class VampireShip : PlayerShip {
 	new void Start() {
 		base.Start();
 
-		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
+		Y = playerEnum == PlayerEnum.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
@@ -45,7 +45,7 @@ public class VampireShip : PlayerShip {
 
 	void FixedUpdate() {
 		foreach (var player in GameManager.S.players) {
-			if (player.dead) {
+			if (player.ship.dead) {
 				return;
 			}
 		}
@@ -58,40 +58,34 @@ public class VampireShip : PlayerShip {
 	new void Update() {
 		base.Update();
 
-		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+		if (shooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
 			return;
 		}
 
-		if (device != null) {
+		if (player.device != null) {
 			//Activate a shield if the button was pressed
-			if (device.Action4.WasPressed) {
-				if (playerShooting.curAmmo != 0 && !shieldUp) {
-					VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
-					newShield.transform.parent = gameObject.transform;
-					newShield.thisPlayer = GetComponent<VampireShip>();
-					newShield.owningPlayer = player;
-					newShield.ActivateShield();
-					playerShooting.ExpendAttackSlot();
-				}
-				else {
-					SoundManager.instance.Play("OutOfAmmo", 1);
-				}
+			if (player.device.Action4.WasPressed) {
+				InstantiateShield();
 			}
 		}
-		else if (device == null) {
+		else if (player.device == null) {
 			if (Input.GetKeyDown(Y)) {
-				if (playerShooting.curAmmo != 0 && !shieldUp) {
-					VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
-					newShield.transform.parent = gameObject.transform;
-					newShield.thisPlayer = GetComponent<VampireShip>();
-					newShield.owningPlayer = player;
-					newShield.ActivateShield();
-					playerShooting.ExpendAttackSlot();
-				}
-				else {
-					SoundManager.instance.Play("OutOfAmmo", 1);
-				}
+				InstantiateShield();
 			}
+		}
+	}
+
+	void InstantiateShield() {
+		if (shooting.curAmmo != 0 && !shieldUp) {
+			VampireShield newShield = Instantiate(shield, transform.position, new Quaternion()) as VampireShield;
+			newShield.transform.parent = gameObject.transform;
+			newShield.thisPlayer = player;
+			newShield.owningPlayer = playerEnum;
+			newShield.ActivateShield();
+			shooting.ExpendAttackSlot();
+		}
+		else {
+			SoundManager.instance.Play("OutOfAmmo", 1);
 		}
 	}
 }

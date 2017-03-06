@@ -2,21 +2,21 @@
 using System.Collections;
 
 public class HomingGroupShot : MonoBehaviour, BombAttack {
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			Player otherPlayer = (value == Player.player1) ? Player.player2 : Player.player1;
+			PlayerEnum otherPlayer = (value == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 			if (GameManager.S.inGame) {
-				target = GameManager.S.players[(int)otherPlayer].transform;
+				target = GameManager.S.players[(int)otherPlayer].ship.transform;
 			}
 		}
 	}
-	Player _owningPlayer = Player.none;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 	HomingGroup homingGroupPrefab;
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	public Transform target;
 
 	int numShots = 3;

@@ -27,7 +27,7 @@ public class Masochist : PlayerShip {
 
 	new void Start() {
 		base.Start();
-		Y = player == Player.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
+		Y = playerEnum == PlayerEnum.player1 ? KeyCode.Alpha4 : KeyCode.Keypad4;
 
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 
@@ -48,7 +48,7 @@ public class Masochist : PlayerShip {
 			damageMultiplier = 1.5f;
 			SoundManager.instance.Play("ActivateAura", 1);
 			curAura = Instantiate(auraPrefab, transform.position, new Quaternion()) as MasochistAura;
-			curAura.player = this;
+			curAura.playerShip = this;
 		}
 		else if (remainingHealthRatio > 0.5f && damageMultiplier == 1.5f) {
 			Destroy(curAura.gameObject);
@@ -59,39 +59,32 @@ public class Masochist : PlayerShip {
 	protected override void Update() {
 		base.Update();
 
-		if (playerShooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
+		if (shooting.shootingDisabled || GameManager.S.gameState != GameStates.playing) {
 			return;
 		}
-		if (device != null) {
-			//Activate a shield if the button was pressed
-			if (device.Action4.WasPressed) {
-				if (playerShooting.curAmmo != 0 && !shieldUp) {
-					MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
-					newShield.transform.parent = gameObject.transform;
-					newShield.thisPlayer = GetComponent<Masochist>();
-					newShield.owningPlayer = player;
-					newShield.ActivateShield();
-					playerShooting.ExpendAttackSlot();
-				}
-				else {
-					SoundManager.instance.Play("OutOfAmmo", 1);
-				}
+		if (player.device != null) {
+			if (player.device.Action4.WasPressed) {
+				InstantiateShield();
 			}
 		}
-		else if (device == null) {
+		else if (player.device == null) {
 			if (Input.GetKeyDown(Y)) {
-				if (playerShooting.curAmmo != 0 && !shieldUp) {
-					MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
-					newShield.transform.parent = gameObject.transform;
-					newShield.thisPlayer = GetComponent<Masochist>();
-					newShield.owningPlayer = player;
-					newShield.ActivateShield();
-					playerShooting.ExpendAttackSlot();
-				}
-				else {
-					SoundManager.instance.Play("OutOfAmmo", 1);
-				}
+				InstantiateShield();
 			}
+		}
+	}
+
+	void InstantiateShield() {
+		if (shooting.curAmmo != 0 && !shieldUp) {
+			MasochistShield newShield = Instantiate(shield, transform.position, new Quaternion()) as MasochistShield;
+			newShield.transform.parent = gameObject.transform;
+			newShield.thisPlayer = player;
+			newShield.owningPlayer = playerEnum;
+			newShield.ActivateShield();
+			shooting.ExpendAttackSlot();
+		}
+		else {
+			SoundManager.instance.Play("OutOfAmmo", 1);
 		}
 	}
 }

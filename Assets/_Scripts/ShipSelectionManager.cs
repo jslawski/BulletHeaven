@@ -29,7 +29,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	public PersistentShipInfo persistentInfoPrefab;
 
 	static List<ShipSelectionManager> selectionMenus;
-	public Player player;
+	public PlayerEnum player;
 	public InputDevice device;
 
 	ShipInfo[] ships;
@@ -80,7 +80,7 @@ public class ShipSelectionManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (player == Player.player1) {
+		if (player == PlayerEnum.player1) {
 			left = KeyCode.A;
 			right = KeyCode.D;
 			A = KeyCode.Alpha1;
@@ -88,7 +88,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			Y = KeyCode.Alpha4;
 			start = KeyCode.Space;
 		}
-		else if	(player == Player.player2) {
+		else if	(player == PlayerEnum.player2) {
 			left = KeyCode.LeftArrow;
 			right = KeyCode.RightArrow;
 			A = KeyCode.Keypad1;
@@ -272,7 +272,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		yield return null;
 		yield return null;
 		//Wait an additional frame to initialize player 2's ship to guarantee initialization order
-		if (selectedShip.selectingPlayer == Player.player2) {
+		if (selectedShip.selectingPlayer == PlayerEnum.player2) {
 			yield return null;
 		}
 

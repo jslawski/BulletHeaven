@@ -3,10 +3,10 @@ using System.Collections;
 using PolarCoordinates;
 
 public class SineShot : MonoBehaviour, BombAttack{
-	public PlayerShip thisPlayer;
-	Player _owningPlayer = Player.none;
+	public Player thisPlayer;
+	PlayerEnum _owningPlayer = PlayerEnum.none;
 
-	public Player owningPlayer {
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -14,8 +14,8 @@ public class SineShot : MonoBehaviour, BombAttack{
 			_owningPlayer = value;
 
 			if (GameManager.S.inGame) {
-				Player targetPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
-				target = GameManager.S.players[(int)targetPlayer].transform;
+				PlayerEnum targetPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
+				target = GameManager.S.players[(int)targetPlayer].ship.transform;
 			}
 		}
 	}
@@ -34,7 +34,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 	}
 
 	IEnumerator FireBurstCoroutine() {
-		if (owningPlayer == Player.none) {
+		if (owningPlayer == PlayerEnum.none) {
 			Debug.LogError("Sine shot does not have owning player set");
 			yield break;
 		}

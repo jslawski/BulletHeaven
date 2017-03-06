@@ -3,22 +3,21 @@ using System.Collections;
 
 public class FinishAttack : MonoBehaviour {
 	public KeyCode fireKey;
-	Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			if (value != Player.none) {
-				int otherPlayer = (value == Player.player1) ? (int)Player.player2 : (int)Player.player1;
-				target = GameManager.S.players[otherPlayer].transform;
+			if (value != PlayerEnum.none) {
 				thisPlayer = GameManager.S.players[(int)value];
+				target = GameManager.S.OtherPlayerShip(thisPlayer.ship).transform;
 				startingGradientValue = FindClosestGradientValue(thisPlayer.playerColor);
 			}
 		}
 	}
-	PlayerShip thisPlayer;
+	Player thisPlayer;
 	Transform target;
 	public Gradient beamPulse;
 	float startingGradientValue = 0;
@@ -80,7 +79,7 @@ public class FinishAttack : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (owningPlayer == Player.none || hasBeenFired) {
+		if (owningPlayer == PlayerEnum.none || hasBeenFired) {
 			return;
 		}
 
@@ -108,12 +107,12 @@ public class FinishAttack : MonoBehaviour {
 		hasBeenFired = true;
 
 		GameManager.S.gameState = GameStates.finalAttack;
-		PlayerShip attackingPlayer = GameManager.S.players[(int)owningPlayer];
-		attackingPlayer.playerMovement.movementDisabled = true;
+		Player attackingPlayer = GameManager.S.players[(int)owningPlayer];
+		attackingPlayer.ship.movement.movementDisabled = true;
 		attackingPlayer.finishAttackPrompt.SetActive(false);
 
 		//Move the attack into the right position before beginning
-		transform.position = attackingPlayer.transform.position + attackingPlayer.transform.up * 4.5f;
+		transform.position = attackingPlayer.ship.transform.position + attackingPlayer.ship.transform.up * 4.5f;
 
 		//Tell the camera to start following this projectile
 		CameraEffects.S.followObj = transform;
@@ -166,8 +165,8 @@ public class FinishAttack : MonoBehaviour {
 
 		//Charging and traveling to target
 		while (!hasReachedDestination) {
-			VibrateManager.S.RumbleVibrate(Player.player1, 0.25f, currentChargePercent*0.25f, true);
-			VibrateManager.S.RumbleVibrate(Player.player2, 0.25f, currentChargePercent*0.25f, true);
+			VibrateManager.S.RumbleVibrate(PlayerEnum.player1, 0.25f, currentChargePercent*0.25f, true);
+			VibrateManager.S.RumbleVibrate(PlayerEnum.player2, 0.25f, currentChargePercent*0.25f, true);
 
 			CameraEffects.S.CameraShake(0.25f, 1f, true);
 
@@ -176,25 +175,25 @@ public class FinishAttack : MonoBehaviour {
 		}
 		
 		//Waiting on target
-		VibrateManager.S.RumbleVibrate(Player.player1, pulseTime, 0.5f, true);
-		VibrateManager.S.RumbleVibrate(Player.player2, pulseTime, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player1, pulseTime, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player2, pulseTime, 0.5f, true);
 		CameraEffects.S.CameraShake(pulseTime, 1f, true);
 		yield return new WaitForSeconds(pulseTime);
 
 		//Exploding on target
-		VibrateManager.S.RumbleVibrate(Player.player1, explosionDuration, 1, true);
-		VibrateManager.S.RumbleVibrate(Player.player2, explosionDuration, 1, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player1, explosionDuration, 1, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player2, explosionDuration, 1, true);
 		CameraEffects.S.CameraShake(explosionDuration, 10f, true);
 		yield return new WaitForSeconds(explosionDuration);
 
 		//Aftershocks
-		VibrateManager.S.RumbleVibrate(Player.player1, explosionDuration/2f, 0.5f, true);
-		VibrateManager.S.RumbleVibrate(Player.player2, explosionDuration/2f, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player1, explosionDuration/2f, 0.5f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player2, explosionDuration/2f, 0.5f, true);
 		CameraEffects.S.CameraShake(explosionDuration/2f, 1f, true);
 
 		yield return new WaitForSeconds(explosionDuration/2f);
-		VibrateManager.S.RumbleVibrate(Player.player1, 0.75f*explosionDuration, 0.1f, true);
-		VibrateManager.S.RumbleVibrate(Player.player2, 0.75f*explosionDuration, 0.1f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player1, 0.75f*explosionDuration, 0.1f, true);
+		VibrateManager.S.RumbleVibrate(PlayerEnum.player2, 0.75f*explosionDuration, 0.1f, true);
 		CameraEffects.S.CameraShake(explosionDuration / 2f, 0.5f, true);
 	}
 
@@ -249,7 +248,7 @@ public class FinishAttack : MonoBehaviour {
 	IEnumerator RidiculousDamageValues() {
 		float timeElapsed = 0;
 		float totalTime = pulseTime + explosionDuration;
-		Player otherPlayer = (owningPlayer == Player.player1) ? Player.player2 : Player.player1;
+		PlayerEnum otherPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 
 		float minDamageTick = 1f;
 		float maxDamageTick = 20000f;

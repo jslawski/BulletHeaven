@@ -28,10 +28,10 @@ public class MasochistBomb : Bomb {
 				SineShot newShot = Instantiate(sineShotPrefab, transform.position, new Quaternion()) as SineShot;
 				newShot.owningPlayer = owningPlayer;
 				if (GameManager.S.inGame) {
-					newShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+					newShot.masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 				}
 				else {
-					newShot.target = thisPlayer.otherPlayer.transform;
+					newShot.target = thisPlayer.otherPlayer.ship.transform;
 					newShot.thisPlayer = thisPlayer;
 				}
 				newShot.FireBurst();
@@ -41,7 +41,7 @@ public class MasochistBomb : Bomb {
 				SpreadShot spreadShot = Instantiate(spreadShotPrefab, transform.position, new Quaternion()) as SpreadShot;
 				spreadShot.owningPlayer = owningPlayer;
 				if (GameManager.S.inGame) {
-					spreadShot.masochistPlayer = GameManager.S.players[(int)owningPlayer] as Masochist;
+					spreadShot.masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
 				}
 				else {
 					spreadShot.thisPlayer = thisPlayer;

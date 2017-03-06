@@ -13,8 +13,8 @@ public class HealthPickup : MonoBehaviour {
 	void Start () {
 		centerOfWorld = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
 		centerOfWorld.z = 0;
-		minX = GameManager.S.players[1].playerMovement.worldSpaceMinX;
-		maxX = GameManager.S.players[0].playerMovement.worldSpaceMaxX;
+		minX = GameManager.S.players[1].ship.movement.worldSpaceMinX;
+		maxX = GameManager.S.players[0].ship.movement.worldSpaceMaxX;
 	}
 	
 	// Update is called once per frame

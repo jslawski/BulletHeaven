@@ -4,9 +4,9 @@ using PolarCoordinates;
 
 public class SpiralShot : MonoBehaviour, BombAttack {
 
-	public Player _owningPlayer = Player.none;
-	public PlayerShip thisPlayer;
-	public Player owningPlayer {
+	public PlayerEnum _owningPlayer = PlayerEnum.none;
+	public Player thisPlayer;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
@@ -19,11 +19,6 @@ public class SpiralShot : MonoBehaviour, BombAttack {
 	int numBursts = 40;
 	int numDirectionFlips = 3;
 	float bulletDelay = 0.05f;
-
-	// Use this for initialization
-	void Start () {
-	
-	}
 
 	public void FireBurst() {
 		StartCoroutine(FireBurstCoroutine());

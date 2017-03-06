@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using InControl;
 using UnityEngine.UI;
 
 public enum ShipType {
@@ -10,21 +9,18 @@ public enum ShipType {
 	masochist,
 	glassCannon,
 	vampire,
+	swarm,
 	random
 }
 
 public class PlayerShip : MonoBehaviour, DamageableObject {
+	public Player player;
 	public ShipType typeOfShip;
 
 	public FinishAttack finalAttackPrefab;
-	public Player player;
-	public Color playerColor;
-	public DurationBar durationBar;
+	public PlayerEnum playerEnum;
 	protected ParticleSystem healthPickupParticles;
-	public InputDevice device;
-	public PressStartPrompt controllerPrompt;
 	protected float hitVibrateIntensity = 1f;
-	public GameObject finishAttackPrompt;
 
 	bool inHealthPickupCoroutine = false;
 	float healthPickupParticleTime = 0.75f;
@@ -51,22 +47,12 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 	protected float timeSinceTakenDamage = 0f;
 
 	[HideInInspector]
-	public ShipMovement playerMovement;
+	public ShipMovement movement;
 	[HideInInspector]
-	public ShootBomb playerShooting;
-
-	private PlayerShip _otherPlayer = null;
-	public PlayerShip otherPlayer {
-		get {
-			if (_otherPlayer == null) {
-				_otherPlayer = GameManager.S.OtherPlayerShip(this);
-			}
-			return _otherPlayer;
-		}
-	}
+	public ShootBomb shooting;
 
 	public delegate void OnHealthChangedEventHandler(float remainingHealth);
-	public event OnHealthChangedEventHandler onDamaged; 
+	public event OnHealthChangedEventHandler onDamaged;
 
 	public float maxHealth = 150f;
 	protected float _health;
@@ -90,18 +76,17 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 
 	// Use this for initialization
 	virtual protected void Awake () {
-		playerMovement = GetComponent<ShipMovement>();
-		playerShooting = GetComponent<ShootBomb>();
+		movement = GetComponent<ShipMovement>();
+		shooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
 		smokeParticles = transform.FindChild("SmokeParticleSystem").GetComponent<ParticleSystem>();
 		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
 	}
 
-	protected void Start() {
+	protected virtual void Start() {
+		player = GetComponentInParent<Player>();
+
 		health = maxHealth;
-		if (durationBar != null) {
-			durationBar.SetPercent(0);
-		}
 	}
 	
 	// Update is called once per frame
@@ -117,9 +102,9 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		if (damageIn > 0) {
 			damageIn *= GameManager.S.curDamageAmplification;
 			CameraEffects.S.CameraShake(0.1f, .5f);
-			VibrateManager.S.RumbleVibrate(player, 0.2f, hitVibrateIntensity, true);
+			VibrateManager.S.RumbleVibrate(playerEnum, 0.2f, hitVibrateIntensity, true);
 			SoundManager.instance.Play("TakeDamage");
-			GameManager.S.DisplayDamage(player, damageIn);
+			GameManager.S.DisplayDamage(playerEnum, damageIn);
 
 			if (health < lowOnHealthThreshold*maxHealth && !inHeartbeatCoroutine) {
 				StartCoroutine(HeartbeatOnLowHealth());
@@ -146,7 +131,7 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 		yield return new WaitForSeconds(timeBetweenHeartbeats);
 
 		while (GameManager.S.gameState == GameStates.playing && health < lowOnHealthThreshold*maxHealth) {
-			VibrateManager.S.RumbleVibrate(player, heartbeatPulseDuration, heartbeatVibration, true);
+			VibrateManager.S.RumbleVibrate(playerEnum, heartbeatPulseDuration, heartbeatVibration, true);
 			yield return new WaitForSeconds(timeBetweenHeartbeats);
 		}
 
@@ -189,40 +174,41 @@ public class PlayerShip : MonoBehaviour, DamageableObject {
 			return;
 		}
 
-		VibrateManager.S.RumbleVibrate(player, 0.75f, 0.6f, true);
+		VibrateManager.S.RumbleVibrate(playerEnum, 0.75f, 0.6f, true);
 
 		SoundManager.instance.Play("NearDeath", 1);
 		dead = true;
-		playerShooting.shootingDisabled = true;
-		playerMovement.movementDisabled = true;
+		shooting.shootingDisabled = true;
+		movement.movementDisabled = true;
 		//print("I am dead");
 		
-		otherPlayer.InitializeFinalAttack();
+		player.otherPlayer.ship.InitializeFinalAttack();
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
-		if (durationBar != null) {
-			durationBar.SetPercent(0);
+		if (player.durationBar != null) {
+			player.durationBar.SetPercent(0);
 		}
 
 		StartCoroutine(DeathParticles());
 		StartCoroutine(PulsateRed());
 	}
 
+	//Maybe move this to Player
 	public void InitializeFinalAttack() {
-		finishAttackPrompt.SetActive(true);
-		finishAttackPrompt.GetComponentInChildren<Text>().color = playerColor;
-		finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = playerColor;
+		player.finishAttackPrompt.SetActive(true);
+		player.finishAttackPrompt.GetComponentInChildren<Text>().color = player.playerColor;
+		player.finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = player.playerColor;
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
-		if (durationBar != null) {
-			durationBar.SetPercent(0);
+		if (player.durationBar != null) {
+			player.durationBar.SetPercent(0);
 		}
 
 		Vector3 spawnPos = transform.position + transform.up * 4.5f;
         FinishAttack finalAttack = Instantiate(finalAttackPrefab, spawnPos, new Quaternion()) as FinishAttack;
-		finalAttack.owningPlayer = player;
-		finalAttack.fireKey = (player == Player.player1) ? KeyCode.E : KeyCode.KeypadEnter;
+		finalAttack.owningPlayer = playerEnum;
+		finalAttack.fireKey = (playerEnum == PlayerEnum.player1) ? KeyCode.E : KeyCode.KeypadEnter;
 
 		//Disable shooting so you don't fire a bomb when you perform the final attack
-		playerShooting.shootingDisabled = true;
+		shooting.shootingDisabled = true;
 		invincible = true;
 	}
 

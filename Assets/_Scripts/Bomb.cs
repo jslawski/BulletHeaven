@@ -2,22 +2,22 @@
 using System.Collections;
 
 public class Bomb : MonoBehaviour {
-	public PlayerShip thisPlayer;
-	public Player _owningPlayer = Player.none;       //Set this when creating a new Bomb
-	public Player owningPlayer {
+	public Player thisPlayer;
+	public PlayerEnum _owningPlayer = PlayerEnum.none;       //Set this when creating a new Bomb
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
-			if (value != Player.none) {
+			if (value != PlayerEnum.none) {
 				if (GameManager.S.inGame) {
 					thisPlayer = GameManager.S.players[(int)value];
 					SetColor(thisPlayer.playerColor);
 				}
 
 				//Move the button UI to always be behind the bomb's trajectory
-				if (value == Player.player2 && buttonUI != null) {
+				if (value == PlayerEnum.player2 && buttonUI != null) {
 					Vector3 buttonPos = buttonUI.transform.localPosition;
 					buttonPos.x *= -1;
 					buttonUI.transform.localPosition = buttonPos;
@@ -70,8 +70,8 @@ public class Bomb : MonoBehaviour {
 	void OnDestroy() {
 		//print("Destroyed bomb");
 		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
-		if (GameManager.S && owningPlayer != Player.none && GameManager.S.gameState != GameStates.titleScreen) {
-			thisPlayer.playerShooting.bombsInAir.Remove(this);
+		if (GameManager.S && owningPlayer != PlayerEnum.none && GameManager.S.gameState != GameStates.titleScreen) {
+			thisPlayer.ship.shooting.bombsInAir.Remove(this);
 		}
 
 		if (transform.parent != null) {

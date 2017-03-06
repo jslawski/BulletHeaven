@@ -5,10 +5,10 @@ using System.Collections.Generic;
 public class VampireShield : MonoBehaviour {
 	SphereCollider thisCollider;
 	SpriteRenderer shieldSprite;
-	Player otherPlayer;
+	PlayerEnum otherPlayer;
 
 	float rotationSpeed_c = 100f;
-	public PlayerShip thisPlayer;
+	public Player thisPlayer;
 	float shieldDuration = 1.5f;
 	public float hitboxOffset = 0;
 
@@ -16,17 +16,17 @@ public class VampireShield : MonoBehaviour {
 
 	List<Bullet> absorbedBullets;
 
-	public Player _owningPlayer = Player.none;
-	public Player owningPlayer {
+	public PlayerEnum _owningPlayer = PlayerEnum.none;
+	public PlayerEnum owningPlayer {
 		get {
 			return _owningPlayer;
 		}
 		set {
 			_owningPlayer = value;
 			if (GameManager.S.inGame) {
-				hitboxOffset = GameManager.S.players[(int)value].transform.FindChild("Hitbox").localPosition.y;
+				hitboxOffset = GameManager.S.players[(int)value].ship.transform.FindChild("Hitbox").localPosition.y;
 			}
-			if (value == Player.player2) {
+			if (value == PlayerEnum.player2) {
 				hitboxOffset = -hitboxOffset;
 			}
 		}
@@ -49,9 +49,6 @@ public class VampireShield : MonoBehaviour {
 
 			yield return null;
 		}
-		if (thisPlayer.durationBar != null) {
-			thisPlayer.durationBar.SetPercent(0);
-		}
 	}
 
 	// Use this for initialization
@@ -59,8 +56,8 @@ public class VampireShield : MonoBehaviour {
 		if (GameManager.S.inGame) {
 			SoundManager.instance.Play("ShieldUp");
 		}
-		if (thisPlayer is VampireShip) {
-			(thisPlayer as VampireShip).shieldUp = true;
+		if (thisPlayer.ship is VampireShip) {
+			(thisPlayer.ship as VampireShip).shieldUp = true;
 		}
 		Color shieldColor = thisPlayer.playerColor;
 		shieldColor.a = 180f / 255f;
@@ -81,11 +78,13 @@ public class VampireShield : MonoBehaviour {
 				Vector3 endPosition = new Vector3(transform.position.x + hitboxOffset, transform.position.y, 0);
 				absorbedBullets[i].transform.position = endPosition;
 			}
-			//yield return new WaitForFixedUpdate();
 		}
 
-		if (thisPlayer is VampireShip) {
-			(thisPlayer as VampireShip).shieldUp = false;
+		if (thisPlayer.ship is VampireShip) {
+			(thisPlayer.ship as VampireShip).shieldUp = false;
+		}
+		if (thisPlayer.durationBar != null) {
+			thisPlayer.durationBar.SetPercent(0);
 		}
 		Destroy(gameObject);
 	}
@@ -114,7 +113,7 @@ public class VampireShield : MonoBehaviour {
 		thisBullet.curState = BulletState.absorbedByVampire;
 
 		//Change color of the bullet and halt its velocity
-		thisBullet.owningPlayer = thisPlayer.player;
+		thisBullet.owningPlayer = thisPlayer.playerEnum;
 		if (!GameManager.S.inGame) {
 			thisBullet.thisPlayer = thisPlayer;
 			thisBullet.SetColor(thisPlayer.playerColor);
