@@ -4,7 +4,7 @@ using System.Collections;
 public class ShipMovement : MonoBehaviour {
 	public PlayerShip thisPlayer;
 	public Camera renderCamera;
-	float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
+	public float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
 	protected float vertMovespeedDefault = 16f;
 	protected float horizMovespeedDefault = 12.5f;
 	public float verticalMovespeed;						//Speed at which the player can move up and down
