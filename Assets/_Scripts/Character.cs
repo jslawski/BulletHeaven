@@ -10,6 +10,7 @@ public enum CharactersEnum {
 	glassCannon,
 	vampire,
 	swarm,
+	twins,
 	random
 }
 
