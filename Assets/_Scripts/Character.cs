@@ -72,6 +72,9 @@ public abstract class Character : MonoBehaviour {
 	}
 
 	public virtual Ship GetClosestShip(Vector3 location) {
+		//Common case handled first
+		if (ships.Count == 1) return ship;
+
 		float minDistance = float.MaxValue;
 		Ship closestShip = null;
 		foreach (Ship ship in ships) {
@@ -82,7 +85,7 @@ public abstract class Character : MonoBehaviour {
 			}
 		}
 
-		return ship;
+		return closestShip;
 	}
 	
 	void ListenForShipDeath(Ship deadShip) {

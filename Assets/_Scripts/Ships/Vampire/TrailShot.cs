@@ -13,7 +13,7 @@ public class TrailShot : MonoBehaviour, BombAttack {
 			_owningPlayer = value;
 			if (GameManager.S.inGame) {
 				PlayerEnum targetPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
-				target = GameManager.S.players[(int)targetPlayer].character.transform;
+				target = GameManager.S.players[(int)targetPlayer].character.GetClosestShip(transform.position).transform;
 			}
 		}
 	}

@@ -11,15 +11,16 @@ public class TetherReflect : MonoBehaviour {
 		shipA = transform.parent.FindChild("TwinShipA");
 		shipB = transform.parent.FindChild("TwinShipB");
 	}
-	
+
 	// Update is called once per frame
+	float shipSize = 2f;
 	void Update () {
 		transform.position = (shipA.position + shipB.position) / 2f;
 		Vector3 diffVector = (shipA.position - shipB.position);
 		transform.up = diffVector.normalized;
 
 		Vector3 scale = transform.localScale;
-		scale.y = diffVector.magnitude;
+		scale.y = diffVector.magnitude - shipSize;
 		transform.localScale = scale;
 	}
 
