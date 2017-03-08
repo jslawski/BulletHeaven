@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JoshAI : MonoBehaviour {
-	PlayerShip thisShip;
+	Character thisShip;
 	ShipMovement movement;
 
 	Collider hitbox;
@@ -19,7 +19,7 @@ public class JoshAI : MonoBehaviour {
 		while (GameManager.S.gameState != GameStates.playing) {
 			yield return null;
 		}
-		thisShip = GetComponent<PlayerShip>();
+		thisShip = GetComponent<Character>();
 		movement = GetComponent<ShipMovement>();
 		hitbox = GetComponentInChildren<Collider>();
 
@@ -202,8 +202,9 @@ public class JoshAI : MonoBehaviour {
 			}
 			else {
 				Vector3 seekVector = (closestHealthPack.position - ai.position);
+				//TODO 3/6/17: Fix this to work for multiple ships
 				//Attempt to get health packs more if you're low on health, and if it's close by
-				float weight = Mathf.Lerp(1, 0, ai.thisShip.health / ai.thisShip.maxHealth);
+				float weight = Mathf.Lerp(1, 0, ai.thisShip.ship.health / ai.thisShip.ship.maxHealth);
 				weight /= seekVector.magnitude;
 				return seekVector.normalized * weight * seekDistance;
 			}
@@ -238,23 +239,23 @@ public class JoshAI : MonoBehaviour {
 	}
 
 	class AvoidOtherPlayerAttacks : MovementRule {
-		PlayerShip otherShip;
+		Character otherShip;
 
 		public AvoidOtherPlayerAttacks(JoshAI ai, float weight) : base(ai, weight) {
 			otherShip = GameManager.S.OtherPlayerShip(ai.thisShip);
 		}
 
 		public override Vector3 Apply() {
-			switch (otherShip.typeOfShip) {
-				case ShipType.generalist:
+			switch (otherShip.characterType) {
+				case CharactersEnum.generalist:
 					return ApplyGeneralist();
-				case ShipType.glassCannon:
+				case CharactersEnum.glassCannon:
 					return ApplyGlassCannon();
-				case ShipType.masochist:
+				case CharactersEnum.masochist:
 					return ApplyMasochist();
-				case ShipType.tank:
+				case CharactersEnum.tank:
 					return ApplyTank();
-				case ShipType.vampire:
+				case CharactersEnum.vampire:
 					return ApplyVampire();
 				default:
 					return Vector3.zero;
@@ -378,12 +379,12 @@ public class JoshAI : MonoBehaviour {
 			}
 			else {
 				//Don't stay horizontal to your opponent
-				PlayerShip otherPlayerShip = GameManager.S.OtherPlayerShip(ai.thisShip);
+				Character otherPlayerShip = GameManager.S.OtherPlayerShip(ai.thisShip);
 				Vector3 diffVector = ai.position - otherPlayerShip.transform.position;
 
 				if (Mathf.Abs(diffVector.y) < tooFarAwayCutoff) {
 					float weight = Mathf.Pow(1f / Mathf.Abs(diffVector.y), 2);
-					collectiveVector += new Vector3(0, -otherPlayerShip.movement.GetVelocity().normalized.y * weight, 0);
+					collectiveVector += new Vector3(0, -otherPlayerShip.ship.movement.GetVelocity().normalized.y * weight, 0);
 				}
 			}
 
@@ -405,8 +406,8 @@ public class JoshAI : MonoBehaviour {
 		#endregion
 		#region Masochist-specific avoidance
 		private Vector3 ApplyMasochist() {
-			PlayerShip otherPlayer = GameManager.S.OtherPlayerShip(ai.thisShip);
-			float amplification = Mathf.Lerp(0, 1, 1 - (otherPlayer.health / otherPlayer.maxHealth));
+			Character otherPlayer = GameManager.S.OtherPlayerShip(ai.thisShip);
+			float amplification = Mathf.Lerp(0, 1, 1 - (otherPlayer.ship.health / otherPlayer.ship.maxHealth));
 
 			Vector3 collectiveDirection = Vector3.zero;
 

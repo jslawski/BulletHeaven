@@ -26,7 +26,7 @@ public class PreviewShipMovement : ShipMovement {
 
 	// Use this for initialization
 	protected override void Awake() {
-		thisPlayerShip = GetComponent<PlayerShip>();
+		thisCharacter = GetComponent<Character>();
 
 		startPos = transform.position;
 
@@ -35,13 +35,6 @@ public class PreviewShipMovement : ShipMovement {
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
-
-		Vector3 worldSpaceMin = renderCamera.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
-		worldSpaceMinX = worldSpaceMin.x;
-		worldSpaceMinY = worldSpaceMin.y;
-		Vector3 worldSpaceMax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
-		worldSpaceMaxX = worldSpaceMax.x;
-		worldSpaceMaxY = worldSpaceMax.y;
 		//print("Bottom left: " + worldSpaceMin + "\nTop right: " + worldSpaceMax);
 
 		desiredPosition = transform.position;

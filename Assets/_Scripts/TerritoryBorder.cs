@@ -4,9 +4,11 @@ using System.Collections;
 
 public class TerritoryBorder : MonoBehaviour {
 	public PlayerEnum owningPlayer;
+	Character owningCharacter;
 	Image territoryImage;
-	ShipMovement shipMovement;
+	Ship closestShip;
 
+	float borderWorldSpacePosition;
 	float maxAlpha = 0.2f;
 	float threshold;
 
@@ -16,23 +18,27 @@ public class TerritoryBorder : MonoBehaviour {
 		while (!GameManager.S.shipsReady) {
 			yield return null;
 		}
-		shipMovement = GameManager.S.players[(int)owningPlayer].ship.movement;
+		owningCharacter = GameManager.S.players[(int)owningPlayer].character;
 
 		yield return new WaitForSeconds(0.1f);
-		Color startColor = shipMovement.thisPlayerShip.player.playerColor;
+		Color startColor = owningCharacter.player.playerColor;
 		startColor.a = 0;
 		territoryImage.color = startColor;
 
 		if (owningPlayer == PlayerEnum.player1) {
-			threshold = shipMovement.worldSpaceMaxX - GameManager.S.players[1].ship.movement.worldSpaceMinX;
+			borderWorldSpacePosition = owningCharacter.player.worldSpaceMaxX;
+			threshold = borderWorldSpacePosition - GameManager.S.players[1].character.player.worldSpaceMinX;
 		}
 		else if (owningPlayer == PlayerEnum.player2) {
-			threshold = GameManager.S.players[0].ship.movement.worldSpaceMaxX - shipMovement.worldSpaceMinX;
+			borderWorldSpacePosition = owningCharacter.player.worldSpaceMinX;
+			threshold = GameManager.S.players[0].character.player.worldSpaceMaxX - borderWorldSpacePosition;
 		}
 
-		while (shipMovement != null && GameManager.S.gameState != GameStates.finalAttack){
+		closestShip = FindClosestShipToBorder();
+
+		while (closestShip != null && GameManager.S.gameState != GameStates.finalAttack){
 			if (owningPlayer == PlayerEnum.player1) {
-				float shiftedPos = shipMovement.transform.position.x - (shipMovement.worldSpaceMaxX - threshold);
+				float shiftedPos = closestShip.transform.position.x - (borderWorldSpacePosition - threshold);
 				if (shiftedPos > 0) {
 					Color curColor = territoryImage.color;
 					curColor.a = maxAlpha * shiftedPos / threshold;
@@ -45,7 +51,7 @@ public class TerritoryBorder : MonoBehaviour {
 				}
 	        }
 			else if (owningPlayer == PlayerEnum.player2) {
-				float shiftedPos = (shipMovement.worldSpaceMinX + threshold) - shipMovement.transform.position.x;
+				float shiftedPos = (borderWorldSpacePosition + threshold) - closestShip.transform.position.x;
 				if (shiftedPos > 0) {
 					Color curColor = territoryImage.color;
 					curColor.a = maxAlpha * shiftedPos / threshold;
@@ -61,5 +67,19 @@ public class TerritoryBorder : MonoBehaviour {
 		}
 
 		territoryImage.enabled = false;
+	}
+
+	Ship FindClosestShipToBorder() {
+		float minDistance = float.MaxValue;
+		Ship closestShip = null;
+		foreach (Ship ship in owningCharacter.ships) {
+			float distanceToBorder = Mathf.Abs(ship.transform.position.x - borderWorldSpacePosition);
+			if (distanceToBorder < minDistance) {
+				minDistance = distanceToBorder;
+				closestShip = ship;
+			}
+		}
+
+		return closestShip;
 	}
 }

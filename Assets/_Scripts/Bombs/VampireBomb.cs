@@ -31,7 +31,7 @@ public class VampireBomb : Bomb {
 				trailShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					trailShot.thisPlayer = thisPlayer;
-					trailShot.target = thisPlayer.otherPlayer.ship.transform;
+					trailShot.target = thisPlayer.otherPlayer.character.transform;
 				}
 				trailShot.FireBurst();
 				break;

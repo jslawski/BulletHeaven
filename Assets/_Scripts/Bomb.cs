@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Bomb : MonoBehaviour {
 	public Player thisPlayer;
@@ -39,7 +39,7 @@ public class Bomb : MonoBehaviour {
 
 	protected float decelerationRate = 0.25f;
 
-	protected void Awake() {
+	protected virtual void Awake() {
 		physics = GetComponentInParent<PhysicsObj>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		if (transform.parent != null) {
@@ -71,7 +71,12 @@ public class Bomb : MonoBehaviour {
 		//print("Destroyed bomb");
 		//Remove this bomb from the bombsInAir queue (only for the main scene, not the title scene)
 		if (GameManager.S && owningPlayer != PlayerEnum.none && GameManager.S.gameState != GameStates.titleScreen) {
-			thisPlayer.ship.shooting.bombsInAir.Remove(this);
+			thisPlayer.character.ApplyToAllShips(ship => {
+				List<Bomb> shipBombs = ship.shooting.bombsInAir;
+				if (shipBombs.Contains(this)) {
+					shipBombs.Remove(this);
+				}
+			});
 		}
 
 		if (transform.parent != null) {

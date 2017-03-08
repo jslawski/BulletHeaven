@@ -8,7 +8,7 @@ public class GeneralistBomb : Bomb {
 	Beam beamShotPrefab;
 	Reflector reflectorPrefab;
 
-	void Awake() {
+	protected override void Awake() {
 		base.Awake();
 		shockwavePrefab = Resources.Load<GameObject>("Prefabs/Shockwave");
 		leadingShotPrefab = Resources.Load<LeadingShot>("Prefabs/LeadingShot");
@@ -38,7 +38,6 @@ public class GeneralistBomb : Bomb {
 				newShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					newShot.thisPlayer = thisPlayer;
-					newShot.targetPlayer = thisPlayer.otherPlayer;
                 }
 				newShot.FireBurst();
 				break;

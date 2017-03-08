@@ -21,7 +21,7 @@ public enum Attack {
 
 public class ShootBomb : MonoBehaviour {
 	GameObject bombPrefab;
-	public Player thisPlayer;
+	public Ship thisShip;
 	public bool shootingDisabled = false;
 
 	public List<Bomb> bombsInAir = new List<Bomb>();         //Bombs that have been fired but not detonated
@@ -43,33 +43,33 @@ public class ShootBomb : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		thisPlayer = GetComponentInParent<Player>();
+		thisShip = GetComponent<Ship>();
 	}
 
 	void Start() {
 		//SetBombType(thisPlayer.typeOfShip);
 	}
 	
-	public void SetBombType(ShipType shipType) {
+	public void SetBombType(CharactersEnum shipType) {
 		//Attach the correct bomb prefab depending on the ship type
 		switch (shipType) {
-			case ShipType.generalist:
+			case CharactersEnum.generalist:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/GeneralistBomb");
 				break;
-			case ShipType.masochist:
+			case CharactersEnum.masochist:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/MasochistBomb");
 				break;
-			case ShipType.vampire:
+			case CharactersEnum.vampire:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/VampireBomb");
 				break;
-			case ShipType.tank:
+			case CharactersEnum.tank:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/TankBomb");
 				break;
-			case ShipType.glassCannon:
+			case CharactersEnum.glassCannon:
 				bombPrefab = Resources.Load<GameObject>("Prefabs/GlassCannonBomb");
 				break;
 			default:
-				Debug.LogError("Ship type " + thisPlayer.ship.typeOfShip + " is not defined!");
+				Debug.LogError("Ship type " + thisShip.character.characterType + " is not defined!");
 				break;
 		}
 	}
@@ -79,7 +79,7 @@ public class ShootBomb : MonoBehaviour {
 		if (shootingDisabled || GameManager.S.gameState != GameStates.playing) {
 			return;
 		}
-		if (thisPlayer.device == null) {
+		if (thisShip.player.device == null) {
 			if (Input.GetKeyDown(shootBomb) && bombShootCooldownRemaining <= 0) {
 				Shoot();
 			}
@@ -102,26 +102,26 @@ public class ShootBomb : MonoBehaviour {
 		else {
 			//Emergency bumper controls
 			if (GameManager.emergencyBumperControls) {
-				if (thisPlayer.device.RightBumper.WasPressed && bombShootCooldownRemaining <= 0) {
+				if (thisShip.player.device.RightBumper.WasPressed && bombShootCooldownRemaining <= 0) {
 					Shoot();
 				}
 			}
 			//Normal controls
-			else if (thisPlayer.device.RightTrigger.WasPressed && bombShootCooldownRemaining <= 0) {
+			else if (thisShip.player.device.RightTrigger.WasPressed && bombShootCooldownRemaining <= 0) {
 				Shoot();
 			}
 
 			//Detonating bombs
-			if (thisPlayer.device.Action1.WasPressed) {
+			if (thisShip.player.device.Action1.WasPressed) {
 				DetonateBomb(AttackButtons.A);
 			}
-			else if (thisPlayer.device.Action2.WasPressed) {
+			else if (thisShip.player.device.Action2.WasPressed) {
 				DetonateBomb(AttackButtons.B);
 			}
-			else if (thisPlayer.device.Action3.WasPressed) {
+			else if (thisShip.player.device.Action3.WasPressed) {
 				DetonateBomb(AttackButtons.X);
 			}
-			else if (thisPlayer.device.Action4.WasPressed) {
+			else if (thisShip.player.device.Action4.WasPressed) {
 				DetonateBomb(AttackButtons.Y);
 			}
 		}
@@ -149,16 +149,15 @@ public class ShootBomb : MonoBehaviour {
 
 		GameObject newBombGO = Instantiate(bombPrefab, transform.position, new Quaternion()) as GameObject;
 		Bomb newBomb = newBombGO.GetComponentInChildren<Bomb>();
-		newBomb.thisPlayer = thisPlayer;
 		PhysicsObj bombPhysics = newBomb.GetComponentInParent<PhysicsObj>();
 
 		//Set the owner of the fired bomb
-		newBomb.owningPlayer = thisPlayer.playerEnum;
+		newBomb.owningPlayer = thisShip.player.playerEnum;
 
 		//Set the initial speed of the fired bomb
 		float speed = Random.Range(minSpeed, maxSpeed);
 		Vector3 aimDirection = ApplySpread(transform.up, bombSpread);
-		Vector3 momentumVector = thisPlayer.ship.movement.GetVelocity();
+		Vector3 momentumVector = thisShip.movement.GetVelocity();
 		momentumVector.x *= momentumInfluenceX;
 		momentumVector.y *= momentumInfluenceY;
 		bombPhysics.velocity = speed*aimDirection + momentumVector;
@@ -183,11 +182,11 @@ public class ShootBomb : MonoBehaviour {
 			curAmmo--;
 			StartCoroutine(ReloadBomb());
 			//Disable the correct ammo image
-			if (thisPlayer.ammoImages[0].reloading == false) {
-				StartCoroutine(thisPlayer.ammoImages[0].DisplayReloadCoroutine(reloadDuration));
+			if (thisShip.player.ammoImages[0].reloading == false) {
+				StartCoroutine(thisShip.player.ammoImages[0].DisplayReloadCoroutine(reloadDuration));
 			}
-			else if (thisPlayer.ammoImages[1].reloading == false) {
-				StartCoroutine(thisPlayer.ammoImages[1].DisplayReloadCoroutine(reloadDuration));
+			else if (thisShip.player.ammoImages[1].reloading == false) {
+				StartCoroutine(thisShip.player.ammoImages[1].DisplayReloadCoroutine(reloadDuration));
 			}
 		}
 	}

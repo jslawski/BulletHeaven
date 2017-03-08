@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour {
 	public PlayerEnum playerEnum;
 	public Color playerColor;
-	public PlayerShip ship;
+	public Character character;
 	public InputDevice device;
 
 	private Player _otherPlayer = null;
@@ -30,60 +30,60 @@ public class Player : MonoBehaviour {
 	public float viewportMaxX;
 	public float viewportMinY;
 	public float viewportMaxY;
+	//In world space
+	public float worldSpaceMinX;
+	public float worldSpaceMaxX;
+	public float worldSpaceMinY;
+	public float worldSpaceMaxY;
 
-	//Prefabs for instantiating ships
-	public Generalist generalistPrefab;
-	public GlassCannon glassCannonPrefab;
-	public Masochist masochistPrefab;
-	public TankyShip tankPrefab;
-	public VampireShip vampirePrefab;
-	public SwarmShip swarmPrefab;
+	public void Awake() {
+		Vector3 worldSpaceMax = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
+		worldSpaceMaxX = worldSpaceMax.x;
+		worldSpaceMaxY = worldSpaceMax.y;
+		Vector3 worldSpaceMin = Camera.main.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
+		worldSpaceMinX = worldSpaceMin.x;
+		worldSpaceMinY = worldSpaceMin.y;
+	}
 
-	public PlayerShip InstantiateShip(ShipInfo shipInfo) {
+	public Character InstantiateShip(ShipInfo shipInfo) {
 		Debug.Assert(shipInfo.selectingPlayer == playerEnum, "Asked " + playerEnum.ToString() + " to instantiate a ship for " + shipInfo.selectingPlayer.ToString());
 		
 		PlayerEnum otherPlayerEnum = GameManager.S.OtherPlayerEnum(playerEnum);
 		Color newShipColor = shipInfo.shipColor;
 		//If both players are running the same type of ship, use the secondary color for the ship instead
-		if (shipInfo.selectingPlayer != PlayerEnum.player1 && shipInfo.typeOfShip == GameManager.S.players[(int)otherPlayerEnum].ship.typeOfShip) {
+		if (shipInfo.selectingPlayer != PlayerEnum.player1 && shipInfo.typeOfShip == GameManager.S.players[(int)otherPlayerEnum].character.characterType) {
 			newShipColor = shipInfo.shipSecondaryColor;
 		}
 
-		PlayerShip prefab;
+		string prefabPath = "Prefabs/Ships/";
 		switch (shipInfo.typeOfShip) {
-			case ShipType.generalist:
-				prefab = generalistPrefab;
+			case CharactersEnum.generalist:
+				prefabPath += "Generalist";
 				break;
-			case ShipType.glassCannon:
-				prefab = glassCannonPrefab;
+			case CharactersEnum.glassCannon:
+				prefabPath += "GlassCannon";
 				break;
-			case ShipType.masochist:
-				prefab = masochistPrefab;
+			case CharactersEnum.masochist:
+				prefabPath += "Masochist";
 				break;
-			case ShipType.tank:
-				prefab = tankPrefab;
+			case CharactersEnum.tank:
+				prefabPath += "Tank";
 				break;
-			case ShipType.vampire:
-				prefab = vampirePrefab;
+			case CharactersEnum.vampire:
+				prefabPath += "Vampire";
 				break;
-			case ShipType.swarm:
-				prefab = swarmPrefab;
-				break;
+			//case CharactersEnum.swarm:
+			//	prefab = swarmPrefab;
+			//	break;
 			default:
 				Debug.LogError("Ship type " + shipInfo.typeOfShip.ToString() + " not found!");
 				return null;
 		}
-
-		ShipMovement prefabMovement = prefab.GetComponent<ShipMovement>();
-		prefabMovement.viewportMinX = viewportMinX;
-		prefabMovement.viewportMaxX = viewportMaxX;
-		prefabMovement.viewportMinY = viewportMinY;
-		prefabMovement.viewportMaxY = viewportMaxY;
+		Character prefab = Resources.Load<Character>(prefabPath);
 
 		Quaternion startRot = (playerEnum == PlayerEnum.player1) ? Quaternion.Euler(0, 0, -90) : Quaternion.Euler(0, 0, 90);
-		this.ship = Instantiate<PlayerShip>(prefab, this.transform.position, startRot, this.transform);
-		this.ship.playerEnum = this.playerEnum;
-		this.ship.shooting.SetBombType(shipInfo.typeOfShip);
+		this.character = Instantiate<Character>(prefab, this.transform.position, startRot, this.transform);
+		this.character.playerEnum = this.playerEnum;
 		
 		//Set colors for the player
 		this.playerColor = newShipColor;
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour {
 		}
 		this.durationBar.SetColor(newShipColor);
 
-		return this.ship;
+		return this.character;
 	}
 
 	// Use this for initialization
@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
 
 		if (durationBar != null) {
 			durationBar.SetPercent(0);
-			durationBar.target = ship.transform;
+			durationBar.target = character.transform;
 		}
 	}
 }

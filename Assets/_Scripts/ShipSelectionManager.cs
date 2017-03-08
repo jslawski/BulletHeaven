@@ -125,7 +125,7 @@ public class ShipSelectionManager : MonoBehaviour {
 
 		//Ready up
 		if (Input.GetKeyDown(A) && !playerReady) {
-			if (selectedShip.typeOfShip == ShipType.random) {
+			if (selectedShip.typeOfShip == CharactersEnum.random) {
 				StartCoroutine(RandomShip());
 			}
 			else {
@@ -139,7 +139,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			print(player + " is no longer ready.");
 			playerReady = false;
 		}
-		else if (Input.GetKeyDown(Y) && selectedShip.typeOfShip != ShipType.random) {
+		else if (Input.GetKeyDown(Y) && selectedShip.typeOfShip != CharactersEnum.random) {
 			abilityPreview.SetAbilityPreview(selectedShip);
 		}
 
@@ -167,7 +167,7 @@ public class ShipSelectionManager : MonoBehaviour {
 
 			//Ready up
 			if (device.Action1.WasPressed && !playerReady) {
-				if (selectedShip.typeOfShip == ShipType.random) {
+				if (selectedShip.typeOfShip == CharactersEnum.random) {
 					StartCoroutine(RandomShip());
 				}
 				else {
@@ -181,7 +181,7 @@ public class ShipSelectionManager : MonoBehaviour {
 				print(player + " is no longer ready.");
 				playerReady = false;
 			}
-			else if (device.Action4.WasPressed && selectedShip.typeOfShip != ShipType.random) {
+			else if (device.Action4.WasPressed && selectedShip.typeOfShip != CharactersEnum.random) {
 				abilityPreview.SetAbilityPreview(selectedShip);
 			}
 
@@ -231,7 +231,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			return;
 		}
 		//Animate the random ship selection
-		else if (shipInfo.typeOfShip == ShipType.random) {
+		else if (shipInfo.typeOfShip == CharactersEnum.random) {
 			selectedShipNameField.text = shipInfo.shipName;
 			selectedShipDescriptionField.text = shipInfo.description;
 			miscStatLabel.text = shipInfo.miscLabel;

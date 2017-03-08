@@ -15,7 +15,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 
 			if (GameManager.S.inGame) {
 				PlayerEnum targetPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
-				target = GameManager.S.players[(int)targetPlayer].ship.transform;
+				target = GameManager.S.players[(int)targetPlayer].character.GetClosestShip(transform.position).transform;
 			}
 		}
 	}
@@ -29,7 +29,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 	float baseVelocity;
 
 	public void FireBurst() {
-		baseVelocity = (masochistPlayer == null || masochistPlayer.damageMultiplier == 1) ? 10f : 15f;
+		baseVelocity = (masochistPlayer == null || masochistPlayer.masochistShip.damageMultiplier == 1) ? 10f : 15f;
 		StartCoroutine(FireBurstCoroutine());
 	}
 
@@ -67,7 +67,7 @@ public class SineShot : MonoBehaviour, BombAttack{
 		curBullet.GetComponent<PhysicsObj>().velocity = baseVelocity * direction.PolarToCartesian().normalized;
 
 		//Make amplitude wider during aura mode
-		if (masochistPlayer != null && masochistPlayer.damageMultiplier > 1) {
+		if (masochistPlayer != null && masochistPlayer.masochistShip.damageMultiplier > 1) {
 			curBullet.amplitude = amplitudeScalar;
 		}
 		else {

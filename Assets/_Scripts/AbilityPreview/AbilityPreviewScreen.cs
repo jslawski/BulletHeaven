@@ -95,13 +95,13 @@ public class AbilityPreviewScreen : MonoBehaviour {
 
 		ShipInfo targetShipInfo = new ShipInfo();
 		targetShipInfo.selectingPlayer = (previewGameManager.sceneOwner == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
-		if (shipInfo.typeOfShip != ShipType.tank) {
+		if (shipInfo.typeOfShip != CharactersEnum.tank) {
 			targetShipInfo.shipColor = new Color(0, 1, 15f / 255f);
-			targetShipInfo.typeOfShip = ShipType.tank;
+			targetShipInfo.typeOfShip = CharactersEnum.tank;
 		}
 		else {
 			targetShipInfo.shipColor = new Color(57f/255f, 155f/255f, 234f / 255f);
-			targetShipInfo.typeOfShip = ShipType.glassCannon;
+			targetShipInfo.typeOfShip = CharactersEnum.glassCannon;
 		}
 		previewGameManager.players[(int)previewGameManager.target.playerEnum].InitializeShip(targetShipInfo);
 
