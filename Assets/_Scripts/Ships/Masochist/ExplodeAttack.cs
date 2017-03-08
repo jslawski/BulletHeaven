@@ -45,10 +45,10 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 		explosionParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
 
 		//Scale the explosion size based on the damage multiplier
-		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
+		Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].character as Masochist;
 		if (masochistPlayer != null) {
-			explosionRadius = explosionRadius * masochistPlayer.damageMultiplier;
-			explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.damageMultiplier;
+			explosionRadius = explosionRadius * masochistPlayer.masochistShip.damageMultiplier;
+			explosionParticles.startSize = explosionParticles.startSize * masochistPlayer.masochistShip.damageMultiplier;
 		}
 
 		Collider[] hitTargets = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -64,25 +64,25 @@ public class ExplodeAttack : MonoBehaviour, BombAttack {
 	//Damage any player or protag ship that is within the explosion
 	void DamageTarget(Collider other) {
 		if (other.tag == "Player") {
-			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
+			Ship shipHit = other.gameObject.GetComponentInParent<Ship>();
 			//Do damage to the player hit
 			float multiplier = 1f;
-			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].character as Masochist;
 			if (masochistPlayer != null) {
-				multiplier = masochistPlayer.damageMultiplier;
+				multiplier = masochistPlayer.masochistShip.damageMultiplier;
 			}
 			damageDealt = CalculateDamageDealt(other.transform) * multiplier;
-			player.TakeDamage(damageDealt);
-			print("Damage Dealt: " + damageDealt);
+			shipHit.TakeDamage(damageDealt);
+			//print("Damage Dealt: " + damageDealt);
 
 			GameObject explosion = Instantiate(explosionPrefab, other.gameObject.transform.position, new Quaternion()) as GameObject;
 			Destroy(explosion, 5f);
 		}
 		else if (other.tag == "ProtagShip") {
 			DamageableObject otherShip = other.gameObject.GetComponentInParent<DamageableObject>();
-			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].ship as Masochist;
+			Masochist masochistPlayer = GameManager.S.players[(int)owningPlayer].character as Masochist;
 			if (masochistPlayer != null) {
-				damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.damageMultiplier;
+				damageDealt = CalculateDamageDealt(other.transform) * masochistPlayer.masochistShip.damageMultiplier;
 			}
 			else {
 				damageDealt = CalculateDamageDealt(other.transform);

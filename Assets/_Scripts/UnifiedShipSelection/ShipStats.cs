@@ -39,7 +39,7 @@ public class ShipStats : MonoBehaviour {
 			return;
 		}
 		//Animate the random ship selection
-		else if (shipInfo.typeOfShip == ShipType.random) {
+		else if (shipInfo.typeOfShip == CharactersEnum.random) {
 			selectedShipNameField.text = shipInfo.shipName;
 			selectedShipDescriptionField.text = shipInfo.description;
 			miscStatLabel.text = shipInfo.miscLabel;

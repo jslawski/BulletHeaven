@@ -29,8 +29,8 @@ public class MasochistShield : MonoBehaviour {
 	}
 
 	IEnumerator Start() {
-		if (thisPlayer != null && thisPlayer.ship is Masochist) {
-			thisMasochist = thisPlayer.ship as Masochist;
+		if (thisPlayer != null && thisPlayer.character is Masochist) {
+			thisMasochist = thisPlayer.character as Masochist;
 		}
 		thisCollider = GetComponent<SphereCollider>();
 		shieldSprite = GetComponentInChildren<SpriteRenderer>();
@@ -60,8 +60,8 @@ public class MasochistShield : MonoBehaviour {
 		shieldColor.a = 180f / 255f;
 		GetComponentInChildren<SpriteRenderer>().color = shieldColor;
 		if (thisMasochist != null) {
-			maxBulletCount = thisMasochist.damageMultiplier == 1 ? 100 : 150;
-			thisMasochist.shieldUp = true;
+			maxBulletCount = thisMasochist.masochistShip.damageMultiplier == 1 ? 100 : 150;
+			thisMasochist.masochistShip.shieldUp = true;
 		}
 		StartCoroutine(RotateShield());
 		
@@ -77,14 +77,14 @@ public class MasochistShield : MonoBehaviour {
 
 	IEnumerator FireBullets() {
 		float sprayRange = 1.5f;
-		float reflectionVelocity = (thisMasochist != null && thisMasochist.damageMultiplier == 1.5f) ? 30f : 20f;
+		float reflectionVelocity = (thisMasochist != null && thisMasochist.masochistShip.damageMultiplier == 1.5f) ? 30f : 20f;
 
 		shooting = true;
 
 		//Remove the shield visual while shooting.  The player can be hit at this point
 		shieldSprite.enabled = false;
 		if (thisMasochist != null) {
-			thisMasochist.shieldUp = false;
+			thisMasochist.masochistShip.shieldUp = false;
 		}
 
 		Vector3 reflectionVector = owningPlayer == PlayerEnum.player1 ? Vector3.right : Vector3.left;

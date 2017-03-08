@@ -51,11 +51,14 @@ public class WinnerPanel : MonoBehaviour {
 				roundWonText.text = "Player 2";
 			}
 
+			//TODO 3/6/17: Make this work for characters with multiple ships
 			//Personalized semi-random message depending on how close the match was
 			//If the total remaining health from the winning player is less than <closenessFactor>% at the end of the round, it is considered a "close win"
-			winThreshold = (GameManager.S.players[(int)PlayerEnum.player1].ship.maxHealth + GameManager.S.players[(int)PlayerEnum.player2].ship.maxHealth) * closenessFactor;
+			winThreshold = (GameManager.S.players[(int)PlayerEnum.player1].character.ship.maxHealth + 
+				GameManager.S.players[(int)PlayerEnum.player2].character.ship.maxHealth) * closenessFactor;
 			int winMessageIndex = Random.Range(0, closeWinVerbs.Count);
-			if (Mathf.Abs(GameManager.S.players[(int)PlayerEnum.player1].ship.health - GameManager.S.players[(int)PlayerEnum.player2].ship.health) > winThreshold) {
+			if (Mathf.Abs(GameManager.S.players[(int)PlayerEnum.player1].character.ship.health - 
+				GameManager.S.players[(int)PlayerEnum.player2].character.ship.health) > winThreshold) {
 				roundWonText.text += "\n" + bigWinVerbs[winMessageIndex];
 			}
 			else {

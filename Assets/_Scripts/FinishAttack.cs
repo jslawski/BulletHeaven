@@ -12,7 +12,7 @@ public class FinishAttack : MonoBehaviour {
 			_owningPlayer = value;
 			if (value != PlayerEnum.none) {
 				thisPlayer = GameManager.S.players[(int)value];
-				target = GameManager.S.OtherPlayerShip(thisPlayer.ship).transform;
+				target = GameManager.S.OtherPlayerShip(thisPlayer.character).transform;
 				startingGradientValue = FindClosestGradientValue(thisPlayer.playerColor);
 			}
 		}
@@ -108,11 +108,11 @@ public class FinishAttack : MonoBehaviour {
 
 		GameManager.S.gameState = GameStates.finalAttack;
 		Player attackingPlayer = GameManager.S.players[(int)owningPlayer];
-		attackingPlayer.ship.movement.movementDisabled = true;
+		attackingPlayer.character.ApplyToAllShips(ship => ship.movement.movementDisabled = true);
 		attackingPlayer.finishAttackPrompt.SetActive(false);
 
 		//Move the attack into the right position before beginning
-		transform.position = attackingPlayer.ship.transform.position + attackingPlayer.ship.transform.up * 4.5f;
+		transform.position = attackingPlayer.character.transform.position + attackingPlayer.character.transform.up * 4.5f;
 
 		//Tell the camera to start following this projectile
 		CameraEffects.S.followObj = transform;

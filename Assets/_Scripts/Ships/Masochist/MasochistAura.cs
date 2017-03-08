@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MasochistAura : MonoBehaviour {
-	public Masochist playerShip;
+	public MasochistShip playerShip;
 
 	// Use this for initialization
 	void Start () {

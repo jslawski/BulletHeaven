@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour {
 
 	private static int numPlayers = 2;
 	public Player[] players;
-	public PlayerShip OtherPlayerShip(PlayerShip thisShip) {
-		return OtherPlayer(thisShip.player).ship;
+	public Character OtherPlayerShip(Character thisShip) {
+		return OtherPlayer(thisShip.player).character;
 	}
 	public PlayerEnum OtherPlayerEnum(PlayerEnum thisPlayerEnum) {
 		return (thisPlayerEnum == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;

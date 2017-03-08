@@ -13,8 +13,8 @@ public class HealthPickup : MonoBehaviour {
 	void Start () {
 		centerOfWorld = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
 		centerOfWorld.z = 0;
-		minX = GameManager.S.players[1].ship.movement.worldSpaceMinX;
-		maxX = GameManager.S.players[0].ship.movement.worldSpaceMaxX;
+		minX = GameManager.S.players[1].worldSpaceMinX;
+		maxX = GameManager.S.players[0].worldSpaceMaxX;
 	}
 	
 	// Update is called once per frame
@@ -32,8 +32,8 @@ public class HealthPickup : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
 			SoundManager.instance.Play("HealthPickup");
-			PlayerShip thisPlayer = other.GetComponentInParent<PlayerShip>();
-			thisPlayer.TakeDamage(-healAmount);
+			Ship thisShip = other.GetComponentInParent<Ship>();
+			thisShip.TakeDamage(-healAmount);
 			Destroy(transform.parent.gameObject);
 		}
 	}

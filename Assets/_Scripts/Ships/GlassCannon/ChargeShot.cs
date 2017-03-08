@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ChargeShot : MonoBehaviour {
 	public PlayerEnum owningPlayer;
-	public PlayerShip playerShip;
+	public Ship playerShip;
 
 	enum ChargeState {
 		charging,
@@ -156,9 +156,9 @@ public class ChargeShot : MonoBehaviour {
 			if (hitscan.collider != null) {
 				//Connect with players
 				if (hitscan.collider.gameObject.tag == "Player") {
-					PlayerShip hitPlayer = hitscan.collider.gameObject.GetComponentInParent<PlayerShip>();
-					if (hitPlayer.playerEnum != owningPlayer) {
-						StartCoroutine(DealDamageCoroutine(hitPlayer));
+					Ship hitShip = hitscan.collider.gameObject.GetComponentInParent<Ship>();
+					if (hitShip.playerEnum != owningPlayer) {
+						StartCoroutine(DealDamageCoroutine(hitShip));
 					}
 				}
 				//Connect with protag ships
@@ -174,7 +174,7 @@ public class ChargeShot : MonoBehaviour {
 		playerShip.movement.RestoreSpeed();
 	}
 
-	IEnumerator DealDamageCoroutine(PlayerShip hitShip) {
+	IEnumerator DealDamageCoroutine(Ship hitShip) {
 		float distance = (hitShip.transform.position - transform.position).magnitude;
 		yield return new WaitForSeconds(distance / shotSpeed);
 

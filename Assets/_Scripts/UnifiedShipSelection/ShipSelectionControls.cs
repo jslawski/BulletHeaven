@@ -104,7 +104,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			//Ready up
 			if (this.device.Action1.WasPressed && this.playerReady == false) 
 			{
-				if (this.selectedShip.typeOfShip == ShipType.random) 
+				if (this.selectedShip.typeOfShip == CharactersEnum.random) 
 				{
 					StartCoroutine(this.RandomShip());
 				} 
@@ -118,7 +118,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			{
 				this.CancelPlayer();
 			} 
-			else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != ShipType.random) 
+			else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != CharactersEnum.random) 
 			{
 				this.abilityPreview.SetAbilityPreview(this.selectedShip);
 				}
@@ -150,7 +150,7 @@ public class ShipSelectionControls : MonoBehaviour {
 
 		//Ready up
 		if (Input.GetKeyDown(this.A) && this.playerReady == false) {
-			if (this.selectedShip.typeOfShip == ShipType.random) {
+			if (this.selectedShip.typeOfShip == CharactersEnum.random) {
 				StartCoroutine(this.RandomShip());
 			}
 			else {
@@ -164,7 +164,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			print(this.player + " is no longer ready.");
 			this.playerReady = false;
 		}
-		else if (Input.GetKeyDown(this.Y) && this.selectedShip.typeOfShip != ShipType.random) {
+		else if (Input.GetKeyDown(this.Y) && this.selectedShip.typeOfShip != CharactersEnum.random) {
 			this.abilityPreview.SetAbilityPreview(this.selectedShip);
 		}
 

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour {
-	public PlayerShip thisPlayerShip;
+	public Character thisCharacter;
 	public Camera renderCamera;
 	float shipLerpSpeed = 13.75f;						//Percent ship lerps towards desired position each FixedUpdate()
 	protected float vertMovespeedDefault = 16f;
@@ -13,19 +13,19 @@ public class ShipMovement : MonoBehaviour {
 	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 15f;							//Maximum amount a ship can toward in a certain direction
 
-	public float viewportMinX;
-	public float viewportMaxX;
-	public float viewportMinY;
-	public float viewportMaxY;
+	public float viewportMinX { get { return thisCharacter.player.viewportMinX; } }
+	public float viewportMaxX { get { return thisCharacter.player.viewportMaxX; } }
+	public float viewportMinY { get { return thisCharacter.player.viewportMinY; } }
+	public float viewportMaxY { get { return thisCharacter.player.viewportMaxY; } }
 
 	[HideInInspector]
-	public float worldSpaceMinX;
+	public float worldSpaceMinX { get { return thisCharacter.player.worldSpaceMinX; } }
 	[HideInInspector]
-	public float worldSpaceMaxX;
+	public float worldSpaceMaxX { get { return thisCharacter.player.worldSpaceMaxX; } }
 	[HideInInspector]
-	public float worldSpaceMinY;
+	public float worldSpaceMinY { get { return thisCharacter.player.worldSpaceMinY; } }
 	[HideInInspector]
-	public float worldSpaceMaxY;
+	public float worldSpaceMaxY { get { return thisCharacter.player.worldSpaceMaxY; } }
 
 	protected Vector3 desiredPosition;                  //The position that the transform lerps towards each FixedUpdate()
 	protected Quaternion startRotation;                 //The beginning rotation of the ship
@@ -39,23 +39,15 @@ public class ShipMovement : MonoBehaviour {
 	// Use this for initialization
 	protected virtual void Awake() {
 		renderCamera = Camera.main;
-		thisPlayerShip = GetComponent<PlayerShip>();
+		thisCharacter = GetComponentInParent<Character>();
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
-
-		Vector3 worldSpaceMin = renderCamera.ViewportToWorldPoint(new Vector3(viewportMinX, viewportMinY, 0));
-		worldSpaceMinX = worldSpaceMin.x;
-		worldSpaceMinY = worldSpaceMin.y;
-		Vector3 worldSpaceMax = renderCamera.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
-		worldSpaceMaxX = worldSpaceMax.x;
-		worldSpaceMaxY = worldSpaceMax.y;
 
 		desiredPosition = transform.position;
 		startRotation = transform.rotation;
 		desiredRotation = startRotation;
 		dotVector = -transform.right;
-		
 	}
 
 	// Update is called once per frame
@@ -65,7 +57,7 @@ public class ShipMovement : MonoBehaviour {
 			return;
 		}
 
-		if (thisPlayerShip.player.device == null) {
+		if (thisCharacter.player.device == null) {
 			if (Input.GetKey(left)) {
 				Move(Vector3.left);
 			}
@@ -85,8 +77,8 @@ public class ShipMovement : MonoBehaviour {
 		}
 		//Controller input
 		else {
-			if (thisPlayerShip.player.device.LeftStick) {
-				Move(thisPlayerShip.player.device.LeftStick.Vector);
+			if (thisCharacter.player.device.LeftStick) {
+				Move(thisCharacter.player.device.LeftStick.Vector);
 			}
 			else {
 				desiredRotation = startRotation;
@@ -103,6 +95,7 @@ public class ShipMovement : MonoBehaviour {
 
 		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.fixedDeltaTime*shipTurnLerpSpeed);
 	}
+	//TODO 3/7/17: Can't this just be done purely in worldspace coordinates?
 	void ClampDesiredPosition() {
 		Vector3 desiredViewportPos = renderCamera.WorldToViewportPoint(desiredPosition);
 

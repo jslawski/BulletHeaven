@@ -10,7 +10,7 @@ public class HomingGroupShot : MonoBehaviour, BombAttack {
 			_owningPlayer = value;
 			PlayerEnum otherPlayer = (value == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 			if (GameManager.S.inGame) {
-				target = GameManager.S.players[(int)otherPlayer].ship.transform;
+				target = GameManager.S.players[(int)otherPlayer].character.transform;
 			}
 		}
 	}

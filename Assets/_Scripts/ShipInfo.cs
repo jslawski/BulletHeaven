@@ -33,7 +33,7 @@ public class ShipInfo : MonoBehaviour {
 			return (SelectionPosition)Mathf.Min((int)SelectionPosition.invisibleCenter, positionIndex);
 		}
 	}
-	public ShipType typeOfShip;
+	public CharactersEnum typeOfShip;
 	public string shipName;
 	public string description;
 	public Color shipColor;
@@ -106,7 +106,7 @@ public class ShipInfo : MonoBehaviour {
 		//Apply the new position information gradually to this ship selection
 		transform.position = Vector3.Lerp(transform.position, posInfo.position, scrollSpeed);
 		transform.localScale = Vector3.Lerp(transform.localScale, posInfo.scale, scrollSpeed);
-		if (typeOfShip == ShipType.random) {
+		if (typeOfShip == CharactersEnum.random) {
 			spriteRenderer.color = Color.Lerp(spriteRenderer.color, new Color(1,1,1,0.75f*posInfo.alphaColor.a), scrollSpeed);
 		}
 		else {
@@ -135,7 +135,7 @@ public class ShipInfo : MonoBehaviour {
 	//Get the correct strings depeinding on the type of the ship
 	void GetShipInfoStrings() {
 		switch (typeOfShip) {
-			case ShipType.generalist:
+			case CharactersEnum.generalist:
 				shipName = TextLiterals.SHIP_NAME_LANCELOT;
 				description = TextLiterals.SHIP_DESC_LANCELOT;
 				miscLabel = TextLiterals.MISC_STAT_LANCELOT;
@@ -148,7 +148,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_3;
 				break;
-			case ShipType.vampire:
+			case CharactersEnum.vampire:
 				shipName = TextLiterals.SHIP_NAME_NOSEFERATU;
 				description = TextLiterals.SHIP_DESC_NOSEFERATU;
 				miscLabel = TextLiterals.MISC_STAT_NOSEFERATU;
@@ -161,7 +161,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_3;
 				break;
-			case ShipType.masochist:
+			case CharactersEnum.masochist:
 				shipName = TextLiterals.SHIP_NAME_TEST_SUBJECT_P41N;
 				description = TextLiterals.SHIP_DESC_TEST_SUBJECT_P41N;
 				miscLabel = TextLiterals.MISC_STAT_TEST_SUBJECT_P41N;
@@ -174,7 +174,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_3;
 				break;
-			case ShipType.tank:
+			case CharactersEnum.tank:
 				shipName = TextLiterals.SHIP_NAME_JUNK_DRIVER;
 				description = TextLiterals.SHIP_DESC_JUNK_DRIVER;
 				miscLabel = TextLiterals.MISC_STAT_JUNK_DRIVER;
@@ -187,7 +187,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_3;
 				break;
-			case ShipType.glassCannon:
+			case CharactersEnum.glassCannon:
 				shipName = TextLiterals.SHIP_NAME_REDEYE;
 				description = TextLiterals.SHIP_DESC_REDEYE;
 				miscLabel = TextLiterals.MISC_STAT_REDEYE;
@@ -200,7 +200,7 @@ public class ShipInfo : MonoBehaviour {
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_REDEYE_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_3;
 				break;
-			case ShipType.random:
+			case CharactersEnum.random:
 				break;
 			default:
 				Debug.LogWarning("<color='red'>ERROR: Ship type " + typeOfShip + " not found!</color>");

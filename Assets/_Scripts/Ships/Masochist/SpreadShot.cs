@@ -41,8 +41,8 @@ public class SpreadShot : MonoBehaviour, BombAttack {
 		float startingAngle;
 
 		if (masochistPlayer != null) {
-			firingSeparation = masochistPlayer.damageMultiplier == 1 ? firingSeparationNoAura : firingSeparationWithAura;
-			startingAngle = masochistPlayer.damageMultiplier == 1 ? startingAngleNoAura : startingAngleWithAura;
+			firingSeparation = masochistPlayer.masochistShip.damageMultiplier == 1 ? firingSeparationNoAura : firingSeparationWithAura;
+			startingAngle = masochistPlayer.masochistShip.damageMultiplier == 1 ? startingAngleNoAura : startingAngleWithAura;
 		}
 		else {
 			firingSeparation = firingSeparationNoAura;

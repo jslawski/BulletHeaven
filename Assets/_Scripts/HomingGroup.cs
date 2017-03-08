@@ -7,7 +7,7 @@ public class HomingGroup : MonoBehaviour {
 	public Player thisPlayer;
 	public PlayerEnum owningPlayer;
 	public Transform target;
-	NonPooledBullet bulletPrefab;
+	ParentedBullet bulletPrefab;
 	PhysicsObj physics;
 
 	//Group settings
@@ -24,11 +24,11 @@ public class HomingGroup : MonoBehaviour {
 	float timeBetweenEachShellForm = 0.5f;
 	float distanceBetweenShells = 1.5f;
 	int[] bulletsPerShell;
-	List<NonPooledBullet> childrenBullets = new List<NonPooledBullet>();
+	List<ParentedBullet> childrenBullets = new List<ParentedBullet>();
 
 	// Use this for initialization
 	void Awake () {
-		bulletPrefab = Resources.Load<NonPooledBullet>("Prefabs/Bullets/NonPooledBullet");
+		bulletPrefab = Resources.Load<ParentedBullet>("Prefabs/Bullets/ParentedBullet");
 		physics = GetComponent<PhysicsObj>();
 		bulletsPerShell = new int[numShells];
 		for (int i = 0; i < numShells; i++) {
@@ -64,7 +64,7 @@ public class HomingGroup : MonoBehaviour {
 			//Instantiating each bullet
 			while (curAngle < 2 * Mathf.PI - 0.01f) {
 				PolarCoordinate direction = new PolarCoordinate(1, curAngle);
-				NonPooledBullet curBullet = Instantiate(bulletPrefab, transform.position, new Quaternion()) as NonPooledBullet;
+				ParentedBullet curBullet = Instantiate(bulletPrefab, transform.position, new Quaternion()) as ParentedBullet;
 				curBullet.curState = BulletState.parented;
 				curBullet.damage = bulletDamage;
 				curBullet.owningPlayer = owningPlayer;
@@ -86,7 +86,7 @@ public class HomingGroup : MonoBehaviour {
 				timeInShell += Time.deltaTime;
 				float percent = timeInShell/timeBetweenEachShellForm;
 
-				List<NonPooledBullet> bulletsToRemoveFromGroup = new List<NonPooledBullet>();
+				List<ParentedBullet> bulletsToRemoveFromGroup = new List<ParentedBullet>();
 				foreach (var bullet in childrenBullets) {
 					if (bullet.curState == BulletState.parented) {
 						bullet.physics.velocity = (bullet.physics.velocity.normalized) * Mathf.Lerp(bulletSpeed, 0, percent);

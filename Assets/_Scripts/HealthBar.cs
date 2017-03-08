@@ -6,7 +6,7 @@ public class HealthBar : MonoBehaviour {
 	[SerializeField]
 	private PlayerEnum owningPlayer;
 	[SerializeField]
-	private PlayerShip owningPlayerShip;
+	private Character owningCharacter;
 
 	private float maxHealth = 0;
 	private float recentlyLostHealthLerpSpeed = 1.5f;
@@ -62,23 +62,27 @@ public class HealthBar : MonoBehaviour {
 		//Wait until the player ships are fully instantiated and set in the GameManager
 		//JPS: I don't like that we have to check for the ShipType != none here.  I'd like to refactor the way we load the game so
 		//     we don't populate the players array in the GameManager twice...
-		while (GameManager.S.players[(int)this.owningPlayer] == null || GameManager.S.players[(int)this.owningPlayer].ship == null) {
+		while (GameManager.S.players[(int)this.owningPlayer] == null || GameManager.S.players[(int)this.owningPlayer].character == null) {
 			yield return null;
 		}
 
-		this.owningPlayerShip = GameManager.S.players[(int)this.owningPlayer].ship;
-		this.maxHealth = owningPlayerShip.maxHealth;
-		this.SetColor(owningPlayerShip.player.playerColor);
+		this.owningCharacter = GameManager.S.players[(int)this.owningPlayer].character;
+		//TODO 3/6/17: Fix this to work for characters with multiple ships
+		this.maxHealth = owningCharacter.ship.maxHealth;
+		this.SetColor(owningCharacter.player.playerColor);
 		this.SetHealth(maxHealth);
+
+		//JDS 3/6/17: Why is this necessary? Seems like it does nothing...
 		this.UnsubscribeFromEvents();
 		this.SubscribeToEvents();
 	}
 
+	//TODO 3/6/17: Fix these to work for characters with multiple ships
 	private void SubscribeToEvents() {
-		this.owningPlayerShip.onDamaged += SetHealth;
+		this.owningCharacter.ship.onDamaged += SetHealth;
 	}
 
 	private void UnsubscribeFromEvents() {
-		this.owningPlayerShip.onDamaged -= SetHealth;
+		this.owningCharacter.ship.onDamaged -= SetHealth;
 	}
 }

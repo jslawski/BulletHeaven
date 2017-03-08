@@ -48,7 +48,7 @@ public class DualLasers : MonoBehaviour {
 
 		//Set this as a child of the player
 		if (thisPlayer != null) {
-			transform.SetParent(thisPlayer.ship.transform, false);
+			transform.SetParent(thisPlayer.character.transform, false);
 			transform.localPosition = Vector3.zero;
 		}
 		//Wait while charging
@@ -72,7 +72,7 @@ public class DualLasers : MonoBehaviour {
 		}
 		//yield return new WaitForSeconds(chargeTime);
 		StartCoroutine(LoseEnergy());
-		thisPlayer.ship.shooting.ExpendAttackSlot();
+		thisPlayer.character.ship.shooting.ExpendAttackSlot();
 		//Turn on the hitboxes
 		foreach (var hitbox in hitboxes) {
 			hitbox.enabled = !hasEnded;
@@ -82,7 +82,7 @@ public class DualLasers : MonoBehaviour {
 		while (thisPlayer != null && !hasEnded && timeFired < maxDuration) {
 			timeFired += Time.deltaTime;
 
-			thisPlayer.ship.movement.SlowPlayer(useSlowingFactor, 0.2f, true);
+			thisPlayer.character.ship.movement.SlowPlayer(useSlowingFactor, 0.2f, true);
 			if (thisPlayer.durationBar != null) {
 				thisPlayer.durationBar.SetPercent(1 - timeFired / maxDuration);
 			}
@@ -139,7 +139,7 @@ public class DualLasers : MonoBehaviour {
 		}
 		//Restore the player's speed
 		if (owningPlayer != PlayerEnum.none) {
-			thisPlayer.ship.movement.RestoreSpeed();
+			thisPlayer.character.ship.movement.RestoreSpeed();
 			if (thisPlayer.durationBar != null) {
 				thisPlayer.durationBar.SetPercent(0);
 			}
@@ -162,18 +162,18 @@ public class DualLasers : MonoBehaviour {
 				EndLaserAttack();
 			}
 		}
-		if (thisPlayer.ship.dead) {
+		if (thisPlayer.character.dead) {
 			EndLaserAttack();
 		}
 	}
 
 	void OnTriggerStay(Collider other) {
 		if (other.tag == "Player") {
-			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
+			Ship shipHit = other.gameObject.GetComponentInParent<Ship>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
-			if (player.playerEnum != owningPlayer) {
+			if (shipHit.playerEnum != owningPlayer) {
 				//Do damage to the player hit
-				player.TakeDamage(damage);
+				shipHit.TakeDamage(damage);
 
 				//Slow the player while in the beam
 				playerMovement.SlowPlayer(slowingFactor);
@@ -193,7 +193,7 @@ public class DualLasers : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if (other.tag == "Player") {
-			PlayerShip player = other.gameObject.GetComponentInParent<PlayerShip>();
+			Character player = other.gameObject.GetComponentInParent<Character>();
 			ShipMovement playerMovement = other.gameObject.GetComponentInParent<ShipMovement>();
 			if (player.playerEnum != owningPlayer) {
 				//Restore the player's speed after leaving the beam
