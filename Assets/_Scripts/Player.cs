@@ -72,6 +72,9 @@ public class Player : MonoBehaviour {
 			case CharactersEnum.vampire:
 				prefabPath += "Vampire";
 				break;
+			case CharactersEnum.twins:
+				prefabPath += "Twins";
+				break;
 			//case CharactersEnum.swarm:
 			//	prefab = swarmPrefab;
 			//	break;
