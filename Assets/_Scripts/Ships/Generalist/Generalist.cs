@@ -6,6 +6,7 @@ public class Generalist : Character {
 		base.Awake();
 
 		characterType = CharactersEnum.generalist;
+		bulletShape = BulletShapes.diamond;
 	}
 
 	void Start() {

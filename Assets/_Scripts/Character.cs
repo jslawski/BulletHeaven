@@ -35,6 +35,7 @@ public abstract class Character : MonoBehaviour {
 		}
 	}
 	public CharactersEnum characterType;
+	public BulletShapes bulletShape;
 
 	public FinishAttack finalAttackPrefab;
 	public PlayerEnum playerEnum;

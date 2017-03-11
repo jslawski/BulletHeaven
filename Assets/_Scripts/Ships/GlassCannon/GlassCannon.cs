@@ -8,6 +8,7 @@ public class GlassCannon : Character {
 		base.Awake();
 
 		characterType = CharactersEnum.glassCannon;
+		bulletShape = BulletShapes.roundedSquare;
 		gcShip = ship as GlassCannonShip;
 	}
 

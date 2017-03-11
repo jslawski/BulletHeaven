@@ -11,7 +11,7 @@ public class ShipMovement : MonoBehaviour {
 	public float horizontalMovespeed;					//Speed at which the player can move right to left
 
 	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
-	float maxTurnAngle = 15f;							//Maximum amount a ship can toward in a certain direction
+	float maxTurnAngle = 45f;							//Maximum amount a ship can toward in a certain direction
 
 	public float viewportMinX { get { return thisCharacter.player.viewportMinX; } }
 	public float viewportMaxX { get { return thisCharacter.player.viewportMaxX; } }
@@ -27,7 +27,7 @@ public class ShipMovement : MonoBehaviour {
 	[HideInInspector]
 	public float worldSpaceMaxY { get { return thisCharacter.player.worldSpaceMaxY; } }
 
-	protected Vector3 desiredPosition;                  //The position that the transform lerps towards each FixedUpdate()
+	public Vector3 desiredPosition;						//The position that the transform lerps towards each FixedUpdate()
 	protected Quaternion startRotation;                 //The beginning rotation of the ship
 	protected Quaternion desiredRotation;				//The rotation that the transform lerps towards each FixedUpdate()
 	protected Vector3 dotVector;                        //Used to determine which way the ship should turn when moving up and down
