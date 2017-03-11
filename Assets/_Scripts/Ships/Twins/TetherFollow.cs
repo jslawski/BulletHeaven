@@ -18,6 +18,7 @@ public class TetherFollow : MonoBehaviour {
 		Vector3 diffVector = target.position - transform.position;
 		transform.up = Vector3.Normalize(diffVector);
 
+		//Update the lifetime to affect the "length" of the particle effect
 		ParticleSystem.MainModule main = ps.main;
 		float startSpeed = main.startSpeed.constant;
 		main.startLifetime = diffVector.magnitude / startSpeed + extraLifetime;

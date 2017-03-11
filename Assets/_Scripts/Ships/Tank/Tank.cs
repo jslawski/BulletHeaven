@@ -7,6 +7,7 @@ public class Tank : Character {
 		base.Awake();
 		
 		characterType = CharactersEnum.tank;
+		bulletShape = BulletShapes.sun;
 	}
 
 	// Use this for initialization

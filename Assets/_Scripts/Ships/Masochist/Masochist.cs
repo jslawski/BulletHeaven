@@ -9,6 +9,7 @@ public class Masochist : Character {
 		base.Awake();
 
 		characterType = CharactersEnum.masochist;
+		bulletShape = BulletShapes.crescent;
 		masochistShip = ship as MasochistShip;
 	}
 

@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour {
 		S = this;
 
 		//**********Change this value to toggle single-player vs. multiplayer**********
-		this.singlePlayer = true;
+		this.singlePlayer = false;
 		//**********Change this value to toggle single-player vs. multiplayer**********
 
 		DontDestroyOnLoad(this);

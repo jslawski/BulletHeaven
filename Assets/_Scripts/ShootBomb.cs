@@ -47,7 +47,20 @@ public class ShootBomb : MonoBehaviour {
 	}
 
 	void Start() {
-		//SetBombType(thisPlayer.typeOfShip);
+		if (thisShip.playerEnum == PlayerEnum.player1) {
+			A = KeyCode.Alpha1;
+			B = KeyCode.Alpha2;
+			X = KeyCode.Alpha3;
+			Y = KeyCode.Alpha4;
+			shootBomb = KeyCode.Q;
+		}
+		else {
+			A = KeyCode.Keypad1;
+			B = KeyCode.Keypad2;
+			X = KeyCode.Keypad3;
+			Y = KeyCode.Keypad4;
+			shootBomb = KeyCode.Keypad0;
+		}
 	}
 	
 	public void SetBombType(CharactersEnum shipType) {

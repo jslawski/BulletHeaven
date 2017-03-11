@@ -14,6 +14,7 @@ public class Vampire : Character {
 		base.Awake();
 
 		characterType = CharactersEnum.vampire;
+		bulletShape = BulletShapes.triangle;
 		vShip = ship as VampireShip;
 	}
 
