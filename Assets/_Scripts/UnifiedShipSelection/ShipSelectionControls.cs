@@ -129,7 +129,7 @@ public class ShipSelectionControls : MonoBehaviour {
 				{
 					SoundManager.instance.Play("StartGame");
 					GameManager.S.gameState = GameStates.countdown;
-					GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+					GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, GameManager.MainSceneName);
 				} 
 				else 
 				{
@@ -172,7 +172,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			if (UnifiedShipSelectionManager.instance.AllPlayersReady()) {
 				SoundManager.instance.Play("StartGame");
 				GameManager.S.gameState = GameStates.countdown;
-				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, "_Scene_Main");
+				GameManager.S.TransitionScene(GameManager.S.fadeFromShipSelectDuration, GameManager.MainSceneName);
 			}
 			else {
 				this.optionsMenu.OpenOptionsMenu(this.device);

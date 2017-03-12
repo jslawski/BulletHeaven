@@ -5,6 +5,10 @@ using UnityEngine;
 
 using PolarCoordinates;
 
+//TODO: this.comShipMovement.gameObject.transform.position isn't right anymore.  The real part that is changing is the child prefab of where this script is attached.  
+//Use THAT object's transform instead.  Either have a reference to the prefab, or use this.comShipMovement.gameObject.transform.position.
+
+
 public enum AIState{
 	Evasive,
 	Attacking,
@@ -12,7 +16,7 @@ public enum AIState{
 	Inactive
 }
 
-public class Point
+/*public class Point
 {
 	public Point(Vector3 pointPosition, int scanIterations){
 		coordinates = pointPosition; 
@@ -25,7 +29,7 @@ public class Point
 	public float dangerScore;
 	public List<Point> adjacentPoints;
 	public float[] previousDangerScores;
-}
+}*/
 
 public class TravelPath
 {
@@ -41,7 +45,7 @@ public class TravelPath
 //TODO: NavPoints have colliders anyway.  Do we need to scan them with overlap spheres?  Nope.
 public class AIManager : MonoBehaviour {
 
-	public static Player controlledPlayer = Player.player2;
+	//public static Player controlledPlayer = PlayerEnum.player2;
 	public static bool debugMode = false;
 
 	[SerializeField]
@@ -61,11 +65,12 @@ public class AIManager : MonoBehaviour {
 
 	private ShipMovement comShipMovement;
 
-	//TODO: Have this done in code
+	//TODO: Have this set in code
 	[SerializeField]
 	private ShipMovement playerShipMovement;
 
-	private List<Point> grid;
+
+	private List<NavigationPoint> grid;
 
 	//Ship Scanning variables
 	private float shipScanDegreeSeparation = 5f * Mathf.Deg2Rad;
@@ -83,15 +88,24 @@ public class AIManager : MonoBehaviour {
 	private AIState currentAIState = AIState.Inactive;
 	private float evadeTriggerThreshold = 0.3f;
 	private float secondsBetweenAttackReposition = 0.5f;
+	private float offsetYRangeForProactiveState = 5f;
 
 	// Use this for initialization
-	void Start () {
-		AIManager.debugMode = false;
+	IEnumerator Start () {
+		while (!GameManager.S.shipsReady) {
+			yield return null;
+		}
 
-		this.comShipMovement = gameObject.GetComponent<ShipMovement>();
+		AIManager.debugMode = true;
+
+		this.comShipMovement = gameObject.GetComponentInChildren<ShipMovement>();
+
+		//TODO: Stop doing this
+		this.playerShipMovement = GameObject.Find("Player1").GetComponentInChildren<ShipMovement>();
+
 		this.navigationPointPrefab = Resources.Load<GameObject>("Prefabs/NavigationPoint");
 
-		this.grid = new List<Point>();
+		this.grid = new List<NavigationPoint>();
 		this.currentlyTravellingPath = new TravelPath();
 
 		//Determine point separation based on the longer side (horizontal length)
@@ -113,12 +127,13 @@ public class AIManager : MonoBehaviour {
 				Vector3 currentPointPosition = this.comShipMovement.renderCamera.ViewportToWorldPoint(new Vector3(xCoordinate, yCoordinate, 0));
 				Vector3 adjustedPointPosition = new Vector3(currentPointPosition.x, currentPointPosition.y, 0);
 
-				Point currentPoint = new Point(adjustedPointPosition, this.numberOfScanIterations);
-				this.grid.Add(currentPoint);
+				//Point currentPoint = new Point(adjustedPointPosition, this.numberOfScanIterations);
 
 				GameObject pointObject = Instantiate(this.navigationPointPrefab, adjustedPointPosition, new Quaternion()) as GameObject;
 				NavigationPoint navPoint = pointObject.GetComponent<NavigationPoint>();
-				navPoint.pointReference = this.grid.Last();  //JPS  Can't I just use currentPoint?
+				navPoint.InitializePoint(adjustedPointPosition, this.numberOfScanIterations);
+				this.grid.Add(navPoint);
+				//navPoint.pointReference = this.grid.Last();  //JPS  Can't I just use currentPoint?
 			}
 		}
 	}
@@ -135,12 +150,14 @@ public class AIManager : MonoBehaviour {
 				Vector3 currentPointPosition = this.comShipMovement.renderCamera.ViewportToWorldPoint(new Vector3(xCoordinate, this.comShipMovement.viewportMaxY + (this.pointSeparation * (rowIndex + 1)), 0));
 				Vector3 adjustedPointPosition = new Vector3(currentPointPosition.x, currentPointPosition.y, 0);
 
-				Point currentPoint = new Point(adjustedPointPosition, 1);
-				currentPoint.dangerScore = 1;
+				//Point currentPoint = new Point(adjustedPointPosition, 1);
+				//currentPoint.dangerScore = 1;
 
 				GameObject pointObject = Instantiate(this.navigationPointPrefab, adjustedPointPosition, new Quaternion()) as GameObject;
 				NavigationPoint navPoint = pointObject.GetComponent<NavigationPoint>();
-				navPoint.pointReference = currentPoint;	
+				navPoint.InitializePoint(adjustedPointPosition, 1);
+				navPoint.dangerScore = 1;
+				//navPoint.pointReference = currentPoint;	
 			}
 		}
 
@@ -152,12 +169,14 @@ public class AIManager : MonoBehaviour {
 				Vector3 currentPointPosition = this.comShipMovement.renderCamera.ViewportToWorldPoint(new Vector3(xCoordinate, this.comShipMovement.viewportMinY - (this.pointSeparation * (rowIndex + 1)), 0));
 				Vector3 adjustedPointPosition = new Vector3(currentPointPosition.x, currentPointPosition.y, 0);
 
-				Point currentPoint = new Point(adjustedPointPosition, 1);
-				currentPoint.dangerScore = 1;
+				//Point currentPoint = new Point(adjustedPointPosition, 1);
+				//currentPoint.dangerScore = 1;
 
 				GameObject pointObject = Instantiate(this.navigationPointPrefab, adjustedPointPosition, new Quaternion()) as GameObject;
 				NavigationPoint navPoint = pointObject.GetComponent<NavigationPoint>();
-				navPoint.pointReference = currentPoint;	
+				navPoint.InitializePoint(adjustedPointPosition, 1);
+				navPoint.dangerScore = 1;
+				//navPoint.pointReference = currentPoint;	
 			}
 		}
 
@@ -169,12 +188,14 @@ public class AIManager : MonoBehaviour {
 				Vector3 currentPointPosition = this.comShipMovement.renderCamera.ViewportToWorldPoint(new Vector3(this.comShipMovement.viewportMinX - (this.pointSeparation * (rowIndex + 1)), yCoordinate, 0));
 				Vector3 adjustedPointPosition = new Vector3(currentPointPosition.x, currentPointPosition.y, 0);
 
-				Point currentPoint = new Point(adjustedPointPosition, 1);
-				currentPoint.dangerScore = 1;
+				//Point currentPoint = new Point(adjustedPointPosition, 1);
+				//currentPoint.dangerScore = 1;
 
 				GameObject pointObject = Instantiate(this.navigationPointPrefab, adjustedPointPosition, new Quaternion()) as GameObject;
 				NavigationPoint navPoint = pointObject.GetComponent<NavigationPoint>();
-				navPoint.pointReference = currentPoint;	
+				navPoint.InitializePoint(adjustedPointPosition, 1);
+				navPoint.dangerScore = 1;
+				//navPoint.pointReference = currentPoint;	
 			}
 		}
 
@@ -186,12 +207,14 @@ public class AIManager : MonoBehaviour {
 				Vector3 currentPointPosition = this.comShipMovement.renderCamera.ViewportToWorldPoint(new Vector3(this.comShipMovement.viewportMaxX + (this.pointSeparation * rowIndex), yCoordinate, 0));
 				Vector3 adjustedPointPosition = new Vector3(currentPointPosition.x, currentPointPosition.y, 0);
 
-				Point currentPoint = new Point(adjustedPointPosition, 1);
-				currentPoint.dangerScore = 1;
+				//Point currentPoint = new Point(adjustedPointPosition, 1);
+				//currentPoint.dangerScore = 1;
 
 				GameObject pointObject = Instantiate(this.navigationPointPrefab, adjustedPointPosition, new Quaternion()) as GameObject;
 				NavigationPoint navPoint = pointObject.GetComponent<NavigationPoint>();
-				navPoint.pointReference = currentPoint;	
+				navPoint.InitializePoint(adjustedPointPosition, 1);
+				navPoint.dangerScore = 1;
+				//navPoint.pointReference = currentPoint;	
 			}
 		}
 	}
@@ -221,7 +244,7 @@ public class AIManager : MonoBehaviour {
 	{
 		//TODO: JPS: Experiment having the first pass done through OnTriggerStay/Exit, and having a generic "Weapon" interface that contains the owningPlayer.
 		//Initial Pass to find bullets
-		foreach (Point currentPoint in this.grid){
+		foreach (NavigationPoint currentPoint in this.grid){
 			Collider[] detectedObjects = Physics.OverlapSphere(new Vector3(currentPoint.coordinates.x, currentPoint.coordinates.y, 0), 0.5f, this.hitLayer);
 			if (detectedObjects.Length > 0) {
 				currentPoint.dangerScore = 1;
@@ -236,12 +259,12 @@ public class AIManager : MonoBehaviour {
 		//Subsequent passes, for blurring the danger scores
 		for (int iteration = 0; iteration < this.numberOfScanIterations; iteration++){
 			//Iterate through each point
-			foreach (Point currentPoint in this.grid) {
+			foreach (NavigationPoint currentPoint in this.grid) {
 				//Only composite scores for points with dangerScores less than 1
 				if (currentPoint.dangerScore != 1) {
 					float compositeDangerScore = 0;
 					//Iterate through each neighbor point and composite a score
-					foreach (Point neighborPoint in currentPoint.adjacentPoints) {
+					foreach (NavigationPoint neighborPoint in currentPoint.adjacentPoints) {
 						compositeDangerScore += (1.0f / (float)currentPoint.adjacentPoints.Count) * neighborPoint.previousDangerScores[iteration];
 					}
 
@@ -265,16 +288,17 @@ public class AIManager : MonoBehaviour {
 			this.startingAngle = oppositeDirection.angle + (Random.Range(-30f, 30f) * Mathf.Deg2Rad);
 			this.endingAngle = this.startingAngle + (360 * Mathf.Deg2Rad);
 
-			Debug.DrawRay(this.transform.position, oppositeDirection.PolarToCartesian().normalized*this.sphereCastMagnitude, Color.green);
+			Debug.DrawRay(this.comShipMovement.gameObject.transform.position, oppositeDirection.PolarToCartesian().normalized*this.sphereCastMagnitude, Color.green);
 
 			//Scan from startAngle to endAngle
 			for (float i = this.startingAngle; i < this.endingAngle; i += this.shipScanDegreeSeparation) {
 				PolarCoordinate scanDirection = new PolarCoordinate(this.sphereCastMagnitude, i);
 				PolarCoordinate offsetPosition = /*new PolarCoordinate(3 * this.sphereCastRadius, i);*/ new PolarCoordinate(this.sphereCastRadius, Vector3.zero);
-				RaycastHit[] detectedObjects = Physics.SphereCastAll(this.transform.position + offsetPosition.PolarToCartesian(), this.sphereCastRadius, scanDirection.PolarToCartesian().normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
+				RaycastHit[] detectedObjects = Physics.SphereCastAll(this.comShipMovement.gameObject.transform.position + offsetPosition.PolarToCartesian(), 
+																	this.sphereCastRadius, scanDirection.PolarToCartesian().normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
 				TravelPath currentCheckedPath = new TravelPath();
 
-				Debug.DrawRay(this.transform.position + offsetPosition.PolarToCartesian(), scanDirection.PolarToCartesian(), Color.red);
+				Debug.DrawRay(this.comShipMovement.gameObject.transform.position + offsetPosition.PolarToCartesian(), scanDirection.PolarToCartesian(), Color.red);
 
 				currentCheckedPath.pathVector = scanDirection.PolarToCartesian();
 				currentCheckedPath.dangerScore = this.CompositeTotalDangerScore(detectedObjects);
@@ -313,24 +337,23 @@ public class AIManager : MonoBehaviour {
 
 		//Don't move directly horizontally towards the player. Looks weird if the player doesn't move.
 		//Offset Y slightly to avoid this.
-		if (directionVector.y == 0) {
-			directionVector = new Vector3(directionVector.x, directionVector.y + Random.Range(-5f, 5f), 0);
-		}
+		directionVector = new Vector3(directionVector.x, directionVector.y + Random.Range(-this.offsetYRangeForProactiveState, this.offsetYRangeForProactiveState), 0);
 
-		Debug.DrawRay(this.transform.position, directionVector.normalized*this.sphereCastMagnitude, Color.green);
+		Debug.DrawRay(this.comShipMovement.gameObject.transform.position, directionVector.normalized*this.sphereCastMagnitude, Color.green);
 
 		//Towards player
-		detectedObjects = Physics.SphereCastAll(this.transform.position, this.sphereCastRadius, directionVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
+		detectedObjects = Physics.SphereCastAll(this.comShipMovement.gameObject.transform.position, this.sphereCastRadius, directionVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
 		towardsDangerScore = this.CompositeTotalDangerScore(detectedObjects);
 
 		//Away from player
 		Vector3 mirroredVector = new Vector3(-directionVector.x, directionVector.y, 0);
-		detectedObjects = Physics.SphereCastAll(this.transform.position, this.sphereCastRadius, mirroredVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
+		detectedObjects = Physics.SphereCastAll(this.comShipMovement.gameObject.transform.position, this.sphereCastRadius, mirroredVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
 		awayDangerScore = this.CompositeTotalDangerScore(detectedObjects);
 
-		Debug.DrawRay(this.transform.position, mirroredVector.normalized*this.sphereCastMagnitude, Color.green);
-
-		Debug.LogError("DirectionVector DangerScore: " + towardsDangerScore + " MirroredVector DangerScore: " + awayDangerScore);
+		if (AIManager.debugMode == true) {
+			Debug.DrawRay(this.comShipMovement.gameObject.transform.position, mirroredVector.normalized * this.sphereCastMagnitude, Color.green);
+			Debug.LogError("DirectionVector DangerScore: " + towardsDangerScore + " MirroredVector DangerScore: " + awayDangerScore);
+		}
 
 		if (towardsDangerScore < awayDangerScore) {
 			return directionVector;
@@ -352,7 +375,7 @@ public class AIManager : MonoBehaviour {
 		float totalDangerScore = 0;
 		foreach (RaycastHit hitInfo in detectedObjects) {
 			NavigationPoint currentNavPoint = hitInfo.collider.gameObject.GetComponent<NavigationPoint>();
-			totalDangerScore += currentNavPoint.pointReference.dangerScore;
+			totalDangerScore += currentNavPoint.dangerScore;
 		}
 
 		return totalDangerScore;
@@ -369,20 +392,20 @@ public class AIManager : MonoBehaviour {
 			return;
 		}
 
-		RaycastHit[] detectedObjects = Physics.SphereCastAll(this.transform.position, this.sphereCastRadius, this.currentlyTravellingPath.pathVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
+		RaycastHit[] detectedObjects = Physics.SphereCastAll(this.comShipMovement.gameObject.transform.position, this.sphereCastRadius, this.currentlyTravellingPath.pathVector.normalized, this.sphereCastMagnitude, this.shipScanLayerMask);
 
 		this.currentlyTravellingPath.dangerScore = this.CompositeTotalDangerScore(detectedObjects);
 	}
 
 	private void DetermineAIState(){
-		Collider[] detectedObjects = Physics.OverlapSphere(new Vector3(this.transform.position.x, this.transform.position.y, 0), this.sphereCastMagnitude, this.shipScanLayerMask);
+		Collider[] detectedObjects = Physics.OverlapSphere(new Vector3(this.comShipMovement.gameObject.transform.position.x, this.comShipMovement.gameObject.transform.position.y, 0), this.sphereCastMagnitude, this.shipScanLayerMask);
 
 		float totalSurroundingDangerScore = 0;
 
 		foreach (Collider pointCollider in detectedObjects) {
 			NavigationPoint currentNavPoint = pointCollider.gameObject.GetComponent<NavigationPoint>();
 
-			totalSurroundingDangerScore += currentNavPoint.pointReference.dangerScore;
+			totalSurroundingDangerScore += currentNavPoint.dangerScore;
 		}
 			
 		float averageSurroundingDangerScore = totalSurroundingDangerScore / (float)detectedObjects.Count();
@@ -398,7 +421,11 @@ public class AIManager : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+	void Update () {
+		if (this.comShipMovement == null) {
+			return;
+		}
+
 		Vector3 moveDirection = Vector3.zero;
 		if (this.passedFrames < this.framesBetweenScans) {
 			this.Scan();

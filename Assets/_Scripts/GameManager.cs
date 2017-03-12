@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour {
 	InputDevice[] controllers;
 	public const string titleSceneName = "_Scene_Title";
 	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
+	public const string MainSceneName = "_Scene_Main_JPS";
 
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour {
 		S = this;
 
 		//**********Change this value to toggle single-player vs. multiplayer**********
-		this.singlePlayer = false;
+		this.singlePlayer = true;
 		//**********Change this value to toggle single-player vs. multiplayer**********
 
 		DontDestroyOnLoad(this);
@@ -174,7 +175,7 @@ public class GameManager : MonoBehaviour {
 			}
 			else if (gameState == GameStates.midRoundVictory && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				if (gameState != GameStates.transitioning) {
-					TransitionScene(fadeFromMainDuration, "_Scene_Main");
+					TransitionScene(fadeFromMainDuration, GameManager.MainSceneName);
 				}
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
@@ -297,7 +298,7 @@ public class GameManager : MonoBehaviour {
 				curTheme = "ShipSelectTheme";
 				PassControllersToShipSelect();
 				break;
-			case "_Scene_Main":
+			case GameManager.MainSceneName:
 				gameState = GameStates.countdown;
 				Reset();
 				//SoundManager.instance.Play("FightTheme");

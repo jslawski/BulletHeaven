@@ -131,7 +131,7 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	//TODO: JPS: OnLevelWasLoaded is deprecated.  Replace this implementation with SceneManager stuff at some point
 	IEnumerator OnLevelWasLoaded(int levelIndex) {
-		if (SceneManager.GetActiveScene().name != "_Scene_Main") {
+		if (SceneManager.GetActiveScene().name != GameManager.MainSceneName) {
 			yield break;
 		}
 

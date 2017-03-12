@@ -6,9 +6,15 @@ public class BounceText : MonoBehaviour {
 	public float amplitude = 5f;
 	public float timeBeforeDirectionChange = 1.5f;
 
+	private Coroutine bounceCoroutine;
+
 	// Use this for initialization
 	void Start() {
-		StartCoroutine(BounceTextCoroutine());
+		this.bounceCoroutine = StartCoroutine(BounceTextCoroutine());
+	}
+
+	void OnDestroy(){
+		StopCoroutine(this.bounceCoroutine);	
 	}
 
 	IEnumerator BounceTextCoroutine() {
