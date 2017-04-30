@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 
 public class AutoMoveShip : MonoBehaviour {
@@ -20,12 +20,15 @@ public class AutoMoveShip : MonoBehaviour {
 	}
 	
 	IEnumerator ChangeDirection() {
-		yield return new WaitForSeconds(1.7f);
-		curDirection *= -1;
-		StartCoroutine(ChangeDirection());
+		while (GameManager.S.gameState == GameStates.titleScreen) {
+			yield return new WaitForSeconds(1.7f);
+			curDirection *= -1;
+			Debug.Log("I'm still being called!");
+		}
 	}
 
 	void FixedUpdate() {
 		thisTransform.Translate(curDirection * speed * Time.fixedDeltaTime, Space.World);
 	}
 }
+*/

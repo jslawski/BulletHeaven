@@ -91,6 +91,8 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	private IEnumerator WaitForStartGameForSinglePlayer()
 	{
+		//TODO: Hand controller off to Player 1 here, in case the player mashes start immediately after selecting COM's ship
+
 		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
 
 		//Wait for the game to progress to the next state
@@ -129,7 +131,7 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	//TODO: JPS: OnLevelWasLoaded is deprecated.  Replace this implementation with SceneManager stuff at some point
 	IEnumerator OnLevelWasLoaded(int levelIndex) {
-		if (SceneManager.GetActiveScene().name != "_Scene_Main") {
+		if (SceneManager.GetActiveScene().name != GameManager.MainSceneName) {
 			yield break;
 		}
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 
 public class AutoFireBomb : MonoBehaviour {
@@ -19,10 +19,11 @@ public class AutoFireBomb : MonoBehaviour {
 	}
 	
 	IEnumerator FireRandomBombs() {
-		yield return new WaitForSeconds(Random.Range(5, 10));
-		FireBomb();
-		StartCoroutine(DetonateBomb());
-		StartCoroutine(FireRandomBombs());
+		while (GameManager.S.gameState == GameStates.titleScreen) {
+			yield return new WaitForSeconds(Random.Range(5, 10));
+			FireBomb();
+			StartCoroutine(DetonateBomb());
+		}
 	}
 
 	IEnumerator DetonateBomb() {
@@ -43,3 +44,4 @@ public class AutoFireBomb : MonoBehaviour {
 		bombPhysics.velocity = speed * aimDirection;
 	}
 }
+*/

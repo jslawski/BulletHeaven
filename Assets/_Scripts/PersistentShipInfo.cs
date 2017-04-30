@@ -26,7 +26,7 @@ public class PersistentShipInfo : MonoBehaviour {
 	}
 
 	IEnumerator OnLevelWasLoaded(int levelIndex) {
-		if (SceneManager.GetActiveScene().name != "_Scene_Main") {
+		if (SceneManager.GetActiveScene().name != GameManager.MainSceneName) {
 			Destroy(gameObject);
 		}
 		else {
