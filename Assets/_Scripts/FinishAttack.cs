@@ -12,7 +12,7 @@ public class FinishAttack : MonoBehaviour {
 			_owningPlayer = value;
 			if (value != PlayerEnum.none) {
 				thisPlayer = GameManager.S.players[(int)value];
-				target = GameManager.S.OtherPlayerShip(thisPlayer.character).transform;
+				target = GameManager.S.OtherPlayerShip(thisPlayer.character).GetClosestShip(transform.position).transform;
 				startingGradientValue = FindClosestGradientValue(thisPlayer.playerColor);
 			}
 		}

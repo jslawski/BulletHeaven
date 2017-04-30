@@ -39,6 +39,8 @@ public class ShipSelectionControls : MonoBehaviour {
 			shipStats.SetStatsForShip(value);
 		}
 	}
+	[SerializeField]
+	private SpriteRenderer shipSelectionBackground;
 
 	void Awake()
 	{
@@ -71,6 +73,8 @@ public class ShipSelectionControls : MonoBehaviour {
 
 	void Update () 
 	{
+		shipSelectionBackground.color = Color.Lerp(shipSelectionBackground.color, selectedShip.shipColor, 5*Time.deltaTime);
+
 		//Don't allow input while it doesn't have focus
 		if (!this.hasFocus || OptionsMenu.hasFocus) 
 		{
