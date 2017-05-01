@@ -52,10 +52,8 @@ public class GatlingGun : MonoBehaviour {
 			Vector3 stickVector3 = new Vector3(stickVector2.x, stickVector2.y, 0);
 			aimDirection = Vector3.Lerp(aimDirection, stickVector3, turnSpeed);
 			thisShip.transform.up = aimDirection;
-
-			if (stickVector3.magnitude > 0.05f) {
-				FireBullet(aimDirection, spread);
-			}
+			
+			FireBullet(aimDirection, spread);
 
 			yield return new WaitForSeconds(timeBetweenShots);
 		}
