@@ -80,7 +80,7 @@ public class GatlingGun : MonoBehaviour {
 	}
 
 	void FireBullet(Vector3 fireDirection, float spread) {
-		Bullet newBullet = Instantiate(bulletPrefab, transform.position + (thisShip.transform.up * 0.5f), new Quaternion());
+		Bullet newBullet = Instantiate(bulletPrefab, transform.position + (thisShip.transform.up * 2f), new Quaternion());
 
 		//Apply spread to each bullet fired
 		float spreadApplied = Random.Range(0, spread);
