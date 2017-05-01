@@ -93,7 +93,9 @@ public class ShipMovement : MonoBehaviour {
 		
 		transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.fixedDeltaTime*shipLerpSpeed);
 
-		transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.fixedDeltaTime*shipTurnLerpSpeed);
+		if (!(movementDisabled || (verticalMovespeed == 0 && horizontalMovespeed == 0))) {
+			transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, Time.fixedDeltaTime * shipTurnLerpSpeed);
+		}
 	}
 	//TODO 3/7/17: Can't this just be done purely in worldspace coordinates?
 	void ClampDesiredPosition() {
