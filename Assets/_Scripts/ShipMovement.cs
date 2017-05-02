@@ -10,7 +10,7 @@ public class ShipMovement : MonoBehaviour {
 	public float verticalMovespeed;						//Speed at which the player can move up and down
 	public float horizontalMovespeed;					//Speed at which the player can move right to left
 
-	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
+	protected float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 45f;							//Maximum amount a ship can toward in a certain direction
 
 	public float viewportMinX { get { return thisCharacter.player.viewportMinX; } }
@@ -86,7 +86,7 @@ public class ShipMovement : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
+	protected virtual void FixedUpdate() {
 		if (!movementDisabled) {
 			ClampDesiredPosition();
 		}
@@ -98,7 +98,7 @@ public class ShipMovement : MonoBehaviour {
 		}
 	}
 	//TODO 3/7/17: Can't this just be done purely in worldspace coordinates?
-	void ClampDesiredPosition() {
+	protected void ClampDesiredPosition() {
 		Vector3 desiredViewportPos = renderCamera.WorldToViewportPoint(desiredPosition);
 
 		//Clamp x-direction

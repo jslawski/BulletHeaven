@@ -75,9 +75,9 @@ public class Player : MonoBehaviour {
 			case CharactersEnum.twins:
 				prefabPath += "Twins";
 				break;
-			//case CharactersEnum.swarm:
-			//	prefab = swarmPrefab;
-			//	break;
+			case CharactersEnum.swarm:
+				prefabPath += "Swarm";
+				break;
 			default:
 				Debug.LogError("Ship type " + shipInfo.typeOfShip.ToString() + " not found!");
 				return null;
