@@ -17,8 +17,8 @@ public class TimerAndDamageAmpDisplay : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		timer = transform.FindChild("Timer").GetComponent<Text>();
-		damageAmpText = transform.FindChild("DamageAmp").GetComponent<Text>();
+		timer = transform.Find("Timer").GetComponent<Text>();
+		damageAmpText = transform.Find("DamageAmp").GetComponent<Text>();
 		damageAmpStretch = damageAmpText.GetComponent<StretchText>();
 
 		StartCoroutine(UpdateTimer());

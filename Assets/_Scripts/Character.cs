@@ -121,7 +121,7 @@ public abstract class Character : MonoBehaviour {
 	public void InitializeFinalAttack() {
 		player.finishAttackPrompt.SetActive(true);
 		player.finishAttackPrompt.GetComponentInChildren<Text>().color = player.playerColor;
-		player.finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = player.playerColor;
+		player.finishAttackPrompt.transform.Find("Plus").GetComponent<Image>().color = player.playerColor;
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 		if (player.durationBar != null) {
 			player.durationBar.SetPercent(0);

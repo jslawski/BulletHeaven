@@ -32,7 +32,7 @@ public class HealthBarManager : MonoBehaviour {
 
 	private void Awake() {
 		healthBarPrefab = Resources.Load<HealthBar>("Prefabs/HealthBar");
-		border = transform.FindChild("Border");
+		border = transform.Find("Border");
 	}
 
 	// Use this for initialization

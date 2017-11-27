@@ -8,8 +8,8 @@ public class TetherReflect : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		shipA = transform.parent.FindChild("TwinShipA");
-		shipB = transform.parent.FindChild("TwinShipB");
+		shipA = transform.parent.Find("TwinShipA");
+		shipB = transform.parent.Find("TwinShipB");
 	}
 
 	// Update is called once per frame

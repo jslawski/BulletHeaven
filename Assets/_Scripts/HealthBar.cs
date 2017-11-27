@@ -31,10 +31,10 @@ public class HealthBar : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		this.healthBackground = transform.FindChild("HealthBarBackground");
-		this.recentlyLostHealth = transform.FindChild("RecentlyLostHealth");
-		this.healthBar = transform.FindChild("HealthBar");
-		this.healthText = transform.FindChild("HealthCounter").GetComponent<Text>();
+		this.healthBackground = transform.Find("HealthBarBackground");
+		this.recentlyLostHealth = transform.Find("RecentlyLostHealth");
+		this.healthBar = transform.Find("HealthBar");
+		this.healthText = transform.Find("HealthCounter").GetComponent<Text>();
 	}
 
 	// Update is called once per frame

@@ -52,9 +52,9 @@ public class FinishAttack : MonoBehaviour {
 	void Start () {
 		AudioSource[] sounds = thisPlayer.gameObject.GetComponentsInChildren<AudioSource>();
 
-		charge = transform.FindChild("Charge").GetComponent<ParticleSystem>();
-		background = transform.FindChild("BackgroundEffect").GetComponent<ParticleSystem>();
-		explosion = transform.FindChild("MassiveExplosion").GetComponent<ParticleSystem>();
+		charge = transform.Find("Charge").GetComponent<ParticleSystem>();
+		background = transform.Find("BackgroundEffect").GetComponent<ParticleSystem>();
+		explosion = transform.Find("MassiveExplosion").GetComponent<ParticleSystem>();
 	}
 
 	float FindClosestGradientValue(Color targetColor) {

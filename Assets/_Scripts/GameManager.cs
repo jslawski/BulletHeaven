@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
 	InputDevice[] controllers;
 	public const string titleSceneName = "_Scene_Title";
 	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
-	public const string MainSceneName = "_Scene_Main";
+	public const string MainSceneName = "_Scene_Main_Backup";
 
 	float minTimeInSceneForInput = 0.25f;
 	float timeInScene = 0;

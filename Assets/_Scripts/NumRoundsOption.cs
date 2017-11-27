@@ -20,8 +20,8 @@ public class NumRoundsOption : OptionMenuItem {
 
 	// Use this for initialization
 	void Start () {
-		leftArrow = transform.FindChild("LeftArrow").GetComponent<Image>();
-		rightArrow = transform.FindChild("RightArrow").GetComponent<Image>();
+		leftArrow = transform.Find("LeftArrow").GetComponent<Image>();
+		rightArrow = transform.Find("RightArrow").GetComponent<Image>();
 		numRoundsTextField = GetComponentInChildren<Text>();
 		numRoundsTextColorDefault = numRoundsTextField.color;
 	}

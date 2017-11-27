@@ -73,8 +73,8 @@ public class Ship : MonoBehaviour, DamageableObject {
 		movement = GetComponent<ShipMovement>();
 		shooting = GetComponent<ShootBomb>();
 		shipSprite = GetComponentInChildren<SpriteRenderer>();
-		smokeParticles = transform.FindChild("SmokeParticleSystem").GetComponent<ParticleSystem>();
-		healthPickupParticles = transform.FindChild("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
+		smokeParticles = transform.Find("SmokeParticleSystem").GetComponent<ParticleSystem>();
+		healthPickupParticles = transform.Find("HealthPickupParticleSystem").GetComponent<ParticleSystem>();
 	}
 
 	protected virtual void Start() {
