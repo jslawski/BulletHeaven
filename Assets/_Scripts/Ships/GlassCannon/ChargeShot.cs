@@ -36,8 +36,8 @@ public class ChargeShot : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		shotParticle = transform.FindChild("ShotParticles").GetComponent<ParticleSystem>();
-		chargeParticle = transform.FindChild("ChargeParticles").GetComponent<ParticleSystem>();
+		shotParticle = transform.Find("ShotParticles").GetComponent<ParticleSystem>();
+		chargeParticle = transform.Find("ChargeParticles").GetComponent<ParticleSystem>();
 
 		if (playerShip != null) {
 			transform.SetParent(playerShip.transform, false);

@@ -32,8 +32,8 @@ public class DurationBar : MonoBehaviour {
 
 	void Awake() {
 		thisRect = GetComponent<RectTransform>();
-		durationBar = transform.FindChild("DurationBar");
-		durationBarBackground = transform.FindChild("DurationBarBackground");
+		durationBar = transform.Find("DurationBar");
+		durationBarBackground = transform.Find("DurationBarBackground");
 	}
 
 	// Use this for initialization
