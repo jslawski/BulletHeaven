@@ -53,7 +53,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 		if (GameManager.S.inGame) {
 			SoundManager.instance.Play("LifeSapZone");
 		}
-		particle = transform.FindChild("Particle");
+		particle = transform.Find("Particle");
 		particle.gameObject.SetActive(false);
 		zoneParticles = GetComponentInChildren<ParticleSystem>();
 

@@ -22,11 +22,11 @@ public class WinnerPanel : MonoBehaviour {
 	void Start () {
 		S = this;
 
-		winningPlayerText = transform.FindChild("WinnerText").GetComponent<Text>();
-		titleText = transform.FindChild("WinnerTitleText").GetComponent<Text>();
-		championText = transform.FindChild("ChampionText").GetComponent<Text>();
-		pressStartText = transform.FindChild("PressStartText").GetComponent<Text>();
-		roundWonText = transform.FindChild("RoundWonText").GetComponent<Text>();
+		winningPlayerText = transform.Find("WinnerText").GetComponent<Text>();
+		titleText = transform.Find("WinnerTitleText").GetComponent<Text>();
+		championText = transform.Find("ChampionText").GetComponent<Text>();
+		pressStartText = transform.Find("PressStartText").GetComponent<Text>();
+		roundWonText = transform.Find("RoundWonText").GetComponent<Text>();
     }
 
 	public void DisplayWinner(PlayerEnum winner) {

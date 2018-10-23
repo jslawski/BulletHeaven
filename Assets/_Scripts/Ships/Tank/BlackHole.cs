@@ -52,9 +52,9 @@ public class BlackHole : MonoBehaviour, BombAttack {
 		inner = GetComponentInChildren<BlackHoleInner>();
 		inner.GetComponent<SphereCollider>().enabled = false;
 		outer = GetComponentInChildren<BlackHoleOuter>();
-		explosion = transform.FindChild("Explosion").GetComponent<ParticleSystem>();
-		outerParticleSystem = transform.FindChild("OuterParticleSystem").GetComponent<ParticleSystem>();
-		innerParticleSystem = transform.FindChild("InnerParticleSystem").GetComponent<ParticleSystem>();
+		explosion = transform.Find("Explosion").GetComponent<ParticleSystem>();
+		outerParticleSystem = transform.Find("OuterParticleSystem").GetComponent<ParticleSystem>();
+		innerParticleSystem = transform.Find("InnerParticleSystem").GetComponent<ParticleSystem>();
 	}
 
 	// Use this for initialization

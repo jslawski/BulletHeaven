@@ -91,11 +91,13 @@ public abstract class Character : MonoBehaviour {
 	}
 	
 	void ListenForShipDeath(Ship deadShip) {
-		ships.Remove(deadShip);
+        //TODO: Many bugs with assuming any ship can have arbitrarily many ships. Namely, we remove the "ship" component
+        //      from single-ship characters upon death, resulting in all targeting attacks (including the final attack) breaking
+        //ships.Remove(deadShip);
 
-		if (ships.Count == 0) {
+		//if (ships.Count == 0) {
 			KillCharacter();
-		}
+		//}
 	}
 
 	void HeartbeatOnLowHealth() {
@@ -121,7 +123,7 @@ public abstract class Character : MonoBehaviour {
 	public void InitializeFinalAttack() {
 		player.finishAttackPrompt.SetActive(true);
 		player.finishAttackPrompt.GetComponentInChildren<Text>().color = player.playerColor;
-		player.finishAttackPrompt.transform.FindChild("Plus").GetComponent<Image>().color = player.playerColor;
+		player.finishAttackPrompt.transform.Find("Plus").GetComponent<Image>().color = player.playerColor;
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, false);
 		if (player.durationBar != null) {
 			player.durationBar.SetPercent(0);
@@ -154,6 +156,7 @@ public abstract class Character : MonoBehaviour {
 		return true;
 	}
 
+    
 	private void OnDestroy() {
 		UnsubscribeFromEvents();
 	}

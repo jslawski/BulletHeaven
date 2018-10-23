@@ -67,7 +67,7 @@ public class PreviewShip : Ship {
 		VampireShield newShield = Instantiate(vampireShieldPrefab, transform.position, new Quaternion()) as VampireShield;
 		newShield.transform.parent = gameObject.transform;
 		newShield.thisPlayer = this.player;
-		newShield.hitboxOffset = transform.FindChild("Hitbox").localPosition.y;
+		newShield.hitboxOffset = transform.Find("Hitbox").localPosition.y;
 		newShield.owningPlayer = playerEnum;
 		newShield.ActivateShield();
 	}
