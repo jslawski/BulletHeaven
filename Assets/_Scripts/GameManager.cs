@@ -176,6 +176,7 @@ public class GameManager : MonoBehaviour {
 			else if (gameState == GameStates.midRoundVictory && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {
 				if (gameState != GameStates.transitioning) {
 					TransitionScene(fadeFromMainDuration, GameManager.MainSceneName);
+                    this.Reset();
 				}
 			}
 			else if (gameState == GameStates.titleScreen && (InputManager.ActiveDevice.MenuWasPressed || Input.GetKeyDown("space"))) {

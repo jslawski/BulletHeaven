@@ -106,7 +106,7 @@ public class Player : MonoBehaviour {
 
 		if (durationBar != null) {
 			durationBar.SetPercent(0);
-			durationBar.target = character.transform;
+			durationBar.target = character.ship.transform;
 		}
 	}
 }
