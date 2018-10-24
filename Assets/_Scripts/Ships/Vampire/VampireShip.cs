@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class VampireShip : Ship {
-	float lifeRegen = 2f;       //Health regained per second
+	
 
 	[HideInInspector]
 	public VampireShield shield;
@@ -14,17 +14,6 @@ public class VampireShip : Ship {
 		maxHealth = 110f;
 
 		shield = Resources.Load<VampireShield>("Prefabs/VampireShield");
-	}
-
-	void FixedUpdate() {
-		if (GameManager.S.gameState != GameStates.playing) {
-			return;
-		}
-
-		health += lifeRegen * Time.fixedDeltaTime;
-		if (health > maxHealth) {
-			health = maxHealth;
-		}
 	}
 
 	public void InstantiateShield() {
