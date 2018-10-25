@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
 
 	public bool inGame {
 		get {
-			return gameState == GameStates.playing || gameState == GameStates.titleScreen;
+            return gameState == GameStates.playing || gameState == GameStates.titleScreen || gameState == GameStates.finalAttack;
         }
 	}
 

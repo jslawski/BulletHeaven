@@ -28,8 +28,24 @@ public class VibrateManager : MonoBehaviour {
 			GameManager.S.players[1].device.Vibrate(0);
 		}
 	}
-	
-	public void RumbleVibrate(PlayerEnum player, float duration, float intensity, bool stack=true) {
+
+    public void OnApplicationQuit() {
+        //Immediately halt all good vibes
+        foreach (InputDevice curDevice in InputManager.Devices) {
+            curDevice.Vibrate(0);
+        }
+    }
+
+    public void OnApplicationFocus(bool hasFocus) {
+        if (hasFocus == true) {
+            //Temporarily pause all good vibes
+            foreach (InputDevice curDevice in InputManager.Devices) {
+                curDevice.Vibrate(0);
+            }
+        }
+    }
+
+    public void RumbleVibrate(PlayerEnum player, float duration, float intensity, bool stack=true) {
 		Player curPlayer = GameManager.S.players[(int)player];
 		//Ignore vibrations until the player has a controller plugged in
 		if (curPlayer.device == null) {
