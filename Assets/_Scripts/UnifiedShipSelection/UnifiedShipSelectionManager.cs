@@ -17,8 +17,6 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 {
 	public static UnifiedShipSelectionManager instance;
 
-	private const float MinWaitTimeForInputInSeconds = 0.25f;
-
 	[HideInInspector]
 	public List<ShipSelectionControls> shipSelectionControls;
 
@@ -45,9 +43,10 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 	#region Single-Player Selection Flow
 	public IEnumerator SelectPlayerOneForSinglePlayer()
 	{
-		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+        //Prevent last frame's input from impacting the new current state
+        yield return null;
 
-		this.shipSelectionControls[(int)PlayerEnum.player1].playerReady = false;
+        this.shipSelectionControls[(int)PlayerEnum.player1].playerReady = false;
 
 		//Continue looping until player 1's ship has been confirmed
 		while (this.shipSelectionControls[(int)PlayerEnum.player1].playerReady == false) 
@@ -62,9 +61,10 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	private IEnumerator SelectComForSinglePlayer()
 	{
-		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+        //Prevent last frame's input from impacting the new current state
+        yield return null;
 
-		this.shipSelectionControls[(int)PlayerEnum.player2].playerReady = false;
+        this.shipSelectionControls[(int)PlayerEnum.player2].playerReady = false;
 
 		//Continue looping until COM's ship has been confirmed
 		while (this.shipSelectionControls[(int)PlayerEnum.player2].playerReady == false) 
@@ -91,9 +91,10 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 
 	private IEnumerator WaitForStartGameForSinglePlayer()
 	{
-		//TODO: Hand controller off to Player 1 here, in case the player mashes start immediately after selecting COM's ship
+        //TODO: Hand controller off to Player 1 here, in case the player mashes start immediately after selecting COM's ship
 
-		yield return new WaitForSeconds(UnifiedShipSelectionManager.MinWaitTimeForInputInSeconds);
+        //Prevent last frame's input from impacting the new current state
+        yield return null;
 
 		//Wait for the game to progress to the next state
 		while (!this.shipSelectionControls[(int)PlayerEnum.player2].device.MenuWasPressed) 
