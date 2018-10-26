@@ -83,7 +83,9 @@ public class FinishAttack : MonoBehaviour {
 			return;
 		}
 
-		if (thisPlayer.device == null) {
+        Player attackingPlayer = GameManager.S.players[(int)owningPlayer];
+
+        if (thisPlayer.device == null) {
 			if (Input.GetKeyDown(fireKey)) {
 				StartCoroutine(FinalAttack());
 			}
@@ -112,7 +114,7 @@ public class FinishAttack : MonoBehaviour {
 		attackingPlayer.finishAttackPrompt.SetActive(false);
 
 		//Move the attack into the right position before beginning
-		transform.position = attackingPlayer.character.transform.position + attackingPlayer.character.transform.up * 4.5f;
+		transform.position = attackingPlayer.character.ship.transform.position + attackingPlayer.character.ship.transform.up * 4.5f;
 
 		//Tell the camera to start following this projectile
 		CameraEffects.S.followObj = transform;

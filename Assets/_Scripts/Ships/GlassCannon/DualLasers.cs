@@ -48,7 +48,7 @@ public class DualLasers : MonoBehaviour {
 
 		//Set this as a child of the player
 		if (thisPlayer != null) {
-			transform.SetParent(thisPlayer.character.transform, false);
+			transform.SetParent(thisPlayer.character.ship.transform, false);
 			transform.localPosition = Vector3.zero;
 		}
 		//Wait while charging

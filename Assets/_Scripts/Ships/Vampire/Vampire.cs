@@ -5,7 +5,9 @@ public class Vampire : Character {
 	[HideInInspector]
 	public VampireShip vShip;
 
-	void Start() {
+    float lifeRegen = 2f;       //Health regained per second
+
+    void Start() {
 		GetComponentInChildren<ButtonHelpUI>().SetButtons(false, false, false, true);
 	}
 
@@ -36,7 +38,20 @@ public class Vampire : Character {
 		}
 	}
 
-	public override Ship GetClosestShip(Vector3 location) {
+    private void FixedUpdate() {
+        if (GameManager.S.gameState != GameStates.playing) {
+            return;
+        }
+
+        if (this.dead == false) {
+            this.vShip.health += this.lifeRegen * Time.fixedDeltaTime;
+            if (this.vShip.health > this.vShip.maxHealth) {
+                this.vShip.health = this.vShip.maxHealth;
+            }
+        }
+    }
+
+    public override Ship GetClosestShip(Vector3 location) {
 		return ship;
 	}
 }
