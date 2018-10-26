@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using InControl;
 
-public class PersistentShipInfo : MonoBehaviour {
-	ShipInfo shipInfo;
+public class PersistentCharacterInfo : MonoBehaviour {
+	SelectedCharacterInfo shipInfo;
 	InputDevice device;
 
 	void Awake() {
@@ -20,7 +20,7 @@ public class PersistentShipInfo : MonoBehaviour {
 		GameManager.S.InitializePlayerShip(shipInfo, device);
 	}
 
-	public void Initialize(ShipInfo shipInfo, InputDevice device) {
+	public void Initialize(SelectedCharacterInfo shipInfo, InputDevice device) {
 		this.shipInfo = shipInfo;
 		this.device = device;
 	}

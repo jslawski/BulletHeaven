@@ -144,7 +144,7 @@ public class ShootBomb : MonoBehaviour {
 		}
 	}
 
-	public void Shoot() {
+	public Bomb Shoot() {
 		//Don't fire if we already have the max number of bombs in the air
 		//if (bombsInAir.Count >= maxNumBombsInAir) {
 		//	return;
@@ -153,7 +153,7 @@ public class ShootBomb : MonoBehaviour {
 		//Don't fire if we are out of ammo
 		if (curAmmo == 0) {
 			SoundManager.instance.Play("OutOfAmmo", 1);
-			return;
+			return null;
 		}
 
 		if (GameManager.S.inGame) {
@@ -166,6 +166,7 @@ public class ShootBomb : MonoBehaviour {
 
 		//Set the owner of the fired bomb
 		newBomb.owningPlayer = thisShip.player.playerEnum;
+		newBomb.targetPlayer = thisShip.player.otherPlayer;
 
 		//Set the initial speed of the fired bomb
 		float speed = Random.Range(minSpeed, maxSpeed);
@@ -180,6 +181,7 @@ public class ShootBomb : MonoBehaviour {
 		
 		ExpendAttackSlot();
 
+		return newBomb;
 	}
 
 	//Executing any attack results in expending an ammo slot

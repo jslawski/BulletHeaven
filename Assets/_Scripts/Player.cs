@@ -36,7 +36,7 @@ public class Player : MonoBehaviour {
 	public float worldSpaceMinY;
 	public float worldSpaceMaxY;
 
-	public void Awake() {
+	public virtual void Awake() {
 		Vector3 worldSpaceMax = Camera.main.ViewportToWorldPoint(new Vector3(viewportMaxX, viewportMaxY, 0));
 		worldSpaceMaxX = worldSpaceMax.x;
 		worldSpaceMaxY = worldSpaceMax.y;
@@ -45,18 +45,18 @@ public class Player : MonoBehaviour {
 		worldSpaceMinY = worldSpaceMin.y;
 	}
 
-	public Character InstantiateShip(ShipInfo shipInfo) {
-		Debug.Assert(shipInfo.selectingPlayer == playerEnum, "Asked " + playerEnum.ToString() + " to instantiate a ship for " + shipInfo.selectingPlayer.ToString());
+	public virtual Character InstantiateCharacter(SelectedCharacterInfo characterInfo) {
+		Debug.Assert(characterInfo.selectingPlayer == playerEnum, "Asked " + playerEnum.ToString() + " to instantiate a character for " + characterInfo.selectingPlayer.ToString());
 		
 		PlayerEnum otherPlayerEnum = GameManager.S.OtherPlayerEnum(playerEnum);
-		Color newShipColor = shipInfo.shipColor;
+		Color newShipColor = characterInfo.shipColor;
 		//If both players are running the same type of ship, use the secondary color for the ship instead
-		if (shipInfo.selectingPlayer != PlayerEnum.player1 && shipInfo.typeOfShip == GameManager.S.players[(int)otherPlayerEnum].character.characterType) {
-			newShipColor = shipInfo.shipSecondaryColor;
+		if (characterInfo.selectingPlayer != PlayerEnum.player1 && characterInfo.typeOfShip == GameManager.S.players[(int)otherPlayerEnum].character.characterType) {
+			newShipColor = characterInfo.shipSecondaryColor;
 		}
 
 		string prefabPath = "Prefabs/Ships/";
-		switch (shipInfo.typeOfShip) {
+		switch (characterInfo.typeOfShip) {
 			case CharactersEnum.generalist:
 				prefabPath += "Generalist";
 				break;
@@ -72,14 +72,14 @@ public class Player : MonoBehaviour {
 			case CharactersEnum.vampire:
 				prefabPath += "Vampire";
 				break;
-			case CharactersEnum.twins:
-				prefabPath += "Twins";
-				break;
+			//case CharactersEnum.twins:
+			//	prefabPath += "Twins";
+			//	break;
 			//case CharactersEnum.swarm:
 			//	prefab = swarmPrefab;
 			//	break;
 			default:
-				Debug.LogError("Ship type " + shipInfo.typeOfShip.ToString() + " not found!");
+				Debug.LogError("Ship type " + characterInfo.typeOfShip.ToString() + " not found!");
 				return null;
 		}
 		Character prefab = Resources.Load<Character>(prefabPath);
@@ -93,7 +93,9 @@ public class Player : MonoBehaviour {
 		foreach (var ammo in this.ammoImages) {
 			ammo.GetComponent<Image>().color = playerColor;
 		}
-		this.durationBar.SetColor(newShipColor);
+		if (this.durationBar != null) {
+			this.durationBar.SetColor(newShipColor);
+		}
 
 		return this.character;
 	}

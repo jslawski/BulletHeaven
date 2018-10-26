@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShipStats : MonoBehaviour {
+public class CharacterStats : MonoBehaviour {
 	[SerializeField]
 	private Text selectedShipNameField;
 	[SerializeField]
@@ -23,7 +23,7 @@ public class ShipStats : MonoBehaviour {
 	[SerializeField]
 	private StatBar miscStat;
 
-	public void SetStatsForShip(ShipInfo shipInfo) {
+	public void SetStatsForCharacter(SelectedCharacterInfo shipInfo) {
 		//Gracefully handle the case of no ship selected
 		if (shipInfo == null) {
 			selectedShipNameField.text = string.Empty;

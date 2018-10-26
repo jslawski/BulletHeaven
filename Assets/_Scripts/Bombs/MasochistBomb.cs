@@ -31,9 +31,9 @@ public class MasochistBomb : Bomb {
 					newShot.masochistPlayer = GameManager.S.players[(int)owningPlayer].character as Masochist;
 				}
 				else {
-					newShot.target = thisPlayer.otherPlayer.character.transform;
 					newShot.thisPlayer = thisPlayer;
 				}
+				newShot.target = targetPlayer.character.transform;
 				newShot.FireBurst();
 				break;
 			//Spread shot

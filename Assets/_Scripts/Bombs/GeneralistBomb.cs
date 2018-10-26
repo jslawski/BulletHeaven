@@ -38,14 +38,15 @@ public class GeneralistBomb : Bomb {
 				newShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					newShot.thisPlayer = thisPlayer;
-                }
+				}
+				newShot.targetShip = targetPlayer.character.GetClosestShip(transform.position);
 				newShot.FireBurst();
 				break;
 			//Spiral shot
 			case AttackButtons.B:
 				SpiralShot spiralShot = Instantiate(spiralShotPrefab, transform.position, new Quaternion()) as SpiralShot;
 				spiralShot.owningPlayer = owningPlayer;
-				if (!GameManager.S.inGame) {
+				if (!GameManager.S.inGame || GameManager.S.gameState == GameStates.shipSelect) {
 					spiralShot.thisPlayer = thisPlayer;
 				}
 				spiralShot.FireBurst();
@@ -54,7 +55,7 @@ public class GeneralistBomb : Bomb {
 			case AttackButtons.X:
 				Beam beamShot = Instantiate(beamShotPrefab, transform.position, new Quaternion()) as Beam;
 				beamShot.owningPlayer = owningPlayer;
-				if (!GameManager.S.inGame) {
+				if (!GameManager.S.inGame || GameManager.S.gameState == GameStates.shipSelect) {
 					beamShot.SetColor(thisPlayer.playerColor);
 				}
 				break;
@@ -62,11 +63,11 @@ public class GeneralistBomb : Bomb {
 			case AttackButtons.Y:
 				Reflector reflectorShot = Instantiate(reflectorPrefab, transform.position, new Quaternion()) as Reflector;
 				reflectorShot.owningPlayer = owningPlayer;
-				if (!GameManager.S.inGame) {
+				if (!GameManager.S.inGame || GameManager.S.gameState == GameStates.shipSelect) {
 					reflectorShot.thisPlayer = thisPlayer;
 					reflectorShot.SetColor(thisPlayer.playerColor);
-					reflectorShot.otherPlayer = thisPlayer.otherPlayer;
 				}
+				reflectorShot.otherPlayer = targetPlayer;
 				break;
 			default:
 				Debug.LogError("Attack button " + attackToPerform.ToString() + " not handled in Bomb.Detonate()");

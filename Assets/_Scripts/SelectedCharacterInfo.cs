@@ -18,10 +18,10 @@ public enum SelectionPosition {
 	invisibleCenter
 }
 
-public class ShipInfo : MonoBehaviour {
+public class SelectedCharacterInfo : MonoBehaviour {
 	private int numSelectionOptions {
 		get {
-			return selectionMenu.ships.Length;
+			return selectionMenu.characters.Length;
 		}
 	}
 	ShipSelectionControls selectionMenu;
@@ -68,13 +68,14 @@ public class ShipInfo : MonoBehaviour {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		selectionMenu = GetComponentInParent<ShipSelectionControls>();
 
+		abilities = new AbilityInfo[4];
 		GetShipInfoStrings();
 	}
 
 	void Start() {
-		positionIndex = Array.IndexOf(selectionMenu.ships, this);
+		positionIndex = Array.IndexOf(selectionMenu.characters, this);
 		if (position == SelectionPosition.selected) {
-			selectionMenu.selectedShip = this;
+			selectionMenu.selectedCharacter = this;
 		}
 	}
 	
@@ -117,8 +118,8 @@ public class ShipInfo : MonoBehaviour {
 
 	public void Scroll(ScrollDirection scrollDirection) {
 		//Deselect this ship if we're moving off of it
-		if (selectionMenu.selectedShip == this) {
-			selectionMenu.selectedShip = null;
+		if (selectionMenu.selectedCharacter == this) {
+			selectionMenu.selectedCharacter = null;
 		}
 
 		//Move the ship's position
@@ -128,7 +129,7 @@ public class ShipInfo : MonoBehaviour {
 
 		//Select this ship if we're moving into the selection slot
 		if (position == SelectionPosition.selected) {
-			selectionMenu.selectedShip = this;
+			selectionMenu.selectedCharacter = this;
 		}
 	}
 
@@ -139,12 +140,20 @@ public class ShipInfo : MonoBehaviour {
 				shipName = TextLiterals.SHIP_NAME_LANCELOT;
 				description = TextLiterals.SHIP_DESC_LANCELOT;
 				miscLabel = TextLiterals.MISC_STAT_LANCELOT;
+
+				abilities[0].slot = 0;
 				abilities[0].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_0;
 				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_0;
+
+				abilities[1].slot = 1;
 				abilities[1].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_1;
 				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_1;
+
+				abilities[2].slot = 2;
 				abilities[2].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_2;
 				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_2;
+
+				abilities[3].slot = 3;
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_LANCELOT_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_LANCELOT_3;
 				break;
@@ -152,12 +161,20 @@ public class ShipInfo : MonoBehaviour {
 				shipName = TextLiterals.SHIP_NAME_NOSEFERATU;
 				description = TextLiterals.SHIP_DESC_NOSEFERATU;
 				miscLabel = TextLiterals.MISC_STAT_NOSEFERATU;
+
+				abilities[0].slot = 0;
 				abilities[0].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_0;
 				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_0;
+
+				abilities[1].slot = 1;
 				abilities[1].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_1;
 				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_1;
+
+				abilities[2].slot = 2;
 				abilities[2].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_2;
 				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_2;
+
+				abilities[3].slot = 3;
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_NOSEFERATU_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_NOSEFERATU_3;
 				break;
@@ -165,12 +182,20 @@ public class ShipInfo : MonoBehaviour {
 				shipName = TextLiterals.SHIP_NAME_TEST_SUBJECT_P41N;
 				description = TextLiterals.SHIP_DESC_TEST_SUBJECT_P41N;
 				miscLabel = TextLiterals.MISC_STAT_TEST_SUBJECT_P41N;
+
+				abilities[0].slot = 0;
 				abilities[0].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_0;
 				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_0;
+
+				abilities[1].slot = 1;
 				abilities[1].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_1;
 				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_1;
+
+				abilities[2].slot = 2;
 				abilities[2].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_2;
 				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_2;
+
+				abilities[3].slot = 3;
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_TEST_SUBJECT_P41N_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_TEST_SUBJECT_P41N_3;
 				break;
@@ -178,12 +203,20 @@ public class ShipInfo : MonoBehaviour {
 				shipName = TextLiterals.SHIP_NAME_JUNK_DRIVER;
 				description = TextLiterals.SHIP_DESC_JUNK_DRIVER;
 				miscLabel = TextLiterals.MISC_STAT_JUNK_DRIVER;
+
+				abilities[0].slot = 0;
 				abilities[0].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_0;
 				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_0;
+
+				abilities[1].slot = 1;
 				abilities[1].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_1;
 				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_1;
+
+				abilities[2].slot = 2;
 				abilities[2].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_2;
 				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_2;
+
+				abilities[3].slot = 3;
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_JUNK_DRIVER_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_JUNK_DRIVER_3;
 				break;
@@ -191,12 +224,20 @@ public class ShipInfo : MonoBehaviour {
 				shipName = TextLiterals.SHIP_NAME_REDEYE;
 				description = TextLiterals.SHIP_DESC_REDEYE;
 				miscLabel = TextLiterals.MISC_STAT_REDEYE;
+
+				abilities[0].slot = 0;
 				abilities[0].abilityName = TextLiterals.ABILITY_NAME_REDEYE_0;
 				abilities[0].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_0;
+
+				abilities[1].slot = 1;
 				abilities[1].abilityName = TextLiterals.ABILITY_NAME_REDEYE_1;
 				abilities[1].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_1;
+
+				abilities[2].slot = 2;
 				abilities[2].abilityName = TextLiterals.ABILITY_NAME_REDEYE_2;
 				abilities[2].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_2;
+
+				abilities[3].slot = 3;
 				abilities[3].abilityName = TextLiterals.ABILITY_NAME_REDEYE_3;
 				abilities[3].abilityDescription = TextLiterals.ABILITY_DESC_REDEYE_3;
 				break;

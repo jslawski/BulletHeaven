@@ -26,9 +26,9 @@ public class GlassCannonBomb : Bomb {
 				HomingGroupShot homingGroupShot = Instantiate(homingGroupShotPrefab, transform.position, new Quaternion()) as HomingGroupShot;
 				homingGroupShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
-					homingGroupShot.target = thisPlayer.otherPlayer.character.transform;
 					homingGroupShot.thisPlayer = thisPlayer;
 				}
+				homingGroupShot.target = targetPlayer.character.transform;
 				break;
 			//AltCircleShot Shot
 			case AttackButtons.B:

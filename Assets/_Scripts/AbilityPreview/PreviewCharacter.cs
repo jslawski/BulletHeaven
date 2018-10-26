@@ -2,14 +2,20 @@
 using System.Collections;
 
 public class PreviewCharacter : Character {
+	public PreviewPlayer previewPlayer {
+		get { return player as PreviewPlayer; }
+	}
 
-	public void InitializeShip(ShipInfo shipInfo) {
-		print("Start initializing " + shipInfo.selectingPlayer);
-		playerEnum = shipInfo.selectingPlayer;
-		characterType = shipInfo.typeOfShip;
-		player.playerColor = shipInfo.shipColor;
+	public Character InitializeCharacter(SelectedCharacterInfo characterInfo) {
+		print("Start initializing " + characterInfo.selectingPlayer);
+		playerEnum = characterInfo.selectingPlayer;
+		characterType = characterInfo.typeOfShip;
+		previewPlayer.playerColor = characterInfo.shipColor;
+		GetComponent<PreviewShip>().typeOfShip = characterInfo.typeOfShip;
+		GetComponent<ShootBomb>().SetBombType(characterType);
 
 		SetSprite();
+		return this;
 	}
 
 	void SetSprite() {

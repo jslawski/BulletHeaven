@@ -31,9 +31,9 @@ public class TankBomb : Bomb {
 				coneShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					coneShot.thisPlayer = thisPlayer;
-					coneShot.target = thisPlayer.otherPlayer.character.transform;
 					coneShot.playerColor = thisPlayer.playerColor;
 				}
+				coneShot.target = targetPlayer.character.transform;
 				coneShot.FireBurst();
 				break;
 			//Weave shot
@@ -42,8 +42,8 @@ public class TankBomb : Bomb {
 				weaveShot.owningPlayer = owningPlayer;
 				if (!GameManager.S.inGame) {
 					weaveShot.thisPlayer = thisPlayer;
-					weaveShot.target = thisPlayer.otherPlayer.character.transform;
 				}
+				weaveShot.target = targetPlayer.character.transform;
 				weaveShot.FireBurst();
 				break;
 			//ClusterBomb attack

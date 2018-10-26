@@ -148,9 +148,9 @@ public class UnifiedShipSelectionManager : MonoBehaviour
 		for (int curControlsIndex = 0; curControlsIndex < this.shipSelectionControls.Count; curControlsIndex++) 
 		{
 			//Create the object that will pass the information to GameManager
-			PersistentShipInfo persistentShipInfo = Instantiate(this.shipSelectionControls[curControlsIndex].persistentInfoPrefab);
+			PersistentCharacterInfo persistentShipInfo = Instantiate(this.shipSelectionControls[curControlsIndex].persistentInfoPrefab);
 			persistentShipInfo.gameObject.name = "P" + ((int)this.shipSelectionControls[curControlsIndex].player + 1) + "_ShipInfo";
-			persistentShipInfo.Initialize(this.shipSelectionControls[curControlsIndex].selectedShip, this.shipSelectionControls[curControlsIndex].device);
+			persistentShipInfo.Initialize(this.shipSelectionControls[curControlsIndex].selectedCharacter, this.shipSelectionControls[curControlsIndex].device);
 		}
 
 		Destroy(this.gameObject);

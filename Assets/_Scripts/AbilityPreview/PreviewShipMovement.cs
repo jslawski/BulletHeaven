@@ -26,12 +26,11 @@ public class PreviewShipMovement : ShipMovement {
 
 	// Use this for initialization
 	protected override void Awake() {
-		thisCharacter = GetComponent<Character>();
+		PreviewCharacter thisPreviewCharacter = GetComponentInParent<PreviewCharacter>();
+		thisCharacter = thisPreviewCharacter;
+		renderCamera = thisPreviewCharacter.previewPlayer.previewGameManager.previewCamera;
 
 		startPos = transform.position;
-
-		vertMovespeedDefault *= speedMultiplier;
-		horizMovespeedDefault *= speedMultiplier;
 
 		verticalMovespeed = vertMovespeedDefault;
 		horizontalMovespeed = horizMovespeedDefault;
@@ -41,6 +40,14 @@ public class PreviewShipMovement : ShipMovement {
 		startRotation = transform.rotation;
 		desiredRotation = startRotation;
 		dotVector = -transform.right;
+	}
+
+	protected void Start() {
+		vertMovespeedDefault *= speedMultiplier;
+		horizMovespeedDefault *= speedMultiplier;
+
+		verticalMovespeed = vertMovespeedDefault;
+		horizontalMovespeed = horizMovespeedDefault;
 	}
 
 	protected override void Update() {

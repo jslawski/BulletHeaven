@@ -25,15 +25,16 @@ public struct PositionInfo {
 	public int orderInLayer;
 }
 
+[System.Obsolete("ShipSelectionManager has been deprecated, use UnifiedShipSelectionManager with ShipSelectionControls instead.", true)]
 public class ShipSelectionManager : MonoBehaviour {
-	public PersistentShipInfo persistentInfoPrefab;
+	public PersistentCharacterInfo persistentInfoPrefab;
 
 	static List<ShipSelectionManager> selectionMenus;
 	public PlayerEnum player;
 	public InputDevice device;
 
-	ShipInfo[] ships;
-	public ShipInfo selectedShip {
+	SelectedCharacterInfo[] ships;
+	public SelectedCharacterInfo selectedShip {
 		get {
 			return _selectedShip;
 		}
@@ -42,7 +43,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			SetStatsForShip(value);
 		}
 	}
-	ShipInfo _selectedShip;
+	SelectedCharacterInfo _selectedShip;
 	public bool playerReady = false;
 
 	public AbilityPreviewScreen abilityPreview;
@@ -69,7 +70,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	public KeyCode left,right,A,B,Y,start;
 
 	void Awake() {
-		persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
+		persistentInfoPrefab = Resources.Load<PersistentCharacterInfo>("Prefabs/ShipInfo");
 
 		DontDestroyOnLoad(this.gameObject);
 		if (selectionMenus == null) {
@@ -97,7 +98,7 @@ public class ShipSelectionManager : MonoBehaviour {
 			start = KeyCode.KeypadEnter;
 		}
 
-		ships = GetComponentsInChildren<ShipInfo>();
+		ships = GetComponentsInChildren<SelectedCharacterInfo>();
 		foreach (var ship in ships) {
 			ship.selectingPlayer = player;
 		}
@@ -200,7 +201,7 @@ public class ShipSelectionManager : MonoBehaviour {
 	}
 
 	public void Scroll(ScrollDirection scrollDirection) {
-		foreach (ShipInfo ship in ships) {
+		foreach (SelectedCharacterInfo ship in ships) {
 			if (ship == null) {
 				continue;
 			}
@@ -215,7 +216,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		}
 	}
 
-	void SetStatsForShip(ShipInfo shipInfo) {
+	void SetStatsForShip(SelectedCharacterInfo shipInfo) {
 		//Gracefully handle the case of no ship selected
 		if (shipInfo == null) {
 			selectedShipNameField.text = string.Empty;
@@ -277,7 +278,7 @@ public class ShipSelectionManager : MonoBehaviour {
 		}
 
 		//Create the object that will pass the information to GameManager
-		PersistentShipInfo persistentShipInfo = Instantiate(persistentInfoPrefab);
+		PersistentCharacterInfo persistentShipInfo = Instantiate(persistentInfoPrefab);
 		persistentShipInfo.gameObject.name = "P" + ((int)selectedShip.selectingPlayer + 1) + "ShipInfo";
 		persistentShipInfo.Initialize(selectedShip, device);
 

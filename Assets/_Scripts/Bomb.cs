@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class Bomb : MonoBehaviour {
 	public Player thisPlayer;
+	public Player targetPlayer;
 	public PlayerEnum _owningPlayer = PlayerEnum.none;       //Set this when creating a new Bomb
 	public PlayerEnum owningPlayer {
 		get {
@@ -13,6 +14,7 @@ public class Bomb : MonoBehaviour {
 			if (value != PlayerEnum.none) {
 				if (GameManager.S.inGame) {
 					thisPlayer = GameManager.S.players[(int)value];
+					targetPlayer = GameManager.S.players[(int)GameManager.S.OtherPlayerEnum(value)];
 					SetColor(thisPlayer.playerColor);
 				}
 

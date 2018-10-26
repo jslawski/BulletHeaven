@@ -17,7 +17,7 @@ public class AbilityPreviewScreen : MonoBehaviour {
 	[SerializeField]
 	Camera previewCamera;
 
-	public ShipInfo selectedShip;
+	public SelectedCharacterInfo selectedShip;
 	int _selectedAbility = 0;
 	int selectedAbility {
 		get {
@@ -86,14 +86,15 @@ public class AbilityPreviewScreen : MonoBehaviour {
 		}
 	}
 
-	public void	SetAbilityPreview(ShipInfo shipInfo) {
+	public void	SetAbilityPreview(SelectedCharacterInfo shipInfo) {
 		gameObject.SetActive(true);
+		previewGameManager.gameObject.SetActive(true);
 		shipSelection.hasFocus = false;
 		previewCamera.gameObject.SetActive(true);
 		//Tell the ability preview ship to initialize itself with this info
-		previewGameManager.players[(int)shipSelection.player].InitializeShip(shipInfo);
+		previewGameManager.previewPlayers[(int)shipSelection.player].InstantiateCharacter(shipInfo);
 
-		ShipInfo targetShipInfo = new ShipInfo();
+		SelectedCharacterInfo targetShipInfo = new SelectedCharacterInfo();
 		targetShipInfo.selectingPlayer = (previewGameManager.sceneOwner == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
 		if (shipInfo.typeOfShip != CharactersEnum.tank) {
 			targetShipInfo.shipColor = new Color(0, 1, 15f / 255f);
@@ -103,7 +104,10 @@ public class AbilityPreviewScreen : MonoBehaviour {
 			targetShipInfo.shipColor = new Color(57f/255f, 155f/255f, 234f / 255f);
 			targetShipInfo.typeOfShip = CharactersEnum.glassCannon;
 		}
-		previewGameManager.players[(int)previewGameManager.target.playerEnum].InitializeShip(targetShipInfo);
+
+		PreviewPlayer targetPreviewPlayer = previewGameManager.previewPlayers[(int)GameManager.S.OtherPlayerEnum(shipSelection.player)];
+		targetPreviewPlayer.InstantiateCharacter(targetShipInfo);
+		previewGameManager.target = targetPreviewPlayer.character.ship;
 
 		//Don't waste time setting information if it's not new
 		if (shipInfo == selectedShip) {

@@ -24,7 +24,7 @@ public class VampireShield : MonoBehaviour {
 		set {
 			_owningPlayer = value;
 			if (GameManager.S.inGame) {
-				hitboxOffset = GameManager.S.players[(int)value].character.transform.Find("Hitbox").localPosition.y;
+				hitboxOffset = GameManager.S.players[(int)value].character.ship.transform.Find("Hitbox").localPosition.y;
 			}
 			if (value == PlayerEnum.player2) {
 				hitboxOffset = -hitboxOffset;

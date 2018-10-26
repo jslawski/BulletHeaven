@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 
 	InputDevice[] controllers;
 	public const string titleSceneName = "_Scene_Title";
-	public const string shipSelectionSceneName = "_Scene_Ship_Selection_JDS";
+	public const string shipSelectionSceneName = "_Scene_Ship_Selection";
 	public const string MainSceneName = "_Scene_Main";
 
 	float minTimeInSceneForInput = 0.25f;
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
 		S = this;
 
 		//**********Change this value to toggle single-player vs. multiplayer**********
-		this.singlePlayer = true;
+		this.singlePlayer = false;
 		//**********Change this value to toggle single-player vs. multiplayer**********
 
 		DontDestroyOnLoad(this);
@@ -123,11 +123,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void InitializePlayerShip(ShipInfo shipInfo, InputDevice device=null) {
+	public void InitializePlayerShip(SelectedCharacterInfo shipInfo, InputDevice device=null) {
 		print("Start initializing " + shipInfo.selectingPlayer);
 
 		Player curPlayer = players[(int)shipInfo.selectingPlayer];
-		curPlayer.InstantiateShip(shipInfo);
+		curPlayer.InstantiateCharacter(shipInfo);
 
 		//Remember the controller in Player and GameManager
 		controllers[(int)shipInfo.selectingPlayer] = device;

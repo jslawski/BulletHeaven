@@ -18,25 +18,25 @@ public class ShipSelectionControls : MonoBehaviour {
 												//such as the world position, alpha value, and orderInLayer value
 												//Set in inspector JPS: TODO: Have this set in code, in order to allow for easier addition of ships in the future
 
-	public PersistentShipInfo persistentInfoPrefab;
+	public PersistentCharacterInfo persistentInfoPrefab;
 
 	[HideInInspector]
-	public ShipInfo[] ships;
+	public SelectedCharacterInfo[] characters;
 
 	[SerializeField]
-	private ShipStats shipStats;
+	private CharacterStats characterStats;
 
 	private bool inChooseRandomShipCoroutine = false;
 
-	private ShipInfo _selectedShip;
-	public ShipInfo selectedShip 
+	private SelectedCharacterInfo _selectedCharacter;
+	public SelectedCharacterInfo selectedCharacter 
 	{
 		get {
-			return _selectedShip;
+			return _selectedCharacter;
 		}
 		set {
-			_selectedShip = value;
-			shipStats.SetStatsForShip(value);
+			_selectedCharacter = value;
+			characterStats.SetStatsForCharacter(value);
 		}
 	}
 	[SerializeField]
@@ -44,11 +44,13 @@ public class ShipSelectionControls : MonoBehaviour {
 
 	void Awake()
 	{
-		this.persistentInfoPrefab = Resources.Load<PersistentShipInfo>("Prefabs/ShipInfo");
+		characterStats = GetComponent<CharacterStats>();
 
-		this.ships = GetComponentsInChildren<ShipInfo>();
-		foreach (ShipInfo ship in ships) {
-			ship.selectingPlayer = this.player;
+		this.persistentInfoPrefab = Resources.Load<PersistentCharacterInfo>("Prefabs/ShipInfo");
+
+		this.characters = GetComponentsInChildren<SelectedCharacterInfo>();
+		foreach (SelectedCharacterInfo character in characters) {
+			character.selectingPlayer = this.player;
 		}
 
 		#region Keyboard Support
@@ -73,7 +75,7 @@ public class ShipSelectionControls : MonoBehaviour {
 
 	void Update () 
 	{
-		shipSelectionBackground.color = Color.Lerp(shipSelectionBackground.color, selectedShip.shipColor, 5*Time.deltaTime);
+		shipSelectionBackground.color = Color.Lerp(shipSelectionBackground.color, selectedCharacter.shipColor, 5*Time.deltaTime);
 
 		//Don't allow input while it doesn't have focus
 		if (!this.hasFocus || OptionsMenu.hasFocus) 
@@ -108,7 +110,7 @@ public class ShipSelectionControls : MonoBehaviour {
 			//Ready up
 			if (this.device.Action1.WasPressed && this.playerReady == false) 
 			{
-				if (this.selectedShip.typeOfShip == CharactersEnum.random) 
+				if (this.selectedCharacter.typeOfShip == CharactersEnum.random) 
 				{
 					StartCoroutine(this.RandomShip());
 				} 
@@ -122,9 +124,9 @@ public class ShipSelectionControls : MonoBehaviour {
 			{
 				this.CancelPlayer();
 			} 
-			else if (this.device.Action4.WasPressed && this.selectedShip.typeOfShip != CharactersEnum.random) 
+			else if (this.device.Action4.WasPressed && this.selectedCharacter.typeOfShip != CharactersEnum.random) 
 			{
-				this.abilityPreview.SetAbilityPreview(this.selectedShip);
+				this.abilityPreview.SetAbilityPreview(this.selectedCharacter);
 				}
 
 			if (GameManager.S.gameState == GameStates.shipSelect && this.device.MenuWasPressed) 
@@ -154,7 +156,7 @@ public class ShipSelectionControls : MonoBehaviour {
 
 		//Ready up
 		if (Input.GetKeyDown(this.A) && this.playerReady == false) {
-			if (this.selectedShip.typeOfShip == CharactersEnum.random) {
+			if (this.selectedCharacter.typeOfShip == CharactersEnum.random) {
 				StartCoroutine(this.RandomShip());
 			}
 			else {
@@ -168,8 +170,8 @@ public class ShipSelectionControls : MonoBehaviour {
 			print(this.player + " is no longer ready.");
 			this.playerReady = false;
 		}
-		else if (Input.GetKeyDown(this.Y) && this.selectedShip.typeOfShip != CharactersEnum.random) {
-			this.abilityPreview.SetAbilityPreview(this.selectedShip);
+		else if (Input.GetKeyDown(this.Y) && this.selectedCharacter.typeOfShip != CharactersEnum.random) {
+			this.abilityPreview.SetAbilityPreview(this.selectedCharacter);
 		}
 
 		if (GameManager.S.gameState == GameStates.shipSelect && Input.GetKeyDown(this.start)) {
@@ -197,7 +199,7 @@ public class ShipSelectionControls : MonoBehaviour {
 	}
 
 	public void Scroll(ScrollDirection scrollDirection) {
-		foreach (ShipInfo ship in this.ships) {
+		foreach (SelectedCharacterInfo ship in this.characters) {
 			if (ship == null) {
 				continue;
 			}
@@ -213,7 +215,7 @@ public class ShipSelectionControls : MonoBehaviour {
 	}
 
 	public IEnumerator RandomShip() {
-		int numPositions = ships.Length;
+		int numPositions = characters.Length;
 		int randNumScrolls;
 
 		float minWaitTime = 0.075f;

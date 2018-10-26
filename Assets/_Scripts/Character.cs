@@ -21,7 +21,7 @@ public abstract class Character : MonoBehaviour {
 	public Ship ship {
 		get {
 			Debug.Assert(ships != null, "ships[] array not yet initialized.");
-			Debug.Assert(ships.Count == 1, "Tried to access Character.ship, but " + characterType + " has more than one ship. Use Character.ships[i] instead.");
+			Debug.Assert(ships.Count == 1, "Tried to access Character.ship, but " + characterType + " does not have exactly one ship (" + ships.Count + "). Use Character.ships[i] instead.");
 			return ships[0];
 		}
 		set {
