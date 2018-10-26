@@ -12,6 +12,7 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 	float minSpeed = 20f;				//Lower limit on new ship speed
 	float maxSpeed = 25f;               //Upper limit on new ship speed
 
+	// Note: Some logic assumes that these are non-overlapping ranges for ship size
 	public float backgroundShipChance = 0.835f;		//Percent chance for a ship to spawn in the background
 	float minBackgroundShipSize = 0.35f;		//Lower limit on size of background ships
 	float maxBackgroundShipSize = 0.65f;         //Upper limit on size of background ships
@@ -45,6 +46,8 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		//Determine the random size (and parallax) of the ship
 		float scaleFactor = GetScaleFactor();
 		bool battlegroundShip = Mathf.Abs(1 - scaleFactor) < interactableShipThreshold;
+		bool foregroundShip = scaleFactor >= minForegroundShipSize;
+		bool backgroundShip = scaleFactor <= maxBackgroundShipSize;
 
 		//Give a random offset to the ship's position
 		//If this ship will be a background/foreground ship, allow it to spawn in a wider range
@@ -72,6 +75,13 @@ public class ProtagonistShipSpawner : MonoBehaviour {
 		//Dim the colors of background ships
 		if (!battlegroundShip) {
 			newShipSprite.color *= backgroundShipColorDim;
+			if (backgroundShip) {
+				newShipSprite.sortingLayerID = SortingLayer.NameToID("Background");
+			}
+			if (foregroundShip) {
+				newShipSprite.sortingLayerID = SortingLayer.NameToID("Foreground");
+				newShipSprite.gameObject.layer = LayerMask.NameToLayer("Foreground");
+			}
 			newShipSprite.sortingOrder = (int)((1 - scaleFactor) * -100);
 		}
 		else {

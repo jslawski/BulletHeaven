@@ -113,152 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &5208607
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 138804, guid: d8d2ba95ce6a1dc4a96c715f808d993f,
-    type: 2}
-  m_PrefabInternal: {fileID: 789061941}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5208609}
-  - component: {fileID: 5208608}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &5208608
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 11431270, guid: d8d2ba95ce6a1dc4a96c715f808d993f,
-    type: 2}
-  m_PrefabInternal: {fileID: 789061941}
-  m_GameObject: {fileID: 5208607}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c49bee4100528c42897019ca4053043, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sounds_:
-  - key: FinalShotCharge
-    value: {fileID: 8300000, guid: e6352aeb03cd65c449ef154cf69f2731, type: 3}
-    channel: 13
-  - key: FinalExplosion
-    value: {fileID: 8300000, guid: bc1ff5865dc10fd47b3b856c56f8a77c, type: 3}
-    channel: 13
-  - key: TitleTheme
-    value: {fileID: 8300000, guid: a6a7ae12fa00a8b4385c43705e844d81, type: 3}
-    channel: 0
-  - key: Beam
-    value: {fileID: 8300000, guid: 8b2be35ce099e7c4b9711adbcdf641b3, type: 3}
-    channel: 2
-  - key: BeamDetonate
-    value: {fileID: 8300000, guid: 9d6db5828d2b722448066873546044b4, type: 3}
-    channel: 3
-  - key: FireBomb
-    value: {fileID: 8300000, guid: 21360261910d31849a83d3eeb6e0a5d5, type: 3}
-    channel: 13
-  - key: NearDeath
-    value: {fileID: 8300000, guid: 80f02257d2e2a6b4dba03593a8d1da4d, type: 3}
-    channel: 5
-  - key: Reflector
-    value: {fileID: 8300000, guid: 532cc57bb2e8616498c877b3ef1ae82d, type: 3}
-    channel: 4
-  - key: DestroyProtagShip
-    value: {fileID: 8300000, guid: 33329a058a7527741bf1285499c0cf28, type: 3}
-    channel: 6
-  - key: BombExplode
-    value: {fileID: 8300000, guid: e10aa92ba9077614f9c15d5b1770daad, type: 3}
-    channel: 7
-  - key: HealthPickup
-    value: {fileID: 8300000, guid: 023590c44e7e995458137de5a92b662c, type: 3}
-    channel: 8
-  - key: BlackHole
-    value: {fileID: 8300000, guid: 956bed0426c67124c9edc8e272b48d40, type: 3}
-    channel: 9
-  - key: PrettyNeat
-    value: {fileID: 8300000, guid: f6dc5c1917a14d547a06f67cc7996c4b, type: 3}
-    channel: 2
-  - key: PrettyNeatMusic
-    value: {fileID: 8300000, guid: dab9c96053851994090e6cf20926263a, type: 3}
-    channel: 0
-  - key: StartGame
-    value: {fileID: 8300000, guid: cb94bd14ee5b42443b48dbf344646c0e, type: 3}
-    channel: 13
-  - key: ShipScroll
-    value: {fileID: 8300000, guid: ed0a0860cb62cb548978a500efe6bd82, type: 3}
-    channel: 3
-  - key: ShipConfirm
-    value: {fileID: 8300000, guid: e23e73716e81d6f4eb518d21a1b46744, type: 3}
-    channel: 2
-  - key: DualLasers
-    value: {fileID: 8300000, guid: 249fce09b6f414e4282448f6949c9253, type: 3}
-    channel: 10
-  - key: ChargeAttackCharge
-    value: {fileID: 8300000, guid: 2857aea2a4773cd4ba6939740cbc7242, type: 3}
-    channel: 11
-  - key: ChargeAttackShoot
-    value: {fileID: 8300000, guid: 96bba668831d5c74584b1310afd17c19, type: 3}
-    channel: 12
-  - key: ShipCancel
-    value: {fileID: 8300000, guid: 2c787d4990d3bcb4dbcc7b51921eac47, type: 3}
-    channel: 4
-  - key: FullyCharged
-    value: {fileID: 8300000, guid: 070ffe329d398654fa31b54b07b672d2, type: 3}
-    channel: 1
-  - key: DrainLife
-    value: {fileID: 8300000, guid: 7ca9eba330fd7f74ba98424a8d906f66, type: 3}
-    channel: 14
-  - key: Explosion
-    value: {fileID: 8300000, guid: a2b57806b0fe5c94392b94c556fad1f3, type: 3}
-    channel: 15
-  - key: LifeSapZone
-    value: {fileID: 8300000, guid: 1e700c1568ea0c54bb16a20cec88d070, type: 3}
-    channel: 16
-  - key: OutOfAmmo
-    value: {fileID: 8300000, guid: f9fbf811a71d6e742adfaf180a69cf25, type: 3}
-    channel: 17
-  - key: ShieldUp
-    value: {fileID: 8300000, guid: b49b1653deaa06043a9dc1a93be9c9d3, type: 3}
-    channel: 18
-  - key: ActivateAura
-    value: {fileID: 8300000, guid: c45161d90554fed4bb081cd9c98d6e2a, type: 3}
-    channel: 19
-  - key: ShipSelectTheme
-    value: {fileID: 8300000, guid: 26a4a6e6e8e569b44a7735ed00ed29a5, type: 3}
-    channel: 0
-  - key: FightTheme
-    value: {fileID: 8300000, guid: 40feb227e81726841928b26c9b7476d5, type: 3}
-    channel: 0
-  - key: PressStart
-    value: {fileID: 8300000, guid: 387fe2237b715904ca6fa7b4fb797789, type: 3}
-    channel: 13
-  - key: TakeDamage
-    value: {fileID: 8300000, guid: d928b3f853f7df143a549073adf6a46b, type: 3}
-    channel: 20
-  - key: OptionsSelect
-    value: {fileID: 8300000, guid: 47bb4be78de54e249bbefa3beb2f257e, type: 3}
-    channel: 5
-  - key: Countdown
-    value: {fileID: 8300000, guid: 7653bb0f435afb5489b8cd8debceae90, type: 3}
-    channel: 5
---- !u!4 &5208609
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 497946, guid: d8d2ba95ce6a1dc4a96c715f808d993f,
-    type: 2}
-  m_PrefabInternal: {fileID: 789061941}
-  m_GameObject: {fileID: 5208607}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.24921, y: 5.144586, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &11916768
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,10 +313,10 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 12
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 16384
+    m_Bits: 147456
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -12224,7 +12078,6 @@ Prefab:
       objectReference: {fileID: 8300000, guid: dab9c96053851994090e6cf20926263a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8d2ba95ce6a1dc4a96c715f808d993f, type: 2}
-  m_RootGameObject: {fileID: 5208607}
   m_IsPrefabAsset: 0
 --- !u!1 &790230355
 GameObject:
