@@ -13,7 +13,8 @@ public class LeadingShot : MonoBehaviour, BombAttack {
 			_owningPlayer = value;
 			if (GameManager.S.inGame) {
 				PlayerEnum otherPlayer = (owningPlayer == PlayerEnum.player1) ? PlayerEnum.player2 : PlayerEnum.player1;
-			}
+                targetShip = GameManager.S.players[(int)otherPlayer].character.GetClosestShip(transform.position);
+            }
 		}
 	}
 

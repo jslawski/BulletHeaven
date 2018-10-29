@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class TitleScreenCharacter : Character {
 
-	public override Ship GetClosestShip(Vector3 location) {
+    protected override void Awake() {
+        base.Awake();
+
+        this.bulletShape = (BulletShapes)Random.Range(0, (int)BulletShapes.numShapes);
+    }
+
+    public override Ship GetClosestShip(Vector3 location) {
 		return ship;
 	}
 }

@@ -74,7 +74,12 @@ public class SineShot : MonoBehaviour, BombAttack{
 			curBullet.amplitude = 10f;
 		}
 
-		curBullet.ApplySineWave(waveDirection);
+        //Make it look cooler for the title screen
+        if (GameManager.S.gameState == GameStates.titleScreen) {
+            curBullet.amplitude = amplitudeScalar;
+        }
+
+        curBullet.ApplySineWave(waveDirection);
 	}
 
 }

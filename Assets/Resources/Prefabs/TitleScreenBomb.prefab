@@ -206,7 +206,7 @@ MonoBehaviour:
   - {fileID: 171734, guid: 435f0ae8633b06147892168d89e5f41f, type: 2}
   - {fileID: 142026, guid: 188cac0e53901ec40b25aadea05eff26, type: 2}
   - {fileID: 161644, guid: aaed7e13216849c4396146b4ef6f11c2, type: 2}
-  - {fileID: 110762, guid: 46501de000644d04e8b64efff7d31d46, type: 2}
+  - {fileID: 184766, guid: 00486fba8610bad4b8c0f49d4a3621b3, type: 2}
   - {fileID: 187038, guid: 9f78f98813f5eb540a3cf91a62fa44f7, type: 2}
   - {fileID: 136902, guid: db3cabc90a27cd440ad480463aeac73a, type: 2}
   - {fileID: 169262, guid: 713047ceaa715594bbad5fe739db8f55, type: 2}
@@ -216,7 +216,6 @@ MonoBehaviour:
   - {fileID: 117376, guid: 929b5fd100b1e83409386700d195be33, type: 2}
   - {fileID: 136902, guid: cd0a7a1074f24a6418f26bdbd0b43377, type: 2}
   - {fileID: 194788, guid: e9947a2da84065a4f946623ed5fac6cc, type: 2}
-  - {fileID: 184766, guid: 00486fba8610bad4b8c0f49d4a3621b3, type: 2}
   shockwavePrefab: {fileID: 100000, guid: 8fa4c2f3246358349ab62cae155c2470, type: 2}
 --- !u!114 &11453000
 MonoBehaviour:

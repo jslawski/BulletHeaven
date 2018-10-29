@@ -1,4 +1,4 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class AutoMoveShip : MonoBehaviour {
@@ -31,4 +31,3 @@ public class AutoMoveShip : MonoBehaviour {
 		thisTransform.Translate(curDirection * speed * Time.fixedDeltaTime, Space.World);
 	}
 }
-*/

@@ -49,8 +49,13 @@ public class SpreadShot : MonoBehaviour, BombAttack {
 			startingAngle = startingAngleNoAura;
 		}
 
-		float bulletOffset = 3f * Mathf.Deg2Rad;
+        //Make it look cooler for the title screen
+        if (GameManager.S.gameState == GameStates.titleScreen) {
+            firingSeparation = firingSeparationWithAura;
+            startingAngle = startingAngleWithAura;
+        }
 
+		float bulletOffset = 3f * Mathf.Deg2Rad;
 
 		float bulletVelocity = 10f;
 

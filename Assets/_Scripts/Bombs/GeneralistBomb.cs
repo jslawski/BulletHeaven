@@ -39,7 +39,6 @@ public class GeneralistBomb : Bomb {
 				if (!GameManager.S.inGame) {
 					newShot.thisPlayer = thisPlayer;
 				}
-				newShot.targetShip = targetPlayer.character.GetClosestShip(transform.position);
 				newShot.FireBurst();
 				break;
 			//Spiral shot

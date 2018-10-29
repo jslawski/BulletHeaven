@@ -1,4 +1,4 @@
-﻿/*using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class AutoFireBomb : MonoBehaviour {
@@ -44,4 +44,3 @@ public class AutoFireBomb : MonoBehaviour {
 		bombPhysics.velocity = speed * aimDirection;
 	}
 }
-*/
