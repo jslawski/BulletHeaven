@@ -12,6 +12,9 @@ public class GlassCannonShip : Ship {
 
 		dualLaserPrefab = Resources.Load<DualLasers>("Prefabs/DualLasers");
 		chargeShotPrefab = Resources.Load<ChargeShot>("Prefabs/ChargeShot");
+
+		// Slightly dim the ship's sprite so it doesn't halo on bloom effect
+		shipSpriteDefaultColor = Color.white * 0.87f;
 	}
 
 	// Use this for initialization

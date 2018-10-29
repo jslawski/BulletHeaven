@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4882377144386872}
   - component: {fileID: 212133573657205656}
   - component: {fileID: 95126993687937116}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 4579249825984360}
   - component: {fileID: 212177281374642682}
   - component: {fileID: 95858310685354630}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -32273,7 +32273,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: e742ce4e4a4e1e7499e9394ea853309a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -32365,7 +32365,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: fc9484d1b18f47a488fe24844fb713c5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

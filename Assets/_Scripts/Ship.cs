@@ -32,6 +32,7 @@ public class Ship : MonoBehaviour, DamageableObject {
 	protected float maxTimeBetweenExplosions = 0.5f;
 
 	protected SpriteRenderer shipSprite;
+	protected Color shipSpriteDefaultColor = Color.white;
 	protected bool inDamageFlashCoroutine = false;
 	protected float damageFlashDuration = 0.2f;
 	protected float timeSinceTakenDamage = 0f;
@@ -82,6 +83,7 @@ public class Ship : MonoBehaviour, DamageableObject {
 		playerEnum = player.playerEnum;
 
 		health = maxHealth;
+		shipSprite.color = shipSpriteDefaultColor;
 		shooting.SetBombType(typeOfShip);
 	}
 
@@ -136,7 +138,7 @@ public class Ship : MonoBehaviour, DamageableObject {
 
 	protected IEnumerator FlashOnDamage(float damage) {
 		inDamageFlashCoroutine = true;
-
+		
 		Color targetColor = (damage > 0) ? damageColor : Color.green;
 		shipSprite.color = targetColor;
 
@@ -144,7 +146,7 @@ public class Ship : MonoBehaviour, DamageableObject {
 		if (damage > 0) {
 			while (timeSinceTakenDamage < damageFlashDuration) {
 				float percent = timeSinceTakenDamage / damageFlashDuration;
-				shipSprite.color = Color.Lerp(targetColor, Color.white, percent);
+				shipSprite.color = Color.Lerp(targetColor, shipSpriteDefaultColor, percent);
 
 				yield return null;
 			}
@@ -155,12 +157,12 @@ public class Ship : MonoBehaviour, DamageableObject {
 			float timeElapsed = 0;
 			while (timeElapsed < 4 * damageFlashDuration) {
 				timeElapsed += Time.deltaTime;
-				shipSprite.color = Color.Lerp(targetColor, Color.white, timeElapsed / (4 * damageFlashDuration));
+				shipSprite.color = Color.Lerp(targetColor, shipSpriteDefaultColor, timeElapsed / (4 * damageFlashDuration));
 
 				yield return null;
 			}
 		}
-		shipSprite.color = Color.white;
+		shipSprite.color = shipSpriteDefaultColor;
 
 		inDamageFlashCoroutine = false;
 	}
@@ -213,12 +215,12 @@ public class Ship : MonoBehaviour, DamageableObject {
 			for (t = 0; t < pulsateRedPeriod; t += Time.deltaTime) {
 				t += Time.deltaTime;
 
-				shipSprite.color = Color.Lerp(Color.white, damageColor, 0.5f * (Mathf.Sin(2 * Mathf.PI * t / pulsateRedPeriod) + 1));
+				shipSprite.color = Color.Lerp(shipSpriteDefaultColor, damageColor, 0.5f * (Mathf.Sin(2 * Mathf.PI * t / pulsateRedPeriod) + 1));
 
 				yield return 0;
 			}
 		}
-		shipSprite.color = Color.white;
+		shipSprite.color = shipSpriteDefaultColor;
 	}
 
 	void PlayHealthPickupParticles() {
