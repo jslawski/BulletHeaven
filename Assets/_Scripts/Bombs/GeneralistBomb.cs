@@ -39,7 +39,8 @@ public class GeneralistBomb : Bomb {
 				if (!GameManager.S.inGame) {
 					newShot.thisPlayer = thisPlayer;
 				}
-				newShot.FireBurst();
+                newShot.targetShip = targetPlayer.character.ship;
+                newShot.FireBurst();
 				break;
 			//Spiral shot
 			case AttackButtons.B:
