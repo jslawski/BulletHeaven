@@ -10,7 +10,7 @@ public class ShipMovement : MonoBehaviour {
 	public float verticalMovespeed;						//Speed at which the player can move up and down
 	public float horizontalMovespeed;					//Speed at which the player can move right to left
 
-	float shipTurnLerpSpeed = 5f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
+	float shipTurnLerpSpeed = 2f;						//Percent ship lerps towards the desired rotation each FixedUpdate()
 	float maxTurnAngle = 45f;							//Maximum amount a ship can toward in a certain direction
 
 	public float viewportMinX { get { return thisCharacter.player.viewportMinX; } }

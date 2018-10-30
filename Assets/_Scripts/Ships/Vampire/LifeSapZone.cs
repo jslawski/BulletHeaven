@@ -120,7 +120,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Player") {
 			Ship otherShip = other.GetComponentInParent<Ship>();
-			if (otherShip == owner) {
+			if (otherShip.player == owner) {
 				return;
 			}
             StartTether(otherShip);
@@ -130,7 +130,7 @@ public class LifeSapZone : MonoBehaviour, BombAttack {
 
 	void OnTriggerExit(Collider other) {
 		if (other.tag == "Player") {
-			if (other.GetComponentInParent<Character>() == targetShip) {
+			if (other.GetComponentInParent<Ship>() == targetShip) {
 				playerInSapZone = false;
 			}
 		}
