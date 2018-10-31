@@ -32,7 +32,7 @@ public class VampireBomb : Bomb {
 				if (!GameManager.S.inGame) {
 					trailShot.thisPlayer = thisPlayer;
 				}
-				trailShot.target = targetPlayer.character.transform;
+				trailShot.target = targetPlayer.character.ship.transform;
 				trailShot.FireBurst();
 				break;
 			//Rotating Circle shot

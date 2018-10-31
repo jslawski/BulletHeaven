@@ -28,7 +28,7 @@ public class GlassCannonBomb : Bomb {
 				if (!GameManager.S.inGame) {
 					homingGroupShot.thisPlayer = thisPlayer;
 				}
-				homingGroupShot.target = targetPlayer.character.transform;
+				homingGroupShot.target = targetPlayer.character.ship.transform;
 				break;
 			//AltCircleShot Shot
 			case AttackButtons.B:

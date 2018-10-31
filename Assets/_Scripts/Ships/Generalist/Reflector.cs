@@ -67,7 +67,7 @@ public class Reflector : MonoBehaviour, BombAttack {
 			if (otherPlayer != null) {
 				otherBullet.curState = BulletState.reflected;
 
-				Vector3 otherPlayerPosition = otherPlayer.character.transform.position;
+				Vector3 otherPlayerPosition = otherPlayer.character.ship.transform.position;
 
 				//Determine reflection vector
 				Vector3 sprayVector = new Vector3(0, Random.Range(-sprayRange, sprayRange), 0);

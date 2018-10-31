@@ -33,7 +33,7 @@ public class MasochistBomb : Bomb {
 				else {
 					newShot.thisPlayer = thisPlayer;
 				}
-				newShot.target = targetPlayer.character.transform;
+				newShot.target = targetPlayer.character.ship.transform;
 				newShot.FireBurst();
 				break;
 			//Spread shot
